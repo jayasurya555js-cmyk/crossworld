@@ -1,0 +1,426 @@
+# =====================================================================
+# Crossword Challenge — Words & Hints (50 puzzles, Easy -> Hard)
+# =====================================================================
+#
+# Edit this file to change what shows up on the Daily Crossword page.
+# No code editing required — just save this file and refresh the site.
+#
+# FORMAT (one word per line):
+#   WORD | Clue text for that word
+#
+# RULES:
+#   - Each word must be 2–5 letters long (the grid is a fixed 5x5).
+#   - Every word needs a clue after the "|".
+#   - Lines starting with # are comments and are ignored.
+#   - Separate each PUZZLE (a group of words that will share one grid)
+#     with a line containing only three dashes: ---
+#   - Each puzzle needs at least 2 words, and the words should share
+#     some letters so they can cross each other in the grid. If a
+#     puzzle's words can't be arranged into a connected 5x5 grid, that
+#     puzzle is skipped automatically and the rest still load.
+#
+# The site solves these puzzles in order, one after another. As soon
+# as a puzzle is fully and correctly solved (via the Check button),
+# the site automatically loads the next puzzle in this file. After
+# the last puzzle, it loops back to the first one.
+#
+# This file has 50 puzzles, roughly ordered from easiest (fewer,
+# shorter words) to hardest (more, longer words):
+#   Puzzles  1-20 : Easy   (3 words each)
+#   Puzzles 21-40 : Medium (4 words each)
+#   Puzzles 41-50 : Hard   (5 words each)
+# =====================================================================
+
+# ---------- EASY (3-word puzzles) ----------
+
+# Puzzle 1
+JAR | A glass container, often for jam
+CAT | A common pet that meows
+STAR | A glowing point of light in the night sky
+
+---
+
+# Puzzle 2
+WEB | A structure spun by a spider
+PAGE | One sheet of a book
+PIG | A pink farm animal that oinks
+
+---
+
+# Puzzle 3
+EYE | The organ used for seeing
+TOE | A digit on your foot
+SNAKE | A long, legless reptile
+
+---
+
+# Puzzle 4
+TOOTH | A hard part of the mouth used for chewing
+COW | A farm animal that gives milk
+ICE | Frozen water
+
+---
+
+# Puzzle 5
+DOG | Man's best friend
+MANGO | A sweet tropical fruit with a large seed
+READ | To look at and understand written words
+
+---
+
+# Puzzle 6
+FOX | A clever, red-furred wild animal
+HONEY | A sweet substance made by bees
+MEAT | Food that comes from animals
+
+---
+
+# Puzzle 7
+PEAR | A fruit that is often shaped like a teardrop
+HONEY | A sweet substance made by bees
+MOP | A tool used to clean floors
+
+---
+
+# Puzzle 8
+ROOF | The covering on top of a house
+FOX | A clever, red-furred wild animal
+STORM | Heavy wind and rain together
+
+---
+
+# Puzzle 9
+SHIRT | A piece of clothing worn on the upper body
+SIT | To rest on your bottom
+ROOF | The covering on top of a house
+
+---
+
+# Puzzle 10
+EAT | What you do when you have food
+RIVER | A large, flowing body of fresh water
+FISH | An animal that swims and breathes with gills
+
+---
+
+# Puzzle 11
+TIE | Worn around the neck with a suit
+PAGE | One sheet of a book
+PRICE | The amount something costs
+
+---
+
+# Puzzle 12
+TOE | A digit on your foot
+POWER | The ability to do something with strength
+STONE | A small piece of rock
+
+---
+
+# Puzzle 13
+BEACH | A sandy area next to the sea
+ICE | Frozen water
+DANCE | To move your body to music
+
+---
+
+# Puzzle 14
+BALL | A round object used in many sports
+PLUM | A small, sweet purple fruit
+PIZZA | A round baked dish topped with cheese
+
+---
+
+# Puzzle 15
+DUCK | A water bird that quacks
+SNAKE | A long, legless reptile
+RACE | A competition to see who is fastest
+
+---
+
+# Puzzle 16
+RUN | To move quickly on foot
+BROWN | The color of chocolate
+CLIMB | To move upward, often on a mountain
+
+---
+
+# Puzzle 17
+RAIN | Water that falls from clouds
+PLANT | A living thing that grows in soil
+HEART | The organ that pumps blood
+
+---
+
+# Puzzle 18
+SWIM | To move through water using your body
+BRUSH | A tool with bristles, used for painting or hair
+HORSE | An animal often ridden or used to pull carts
+
+---
+
+# Puzzle 19
+PEACH | A fuzzy, sweet orange fruit
+GLASS | A container used for drinking, made of a clear material
+PEAR | A fruit that is often shaped like a teardrop
+
+---
+
+# Puzzle 20
+SMOKE | The gray cloud that rises from a fire
+CLOUD | A white or gray shape floating in the sky
+SHELL | The hard outer covering of some sea creatures
+
+---
+
+# ---------- MEDIUM (4-word puzzles) ----------
+
+# Puzzle 21
+PEN | Something you write with
+ICE | Frozen water
+ANT | A tiny insect that lives in colonies
+TIE | Worn around the neck with a suit
+
+---
+
+# Puzzle 22
+CAT | A common pet that meows
+ERA | A distinct period in history
+RAT | A small rodent with a long tail
+DUCK | A water bird that quacks
+
+---
+
+# Puzzle 23
+PLUM | A small, sweet purple fruit
+BALL | A round object used in many sports
+WEB | A structure spun by a spider
+SUN | The star at the center of our solar system
+
+---
+
+# Puzzle 24
+PEN | Something you write with
+SUN | The star at the center of our solar system
+MEAT | Food that comes from animals
+STUDY | To spend time learning about a subject
+
+---
+
+# Puzzle 25
+BOOK | Pages bound together with a cover
+BAG | Something you carry things in
+SMOKE | The gray cloud that rises from a fire
+CAT | A common pet that meows
+
+---
+
+# Puzzle 26
+TEAM | A group that plays together
+MOON | The natural satellite of Earth
+WALL | A vertical structure that divides space
+EAR | The organ used for hearing
+
+---
+
+# Puzzle 27
+GEM | A precious stone
+ANGRY | Feeling strong displeasure
+READ | To look at and understand written words
+BAG | Something you carry things in
+
+---
+
+# Puzzle 28
+ANT | A tiny insect that lives in colonies
+TEA | A hot drink made from leaves
+DREAM | Images and thoughts that occur during sleep
+GRASS | The green plant that covers lawns
+
+---
+
+# Puzzle 29
+PAN | A flat cooking container
+PLANE | A flying vehicle with wings
+BREAD | A baked food made from flour
+CUP | A small container for drinking
+
+---
+
+# Puzzle 30
+TEAM | A group that plays together
+SPEED | How fast something moves
+BOAT | A smaller vessel that travels on water
+TEN | The number after nine
+
+---
+
+# Puzzle 31
+FROG | An amphibian that hops and croaks
+BRUSH | A tool with bristles, used for painting or hair
+ARROW | A pointed shaft shot from a bow
+FOX | A clever, red-furred wild animal
+
+---
+
+# Puzzle 32
+DUCK | A water bird that quacks
+OCEAN | A vast body of salt water
+SPEED | How fast something moves
+SKY | The space above the earth
+
+---
+
+# Puzzle 33
+RAIN | Water that falls from clouds
+PAGE | One sheet of a book
+BREAD | A baked food made from flour
+GAME | An activity played for fun or competition
+
+---
+
+# Puzzle 34
+GATE | A hinged barrier at an entrance
+TABLE | Furniture you eat or work at
+LION | The king of the jungle
+SONG | A piece of music with lyrics
+
+---
+
+# Puzzle 35
+QUIET | Making very little noise
+LIP | Part of the mouth
+SPACE | The vast area beyond Earth's atmosphere
+RACE | A competition to see who is fastest
+
+---
+
+# Puzzle 36
+BRAIN | The organ used for thinking
+GOAT | A farm animal known for climbing
+SMILE | An expression showing happiness
+RING | A circular piece of jewelry
+
+---
+
+# Puzzle 37
+POT | A container used for cooking
+SOLAR | Relating to the sun
+SUGAR | A sweet, crystalline substance
+HORSE | An animal often ridden or used to pull carts
+
+---
+
+# Puzzle 38
+SLEEP | To rest with your eyes closed at night
+PLANT | A living thing that grows in soil
+CROWN | A headpiece worn by royalty
+ANT | A tiny insect that lives in colonies
+
+---
+
+# Puzzle 39
+STOVE | An appliance used for cooking food
+GAME | An activity played for fun or competition
+MINT | A fresh-tasting herb
+SPOON | A utensil used for eating soup or cereal
+
+---
+
+# Puzzle 40
+ROAD | A path made for vehicles
+WRITE | To put words on paper
+TEACH | To help someone learn
+STORE | A place where you buy goods
+
+---
+
+# ---------- HARD (5-word puzzles) ----------
+
+# Puzzle 41
+LAMP | A device that gives off light
+GAME | An activity played for fun or competition
+BAT | A flying mammal, or sports equipment
+GEM | A precious stone
+ERA | A distinct period in history
+
+---
+
+# Puzzle 42
+AXE | A tool for chopping wood
+LIME | A small green citrus fruit
+LEG | The limb used for walking
+AGE | How many years old someone is
+GREEN | The color of grass
+
+---
+
+# Puzzle 43
+PAN | A flat cooking container
+SPEED | How fast something moves
+SUN | The star at the center of our solar system
+ARM | The limb between shoulder and hand
+EAGLE | A large bird of prey with sharp eyesight
+
+---
+
+# Puzzle 44
+RAT | A small rodent with a long tail
+BREAD | A baked food made from flour
+DESK | Furniture used for writing or studying
+AXE | A tool for chopping wood
+PEAR | A fruit that is often shaped like a teardrop
+
+---
+
+# Puzzle 45
+DEER | A forest animal with antlers
+TEN | The number after nine
+DREAM | Images and thoughts that occur during sleep
+TEA | A hot drink made from leaves
+FLAME | The visible part of a fire
+
+---
+
+# Puzzle 46
+MONEY | What you use to buy things
+GRAPE | A small fruit that grows in bunches on a vine
+BAT | A flying mammal, or sports equipment
+BIRD | An animal with feathers that can fly
+CUP | A small container for drinking
+
+---
+
+# Puzzle 47
+WEB | A structure spun by a spider
+DEER | A forest animal with antlers
+DANCE | To move your body to music
+DESK | Furniture used for writing or studying
+CAKE | A sweet baked dessert
+
+---
+
+# Puzzle 48
+GRAPE | A small fruit that grows in bunches on a vine
+SPARK | A tiny flash of light or fire
+HAT | Something worn on the head
+ROAD | A path made for vehicles
+MOP | A tool used to clean floors
+
+---
+
+# Puzzle 49
+ROOF | The covering on top of a house
+DOG | Man's best friend
+SMOKE | The gray cloud that rises from a fire
+RIVER | A large, flowing body of fresh water
+OAR | Used to row a boat
+
+---
+
+# Puzzle 50
+LAMP | A device that gives off light
+EAT | What you do when you have food
+PANTS | Clothing worn to cover the legs
+EYE | The organ used for seeing
+TRAIN | A vehicle that runs on tracks
