@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +14,19 @@
 /* =========================
    1. DESIGN SYSTEM
 ========================= */
+
+#key-capture {
+  position: fixed;
+  top: -1000px;
+  left: -1000px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  opacity: 0;
+  font-size: 16px; /* prevents iOS Safari from auto-zooming on focus */
+}
 
 :root {
   --bg: #ffffff;
@@ -942,6 +954,22 @@ a {
 
 <body>
 
+<!-- Hidden input used only to summon the mobile on-screen keyboard.
+     Mobile browsers only pop up a virtual keyboard when a real
+     focusable <input> receives focus, so cell clicks focus this
+     instead of relying on physical keydown events alone. -->
+<input
+  type="text"
+  id="key-capture"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="characters"
+  spellcheck="false"
+  inputmode="text"
+  aria-hidden="true"
+  tabindex="-1"
+/>
+
 <!-- =========================
      HEADER
 ========================= -->
@@ -950,7 +978,7 @@ a {
   <div class="container navbar">
     <a href="#home" class="brand" aria-label="Crossword Challenge home">
       <span class=""></span>
-      <span>Crossworld</span>
+      <span>Crossword Challenge</span>
     </a>
 
     <nav class="nav-links" aria-label="Main navigation">
@@ -982,7 +1010,7 @@ a {
     </p>
 
     <div class="hero-actions">
-      <a href="#daily" class="btn btn-primary">Play crossword →</a>
+      <a href="#daily" class="btn btn-primary">Play today's crossword →</a>
       <a href="#create" class="btn btn-secondary">Create your own</a>
     </div>
   </div>
@@ -1505,6 +1533,15 @@ function showPage(pageId) {
   const page = $(pageId);
   if (page) page.classList.add("active");
 
+  // Dismiss the mobile keyboard when leaving a puzzle page — it has
+  // nothing to type into on the Home/Create pages.
+  if (pageId !== "daily" && pageId !== "shared") {
+    const captureInput = $("key-capture");
+    if (captureInput && document.activeElement === captureInput) {
+      captureInput.blur();
+    }
+  }
+
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
@@ -1745,6 +1782,8 @@ class CrosswordGame {
             } else {
               this.selectCell(r, c);
             }
+
+            this.focusInputCapture();
           });
         }
 
@@ -1833,6 +1872,19 @@ class CrosswordGame {
 
     this.refreshCellStyles();
     this.highlightActiveClue();
+  }
+
+  focusInputCapture() {
+    const input = document.getElementById("key-capture");
+    if (!input) return;
+
+    input.value = "";
+
+    // Only call focus() if it isn't already focused, to avoid
+    // needlessly re-triggering the mobile keyboard on every tap.
+    if (document.activeElement !== input) {
+      input.focus({ preventScroll: true });
+    }
   }
 
   toggleDirection() {
@@ -1999,6 +2051,7 @@ class CrosswordGame {
       button.addEventListener("click", () => {
         this.direction = word.direction;
         this.selectCell(word.row, word.col);
+        this.focusInputCapture();
       });
 
       if (word.direction === "across") {
@@ -2308,6 +2361,63 @@ document.addEventListener("keydown", event => {
     }
   }
 });
+
+/* ------------------------------------------
+   7b. MOBILE KEYBOARD SUPPORT
+   The hidden #key-capture input is focused whenever a grid cell or
+   clue is tapped (see focusInputCapture() on CrosswordGame). That
+   focus is what makes mobile browsers pop up their on-screen
+   keyboard — plain <div>/<button> cells with only a document-level
+   keydown listener never trigger it, since there's no real focused
+   text field for the OS to attach a keyboard to.
+------------------------------------------ */
+
+function getActiveCrosswordGame() {
+  if (dailyGame && $("daily").classList.contains("active")) {
+    return dailyGame;
+  }
+
+  if (sharedGame && $("shared").classList.contains("active")) {
+    return sharedGame;
+  }
+
+  return null;
+}
+
+const keyCaptureInput = $("key-capture");
+
+// Backspace and arrow keys are reliably reported by keydown, even on
+// mobile on-screen keyboards, so handle them here directly.
+keyCaptureInput.addEventListener("keydown", event => {
+  const game = getActiveCrosswordGame();
+  if (!game) return;
+
+  if (event.key === "Backspace" || event.key.startsWith("Arrow")) {
+    event.preventDefault();
+    game.handleKey(event.key);
+    keyCaptureInput.value = "";
+  }
+});
+
+// Letters are handled via the "input" event instead of keydown,
+// since virtual/IME keyboards don't always fire a usable keydown
+// for character keys, but always fire "input" once a character
+// actually lands in the field.
+keyCaptureInput.addEventListener("input", () => {
+  const game = getActiveCrosswordGame();
+  const value = keyCaptureInput.value;
+
+  keyCaptureInput.value = "";
+
+  if (!game || !value) return;
+
+  const letter = value[value.length - 1];
+
+  if (/^[a-zA-Z]$/.test(letter)) {
+    game.handleKey(letter);
+  }
+});
+
 
 /* ------------------------------------------
    8. DAILY PUZZLE ACTIONS
