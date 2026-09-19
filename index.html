@@ -977,8 +977,8 @@ a {
 <header class="site-header">
   <div class="container navbar">
     <a href="#home" class="brand" aria-label="Crossword Challenge home">
-      <span class=""></span>
-      <span>Crossworld</span>
+      <span class="brand-mark">✚</span>
+      <span>Crossword Challenge</span>
     </a>
 
     <nav class="nav-links" aria-label="Main navigation">
@@ -1041,7 +1041,7 @@ a {
 
           <p>
             Solve a beginner-friendly crossword with
-            simple clues.
+            simple clues. No login required.
           </p>
 
           <div>
@@ -1134,7 +1134,7 @@ a {
   <div class="container puzzle-header">
     <span class="eyebrow">Daily crossword</span>
     <h1 id="daily-title">Today's Crossword</h1>
-    <p>5 × 5 · Beginner</p>
+    <p>5 × 5 · Beginner · No login required</p>
   </div>
 
   <div class="container">
@@ -1245,7 +1245,7 @@ a {
         <h2>Your crossword</h2>
         <p>
           Enter words and clues. Use 3–5 letter words
-          for this beginner 5×5 puzzle.
+          for this beginner 5×5 prototype.
         </p>
 
         <div id="word-inputs"></div>
@@ -1412,7 +1412,7 @@ a {
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <span>© 2026 Crossworld</span>
+    <span>© 2026 Crossword Challenge</span>
 
     <nav class="footer-links" aria-label="Footer navigation">
       <a href="#home">Home</a>
@@ -1487,15 +1487,15 @@ const DEFAULT_PUZZLE_WORDS = [
   [
     { word: "APPLE", clue: "A fruit that can be red or green" },
     { word: "PLANT", clue: "A living thing that grows in soil" },
-    { word: "LEMON", clue: "A yellow citrus fruit" },
     { word: "PEN", clue: "Something you write with" },
-    { word: "EAT", clue: "What you do when you have food" }
+    { word: "EAT", clue: "What you do when you have food" },
+    { word: "PEAR", clue: "A fruit that is often shaped like a teardrop" }
   ],
   [
     { word: "RAIN", clue: "Water that falls from clouds" },
-    { word: "SNOW", clue: "White flakes that fall in winter" },
     { word: "WIND", clue: "Moving air you can feel but not see" },
-    { word: "SUN", clue: "The star at the center of our solar system" }
+    { word: "SUN", clue: "The star at the center of our solar system" },
+    { word: "STORM", clue: "Heavy wind and rain together" }
   ],
   [
     { word: "MANGO", clue: "A sweet tropical fruit with a large seed" },
@@ -1725,13 +1725,22 @@ function buildGrid(puzzle) {
 
       if (cell.black) continue;
 
+      const leftCell = c > 0 ? grid[r][c - 1] : null;
+      const upCell = r > 0 ? grid[r - 1][c] : null;
+
+      // A cell starts an across word if there's no cell to its left,
+      // that cell is black, OR that cell simply isn't part of the
+      // same across word — not just "isn't black". Two across words
+      // can sit right next to each other with no black divider
+      // between them (e.g. the left cell only belongs to a down
+      // word), and that still counts as a new start.
       const startsAcross =
         cell.across !== null &&
-        (c === 0 || grid[r][c - 1].black);
+        (!leftCell || leftCell.black || leftCell.across !== cell.across);
 
       const startsDown =
         cell.down !== null &&
-        (r === 0 || grid[r - 1][c].black);
+        (!upCell || upCell.black || upCell.down !== cell.down);
 
       if (startsAcross || startsDown) {
         cell.number = clueNumber++;
@@ -2684,6 +2693,17 @@ function generateCrossword(words) {
     () => Array(size).fill(null)
   );
 
+  // Tracks which direction(s) have a word running through each
+  // cell. This is what lets us tell a legitimate perpendicular
+  // crossing (across meets down at one shared cell) apart from two
+  // words of the SAME direction silently overlapping/chaining into
+  // one continuous run, which would break clue numbering and make
+  // the grid ambiguous to solve.
+  const dirGrid = Array.from(
+    { length: size },
+    () => Array.from({ length: size }, () => ({ across: false, down: false }))
+  );
+
   const sorted = words
     .map(item => ({
       word: cleanWord(item.word),
@@ -2706,6 +2726,30 @@ function generateCrossword(words) {
 
   function canPlace(word, row, col, direction) {
 
+    // The cell immediately before the start, and immediately after
+    // the end, of this word (in its own direction) must be
+    // completely empty. Otherwise the word would silently run into
+    // whatever is already there and merge into one longer entry.
+    const beforeR = row - (direction === "down" ? 1 : 0);
+    const beforeC = col - (direction === "across" ? 1 : 0);
+
+    if (
+      beforeR >= 0 && beforeC >= 0 &&
+      grid[beforeR][beforeC] !== null
+    ) {
+      return false;
+    }
+
+    const afterR = row + (direction === "down" ? word.length : 0);
+    const afterC = col + (direction === "across" ? word.length : 0);
+
+    if (
+      afterR < size && afterC < size &&
+      grid[afterR][afterC] !== null
+    ) {
+      return false;
+    }
+
     for (let i = 0; i < word.length; i++) {
 
       const r = row + (direction === "down" ? i : 0);
@@ -2717,20 +2761,35 @@ function generateCrossword(words) {
 
       const existing = grid[r][c];
 
-      if (existing !== null && existing !== word[i]) {
-        return false;
-      }
+      if (existing !== null) {
 
-      // Prevent adjacent parallel words.
-      if (existing === null) {
+        if (existing !== word[i]) return false;
 
+        // A cell can only be shared as a perpendicular crossing.
+        // If a word in this SAME direction already runs through
+        // here, placing this word would chain the two into one
+        // ambiguous run instead of a real intersection.
+        if (dirGrid[r][c][direction]) return false;
+
+      } else {
+
+        // A brand-new (non-crossing) cell for this word: the two
+        // cells perpendicular to the word's direction must be
+        // empty, or this cell would accidentally touch an
+        // unrelated word and form an unintended extra entry.
         if (direction === "across") {
           if (
             (r > 0 && grid[r - 1][c] !== null) ||
             (r < size - 1 && grid[r + 1][c] !== null)
           ) {
-            // A crossing is okay only if an existing
-            // letter is actually at this position.
+            return false;
+          }
+        } else {
+          if (
+            (c > 0 && grid[r][c - 1] !== null) ||
+            (c < size - 1 && grid[r][c + 1] !== null)
+          ) {
+            return false;
           }
         }
       }
@@ -2741,7 +2800,8 @@ function generateCrossword(words) {
 
   function place(word, row, col, direction) {
 
-    const changed = [];
+    const letterChanges = [];
+    const dirChanges = [];
 
     for (let i = 0; i < word.length; i++) {
 
@@ -2750,19 +2810,28 @@ function generateCrossword(words) {
 
       if (grid[r][c] === null) {
         grid[r][c] = word[i];
-        changed.push([r, c]);
+        letterChanges.push([r, c]);
+      }
+
+      if (!dirGrid[r][c][direction]) {
+        dirGrid[r][c][direction] = true;
+        dirChanges.push([r, c]);
       }
     }
 
     placements.push({ word, row, col, direction });
 
-    return changed;
+    return { letterChanges, dirChanges, direction };
   }
 
   function undo(changed) {
 
-    changed.forEach(([r, c]) => {
+    changed.letterChanges.forEach(([r, c]) => {
       grid[r][c] = null;
+    });
+
+    changed.dirChanges.forEach(([r, c]) => {
+      dirGrid[r][c][changed.direction] = false;
     });
 
     placements.pop();
