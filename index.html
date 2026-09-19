@@ -977,8 +977,8 @@ a {
 <header class="site-header">
   <div class="container navbar">
     <a href="#home" class="brand" aria-label="Crossword Challenge home">
-      <span class=""></span>
-      <span>Crossworld</span>
+      <span class="brand-mark">✚</span>
+      <span>Crossword Challenge</span>
     </a>
 
     <nav class="nav-links" aria-label="Main navigation">
@@ -1041,7 +1041,7 @@ a {
 
           <p>
             Solve a beginner-friendly crossword with
-            simple clues.
+            simple clues. No login required.
           </p>
 
           <div>
@@ -1134,7 +1134,7 @@ a {
   <div class="container puzzle-header">
     <span class="eyebrow">Daily crossword</span>
     <h1 id="daily-title">Today's Crossword</h1>
-    <p>5 × 5 · Beginner </p>
+    <p>5 × 5 · Beginner · No login required</p>
   </div>
 
   <div class="container">
@@ -1245,7 +1245,7 @@ a {
         <h2>Your crossword</h2>
         <p>
           Enter words and clues. Use 3–5 letter words
-          for this beginner 5×5 puzzle.
+          for this beginner 5×5 prototype.
         </p>
 
         <div id="word-inputs"></div>
@@ -1302,6 +1302,10 @@ a {
           <div class="share-actions">
             <button class="btn btn-primary" id="copy-link-btn">
               Copy link
+            </button>
+
+            <button class="btn btn-secondary" id="copy-message-btn">
+              Copy message
             </button>
 
             <button class="btn btn-secondary" id="native-share-btn">
@@ -1511,10 +1515,30 @@ function buildDefaultPuzzles() {
     .filter(Boolean);
 }
 
+function shuffleArray(array) {
+  const result = array.slice();
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+// Puzzles are played in a shuffled, non-repeating order (a fresh
+// shuffle of all indices) so the mix is different each time through,
+// rather than always going 1, 2, 3... in the same sequence.
+function newShuffledPlaylist() {
+  return shuffleArray(PUZZLES.map((_, i) => i));
+}
+
 let PUZZLES = buildDefaultPuzzles();
 if (PUZZLES.length === 0) PUZZLES = [DAILY_PUZZLE];
 
-let dailyPuzzleIndex = 0;
+let dailyPlaylist = newShuffledPlaylist();
+let dailyPlaylistPos = 0;
+let dailyPuzzleIndex = dailyPlaylist[dailyPlaylistPos];
 let dailyAwaitingNextPuzzle = false;
 
 /* ------------------------------------------
@@ -1570,11 +1594,61 @@ function cleanWord(word) {
   return word.toUpperCase().replace(/[^A-Z]/g, "");
 }
 
-function encodePuzzle(data) {
-  const json = JSON.stringify(data);
+function encodePuzzle(puzzle) {
+  // Compact wire format: each word is a short array instead of an
+  // object with full key names, and the title/size are only
+  // included when they aren't the default — this keeps shared links
+  // noticeably shorter than a full JSON dump of the puzzle.
+  const compact = {
+    w: puzzle.words.map(item => [
+      item.word,
+      item.clue,
+      item.row,
+      item.col,
+      item.direction === "down" ? "d" : "a"
+    ])
+  };
 
-  // URL-safe Base64 encoding.
-  const bytes = new TextEncoder().encode(json);
+  if (puzzle.title && puzzle.title !== "Custom Crossword") {
+    compact.t = puzzle.title;
+  }
+
+  return base64UrlEncode(JSON.stringify(compact));
+}
+
+function decodePuzzle(encoded) {
+  try {
+    const data = JSON.parse(base64UrlDecode(encoded));
+
+    // Compact format: { w: [[word, clue, row, col, dir], ...], t?: title }
+    if (data && Array.isArray(data.w)) {
+      return {
+        title: data.t || "Custom Crossword",
+        size: SIZE,
+        words: data.w.map(([word, clue, row, col, dir]) => ({
+          word,
+          clue,
+          row,
+          col,
+          direction: dir === "d" ? "down" : "across"
+        }))
+      };
+    }
+
+    // Legacy format from earlier links: a full, uncompressed puzzle
+    // object. Still supported so old shared links keep working.
+    if (data && Array.isArray(data.words)) {
+      return data;
+    }
+
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function base64UrlEncode(str) {
+  const bytes = new TextEncoder().encode(str);
   let binary = "";
 
   bytes.forEach(byte => {
@@ -1587,26 +1661,22 @@ function encodePuzzle(data) {
     .replace(/=+$/, "");
 }
 
-function decodePuzzle(encoded) {
-  try {
-    const base64 = encoded
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
+function base64UrlDecode(encoded) {
+  const base64 = encoded
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
 
-    const padded = base64 + "=".repeat(
-      (4 - base64.length % 4) % 4
-    );
+  const padded = base64 + "=".repeat(
+    (4 - base64.length % 4) % 4
+  );
 
-    const binary = atob(padded);
-    const bytes = Uint8Array.from(
-      binary,
-      char => char.charCodeAt(0)
-    );
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(
+    binary,
+    char => char.charCodeAt(0)
+  );
 
-    return JSON.parse(new TextDecoder().decode(bytes));
-  } catch (error) {
-    return null;
-  }
+  return new TextDecoder().decode(bytes);
 }
 
 /* ------------------------------------------
@@ -2280,7 +2350,15 @@ function startDailyGame() {
 function goToNextDailyPuzzle() {
   clearInterval(dailyInterval);
 
-  dailyPuzzleIndex = (dailyPuzzleIndex + 1) % PUZZLES.length;
+  dailyPlaylistPos++;
+
+  if (dailyPlaylistPos >= dailyPlaylist.length) {
+    // Every puzzle has been played once — reshuffle for a fresh mix.
+    dailyPlaylist = newShuffledPlaylist();
+    dailyPlaylistPos = 0;
+  }
+
+  dailyPuzzleIndex = dailyPlaylist[dailyPlaylistPos];
   startDailyGame();
 }
 
@@ -2939,6 +3017,12 @@ function createShareLink(puzzle) {
   $("share-box").classList.remove("hidden");
 }
 
+function buildShareMessage(url) {
+  return "🧩 Your friend has created and shared a special crossword " +
+    "puzzle with you! It's time to take it down — good luck!\n\n" +
+    url;
+}
+
 $("copy-link-btn").addEventListener("click", async () => {
 
   const url = $("share-url").value;
@@ -2964,6 +3048,29 @@ $("copy-link-btn").addEventListener("click", async () => {
   }
 });
 
+$("copy-message-btn").addEventListener("click", async () => {
+
+  const message = buildShareMessage($("share-url").value);
+
+  try {
+    await navigator.clipboard.writeText(message);
+
+    setStatus(
+      "creator-status",
+      "Share message copied! Paste it anywhere.",
+      "success"
+    );
+
+  } catch (error) {
+
+    setStatus(
+      "creator-status",
+      "Couldn't copy automatically — copy the link above instead.",
+      "error"
+    );
+  }
+});
+
 $("native-share-btn").addEventListener("click", async () => {
 
   const url = $("share-url").value;
@@ -2972,7 +3079,9 @@ $("native-share-btn").addEventListener("click", async () => {
     try {
       await navigator.share({
         title: "Crossword Challenge",
-        text: "Solve my custom crossword!",
+        text: "🧩 Your friend has created and shared a special " +
+          "crossword puzzle with you! It's time to take it down — " +
+          "good luck!",
         url
       });
     } catch (error) {
@@ -3210,8 +3319,13 @@ addWordInput();
 loadPuzzlesFromFile().then(puzzles => {
   if (puzzles) {
     PUZZLES = puzzles;
-    dailyPuzzleIndex = 0;
   }
+
+  // Rebuild the shuffled playlist now that the final puzzle set
+  // (built-in or loaded from words.txt) is known.
+  dailyPlaylist = newShuffledPlaylist();
+  dailyPlaylistPos = 0;
+  dailyPuzzleIndex = dailyPlaylist[dailyPlaylistPos];
 
   route();
 });
