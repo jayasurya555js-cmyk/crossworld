@@ -1304,10 +1304,6 @@ a {
               Copy link
             </button>
 
-            <button class="btn btn-secondary" id="copy-message-btn">
-              Copy message
-            </button>
-
             <button class="btn btn-secondary" id="native-share-btn">
               Share
             </button>
@@ -1515,30 +1511,23 @@ function buildDefaultPuzzles() {
     .filter(Boolean);
 }
 
-function shuffleArray(array) {
-  const result = array.slice();
+// Picks a fully random puzzle index, different from excludeIndex when
+// possible (so "give me a different one" always actually changes it).
+function pickRandomPuzzleIndex(excludeIndex) {
+  if (PUZZLES.length <= 1) return 0;
 
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
+  let index;
+  do {
+    index = Math.floor(Math.random() * PUZZLES.length);
+  } while (index === excludeIndex);
 
-  return result;
-}
-
-// Puzzles are played in a shuffled, non-repeating order (a fresh
-// shuffle of all indices) so the mix is different each time through,
-// rather than always going 1, 2, 3... in the same sequence.
-function newShuffledPlaylist() {
-  return shuffleArray(PUZZLES.map((_, i) => i));
+  return index;
 }
 
 let PUZZLES = buildDefaultPuzzles();
 if (PUZZLES.length === 0) PUZZLES = [DAILY_PUZZLE];
 
-let dailyPlaylist = newShuffledPlaylist();
-let dailyPlaylistPos = 0;
-let dailyPuzzleIndex = dailyPlaylist[dailyPlaylistPos];
+let dailyPuzzleIndex = pickRandomPuzzleIndex();
 let dailyAwaitingNextPuzzle = false;
 
 /* ------------------------------------------
@@ -2350,15 +2339,7 @@ function startDailyGame() {
 function goToNextDailyPuzzle() {
   clearInterval(dailyInterval);
 
-  dailyPlaylistPos++;
-
-  if (dailyPlaylistPos >= dailyPlaylist.length) {
-    // Every puzzle has been played once — reshuffle for a fresh mix.
-    dailyPlaylist = newShuffledPlaylist();
-    dailyPlaylistPos = 0;
-  }
-
-  dailyPuzzleIndex = dailyPlaylist[dailyPlaylistPos];
+  dailyPuzzleIndex = pickRandomPuzzleIndex(dailyPuzzleIndex);
   startDailyGame();
 }
 
@@ -3017,12 +2998,6 @@ function createShareLink(puzzle) {
   $("share-box").classList.remove("hidden");
 }
 
-function buildShareMessage(url) {
-  return "🧩 Your friend has created and shared a special crossword " +
-    "puzzle with you! It's time to take it down — good luck!\n\n" +
-    url;
-}
-
 $("copy-link-btn").addEventListener("click", async () => {
 
   const url = $("share-url").value;
@@ -3043,29 +3018,6 @@ $("copy-link-btn").addEventListener("click", async () => {
     setStatus(
       "creator-status",
       "Select and copy the link manually.",
-      "error"
-    );
-  }
-});
-
-$("copy-message-btn").addEventListener("click", async () => {
-
-  const message = buildShareMessage($("share-url").value);
-
-  try {
-    await navigator.clipboard.writeText(message);
-
-    setStatus(
-      "creator-status",
-      "Share message copied! Paste it anywhere.",
-      "success"
-    );
-
-  } catch (error) {
-
-    setStatus(
-      "creator-status",
-      "Couldn't copy automatically — copy the link above instead.",
       "error"
     );
   }
@@ -3211,7 +3163,10 @@ function route() {
   if (routeName === "daily") {
     showPage("daily");
 
-    if (!dailyGame) startDailyGame();
+    // Every visit to the Daily page gets a freshly randomized puzzle
+    // — not just the first time, and not the same one as last visit.
+    dailyPuzzleIndex = pickRandomPuzzleIndex(dailyPuzzleIndex);
+    startDailyGame();
 
   } else if (routeName === "create") {
     showPage("create");
@@ -3321,11 +3276,12 @@ loadPuzzlesFromFile().then(puzzles => {
     PUZZLES = puzzles;
   }
 
-  // Rebuild the shuffled playlist now that the final puzzle set
-  // (built-in or loaded from words.txt) is known.
-  dailyPlaylist = newShuffledPlaylist();
-  dailyPlaylistPos = 0;
-  dailyPuzzleIndex = dailyPlaylist[dailyPlaylistPos];
+  // Pick a fresh random puzzle now that the final puzzle set
+  // (built-in or loaded from words.txt) is known. route() below
+  // will randomize again anyway if it lands on the Daily page, but
+  // this keeps dailyPuzzleIndex valid even if something reads it
+  // before that.
+  dailyPuzzleIndex = pickRandomPuzzleIndex();
 
   route();
 });
