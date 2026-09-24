@@ -507,9 +507,204 @@ a {
   padding: 0;
 }
 
+/* Blocked cells are little wooden crates (drawn as an inline SVG, so
+   there is no image file to upload). --blocked-bg is only the color
+   shown for an instant before the crate is painted. */
+:root {
+  --blocked-bg: #a85a1a;
+}
+
 .cell.black {
-  background: var(--black);
+  background-color: var(--blocked-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='post' x1='0' x2='1' y1='0' y2='0'%3E%3Cstop offset='0' stop-color='%236f3610'/%3E%3Cstop offset='1' stop-color='%239c4d17'/%3E%3C/linearGradient%3E%3ClinearGradient id='postR' x1='0' x2='1' y1='0' y2='0'%3E%3Cstop offset='0' stop-color='%239c4d17'/%3E%3Cstop offset='1' stop-color='%236f3610'/%3E%3C/linearGradient%3E%3ClinearGradient id='shade' x1='0' x2='1' y1='0' y2='0'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='.38'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='shadeR' x1='0' x2='1' y1='0' y2='0'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.25'/%3E%3C/linearGradient%3E%3ClinearGradient id='top' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='%238a4513'/%3E%3Crect x='9' y='5' width='82' height='15.5' fill='%23c1732a'/%3E%3Crect x='9' y='20.5' width='82' height='15.5' fill='%23b86a24'/%3E%3Crect x='9' y='36' width='82' height='15.5' fill='%23c67c30'/%3E%3Crect x='9' y='51.5' width='82' height='15.5' fill='%23b5651f'/%3E%3Crect x='9' y='67' width='82' height='15.5' fill='%23bf7028'/%3E%3Crect x='9' y='82.5' width='82' height='12.5' fill='%23b96c26'/%3E%3Cpath d='M15.5 7.0 q10.7 0.5 21.4 0 q10.7 -0.5 21.4 0 q10.7 -0.5 21.4 0 q10.7 -0.5 21.4 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.38'/%3E%3Cpath d='M11.4 10.1 q8.3 -0.7 16.6 0 q8.3 -0.7 16.6 0 q8.3 -0.7 16.6 0 q8.3 0.7 16.6 0 q8.3 -0.7 16.6 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.54'/%3E%3Cpath d='M17.6 14.9 q8.7 -0.4 17.4 0 q8.7 0.4 17.4 0 q8.7 -0.4 17.4 0 q8.7 -0.4 17.4 0 q8.7 -0.4 17.4 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.45'/%3E%3Cpath d='M9.6 17.4 q9.0 0.8 18.1 0 q9.0 0.8 18.1 0 q9.0 0.8 18.1 0 q9.0 0.8 18.1 0 q9.0 0.8 18.1 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.37'/%3E%3Cpath d='M16.0 22.5 q10.9 1.0 21.7 0 q10.9 1.0 21.7 0 q10.9 1.0 21.7 0 q10.9 1.0 21.7 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.44'/%3E%3Cpath d='M14.1 26.4 q9.7 0.5 19.4 0 q9.7 0.5 19.4 0 q9.7 -0.5 19.4 0 q9.7 -0.5 19.4 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.41'/%3E%3Cpath d='M17.8 30.1 q11.5 0.9 23.0 0 q11.5 0.9 23.0 0 q11.5 -0.9 23.0 0 q11.5 -0.9 23.0 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.46'/%3E%3Cpath d='M15.6 33.8 q11.5 0.8 23.0 0 q11.5 0.8 23.0 0 q11.5 0.8 23.0 0 q11.5 0.8 23.0 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.37'/%3E%3Cpath d='M10.7 37.6 q8.3 0.8 16.6 0 q8.3 -0.8 16.6 0 q8.3 -0.8 16.6 0 q8.3 0.8 16.6 0 q8.3 0.8 16.6 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.39'/%3E%3Cpath d='M10.7 42.4 q9.4 -0.8 18.8 0 q9.4 0.8 18.8 0 q9.4 0.8 18.8 0 q9.4 0.8 18.8 0 q9.4 0.8 18.8 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.49'/%3E%3Cpath d='M11.3 45.4 q8.8 -0.7 17.5 0 q8.8 -0.7 17.5 0 q8.8 0.7 17.5 0 q8.8 -0.7 17.5 0 q8.8 0.7 17.5 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.38'/%3E%3Cpath d='M14.3 48.2 q9.6 -0.5 19.2 0 q9.6 -0.5 19.2 0 q9.6 0.5 19.2 0 q9.6 0.5 19.2 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.56'/%3E%3Cpath d='M13.8 53.7 q9.0 -0.7 17.9 0 q9.0 0.7 17.9 0 q9.0 -0.7 17.9 0 q9.0 -0.7 17.9 0 q9.0 0.7 17.9 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.49'/%3E%3Cpath d='M14.7 57.4 q12.7 -0.5 25.5 0 q12.7 -0.5 25.5 0 q12.7 -0.5 25.5 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.54'/%3E%3Cpath d='M11.5 60.8 q9.8 -0.5 19.6 0 q9.8 -0.5 19.6 0 q9.8 0.5 19.6 0 q9.8 0.5 19.6 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.47'/%3E%3Cpath d='M10.4 64.0 q11.7 0.6 23.4 0 q11.7 -0.6 23.4 0 q11.7 -0.6 23.4 0 q11.7 -0.6 23.4 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.61'/%3E%3Cpath d='M10.5 70.0 q8.1 0.8 16.3 0 q8.1 -0.8 16.3 0 q8.1 0.8 16.3 0 q8.1 0.8 16.3 0 q8.1 -0.8 16.3 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.54'/%3E%3Cpath d='M14.4 72.5 q11.2 -0.6 22.4 0 q11.2 -0.6 22.4 0 q11.2 0.6 22.4 0 q11.2 -0.6 22.4 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.53'/%3E%3Cpath d='M16.3 75.7 q12.0 0.8 23.9 0 q12.0 0.8 23.9 0 q12.0 -0.8 23.9 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.70'/%3E%3Cpath d='M13.5 79.9 q12.9 1.2 25.9 0 q12.9 -1.2 25.9 0 q12.9 -1.2 25.9 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.68'/%3E%3Cpath d='M12.4 83.7 q12.9 -0.8 25.9 0 q12.9 0.8 25.9 0 q12.9 0.8 25.9 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.52'/%3E%3Cpath d='M15.6 87.6 q11.9 -0.5 23.8 0 q11.9 0.5 23.8 0 q11.9 -0.5 23.8 0 q11.9 0.5 23.8 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.67'/%3E%3Cpath d='M17.0 90.3 q10.0 0.7 20.0 0 q10.0 -0.7 20.0 0 q10.0 -0.7 20.0 0 q10.0 -0.7 20.0 0' fill='none' stroke='%235e2c0a' stroke-opacity='0.32' stroke-width='0.69'/%3E%3Cpath d='M14.9 93.4 q11.3 0.4 22.6 0 q11.3 0.4 22.6 0 q11.3 -0.4 22.6 0 q11.3 -0.4 22.6 0' fill='none' stroke='%23e6ad6e' stroke-opacity='0.5' stroke-width='0.51'/%3E%3Cpath d='M9 20.5H91M9 36H91M9 51.5H91M9 67H91M9 82.5H91' stroke='%234a2208' stroke-width='1.3' fill='none'/%3E%3Cpath d='M9 21.6H91M9 37.1H91M9 52.6H91M9 68.1H91M9 83.6H91' stroke='%23e0a266' stroke-opacity='.35' stroke-width='.6' fill='none'/%3E%3Cellipse cx='63' cy='28' rx='3.2' ry='1.7' fill='none' stroke='%235e2c0a' stroke-opacity='.5' stroke-width='.6'/%3E%3Cellipse cx='63' cy='28' rx='1.3' ry='.7' fill='%235e2c0a' fill-opacity='.45'/%3E%3Cellipse cx='30' cy='74' rx='3' ry='1.6' fill='none' stroke='%235e2c0a' stroke-opacity='.5' stroke-width='.6'/%3E%3Cellipse cx='30' cy='74' rx='1.2' ry='.7' fill='%235e2c0a' fill-opacity='.45'/%3E%3Crect x='9' y='5' width='9' height='90' fill='url(%23shade)'/%3E%3Crect x='82' y='5' width='9' height='90' fill='url(%23shadeR)'/%3E%3Crect x='9' y='5' width='82' height='6' fill='url(%23top)'/%3E%3Crect x='0' y='0' width='9' height='100' fill='url(%23post)'/%3E%3Crect x='91' y='0' width='9' height='100' fill='url(%23postR)'/%3E%3Crect x='0' y='0' width='100' height='5' fill='%237a3c12'/%3E%3Crect x='0' y='95' width='100' height='5' fill='%236a320d'/%3E%3Cpath d='M0 5H100M0 95H100M9 5V95M91 5V95' stroke='%233f1d06' stroke-width='1' fill='none'/%3E%3Cpath d='M2.6 6V94' stroke='%233f1d06' stroke-opacity='.35' stroke-width='.5'/%3E%3Cpath d='M5.4 6V94' stroke='%233f1d06' stroke-opacity='.35' stroke-width='.5'/%3E%3Cpath d='M94.6 6V94' stroke='%233f1d06' stroke-opacity='.35' stroke-width='.5'/%3E%3Cpath d='M97.4 6V94' stroke='%233f1d06' stroke-opacity='.35' stroke-width='.5'/%3E%3Ccircle cx='4.5' cy='10' r='2' fill='%232c2c2c'/%3E%3Ccircle cx='3.9' cy='9.4' r='.7' fill='%238c8c8c'/%3E%3Ccircle cx='4.5' cy='90' r='2' fill='%232c2c2c'/%3E%3Ccircle cx='3.9' cy='89.4' r='.7' fill='%238c8c8c'/%3E%3Ccircle cx='95.5' cy='10' r='2' fill='%232c2c2c'/%3E%3Ccircle cx='94.9' cy='9.4' r='.7' fill='%238c8c8c'/%3E%3Ccircle cx='95.5' cy='90' r='2' fill='%232c2c2c'/%3E%3Ccircle cx='94.9' cy='89.4' r='.7' fill='%238c8c8c'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   BOMB IN EVERY BLOCKED CELL
+   Tap a bomb: it explodes inside its own cell, then a fresh
+   bomb pops back in and is ready to go off again.
+========================= */
+
+.bomb-art {
+  position: absolute;
+  inset: 9%;
+  display: block;
+  transform-origin: 50% 65%;
+  animation: bombWobble 2.6s ease-in-out infinite;
+  animation-delay: var(--bd, 0s);
   pointer-events: none;
+}
+
+.bomb-art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.cell.black:hover .bomb-art {
+  animation-duration: 0.45s;
+}
+
+.bomb-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 95%;
+  animation: bombFlame 0.3s ease-in-out infinite alternate;
+  animation-delay: var(--bd, 0s);
+}
+
+.bomb-glint {
+  animation: bombGlint 0.7s steps(2, end) infinite;
+  animation-delay: var(--bd, 0s);
+}
+
+@keyframes bombWobble {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50%      { transform: rotate(3deg) scale(1.05); }
+}
+
+@keyframes bombFlame {
+  from { transform: scale(0.9, 0.95) rotate(-8deg); }
+  to   { transform: scale(1.12, 1.18) rotate(8deg); }
+}
+
+@keyframes bombGlint {
+  0%   { opacity: 1; }
+  100% { opacity: 0.15; }
+}
+
+/* ----- the explosion (all effects stay inside the cell) ----- */
+
+.bomb-fx {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+
+.cell.black.boom .bomb-fx {
+  display: block;
+}
+
+.cell.black.boom {
+  animation: cellScorch 1s ease-out;
+}
+
+.cell.black.boom .bomb-art {
+  animation: bombPop 0.34s ease-in forwards;
+}
+
+.cell.black.return .bomb-art {
+  animation: bombReturn 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+
+@keyframes bombPop {
+  0%   { transform: scale(1); filter: brightness(1); opacity: 1; }
+  55%  { transform: scale(1.3) rotate(5deg); filter: brightness(1.8); opacity: 1; }
+  100% { transform: scale(1.7); filter: brightness(3); opacity: 0; }
+}
+
+@keyframes bombReturn {
+  0%   { transform: scale(0) rotate(-40deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes cellScorch {
+  0%   { box-shadow: inset 0 0 0 0 rgba(255, 170, 40, 0); filter: brightness(1); }
+  18%  { box-shadow: inset 0 0 22px 6px rgba(255, 170, 40, 0.95); filter: brightness(1.35); }
+  100% { box-shadow: inset 0 0 0 0 rgba(255, 170, 40, 0); filter: brightness(1); }
+}
+
+.fx-flash {
+  position: absolute;
+  inset: -25%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #fff2a8 25%, rgba(255, 150, 0, 0.75) 50%, transparent 70%);
+  opacity: 0;
+  animation: fxFlash 0.55s ease-out 0.28s forwards;
+}
+
+.fx-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 70%;
+  margin: -35% 0 0 -35%;
+  border: 3px solid #ffb020;
+  border-radius: 50%;
+  opacity: 0;
+  animation: fxRing 0.6s ease-out 0.3s forwards;
+}
+
+.fx-ring.two {
+  border-color: #ff4d2e;
+  animation-delay: 0.4s;
+}
+
+.fx-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14%;
+  height: 4px;
+  margin: -2px 0 0 -7%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ffffff, #ffcf3a, #ff5a1f);
+  opacity: 0;
+  animation: fxSpark 0.6s ease-out 0.3s forwards;
+}
+
+.fx-smoke {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: 46%;
+  height: 46%;
+  margin: -23% 0 0 -23%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 110, 110, 0.5), rgba(90, 90, 90, 0) 70%);
+  opacity: 0;
+  animation: fxSmoke 0.75s ease-out 0.42s forwards;
+}
+
+@keyframes fxFlash {
+  0%   { opacity: 0; transform: scale(0.2); }
+  25%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+@keyframes fxRing {
+  0%   { opacity: 0.95; transform: scale(0.2); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+@keyframes fxSpark {
+  0%   { opacity: 1; transform: rotate(var(--a)) translateX(0) scaleX(0.4); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(320%) scaleX(1.4); }
+}
+
+@keyframes fxSmoke {
+  0%   { opacity: 0.9; transform: translateY(0) scale(0.3); }
+  100% { opacity: 0; transform: translateY(-25%) scale(1.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bomb-art,
+  .bomb-flame,
+  .bomb-glint,
+  .cell.black:hover .bomb-art {
+    animation: none;
+  }
+
+  .cell.black.boom .bomb-art {
+    animation: bombPop 0.34s ease-in forwards;
+  }
 }
 
 .cell.selected {
@@ -546,6 +741,27 @@ a {
 .cell-letter {
   line-height: 1;
   margin-top: 5px;
+}
+
+/* Bigger grids (7x7, 8x8) get slightly smaller type so every cell
+   still fits comfortably on a phone. */
+.crossword-grid[data-size="7"] .cell,
+.creator-grid[data-size="7"] .cell {
+  font-size: clamp(16px, 3.6vw, 30px);
+}
+
+.crossword-grid[data-size="8"] .cell,
+.creator-grid[data-size="8"] .cell {
+  font-size: clamp(15px, 3.2vw, 26px);
+}
+
+.crossword-grid[data-size="7"] .cell-number,
+.crossword-grid[data-size="8"] .cell-number,
+.creator-grid[data-size="7"] .cell-number,
+.creator-grid[data-size="8"] .cell-number {
+  font-size: 9px;
+  top: 1px;
+  left: 3px;
 }
 
 .grid-actions {
@@ -777,7 +993,7 @@ a {
 }
 
 .creator-grid .cell.black {
-  background: var(--black);
+  background-color: var(--blocked-bg);
 }
 
 .creator-grid .cell-number {
@@ -1067,7 +1283,7 @@ a {
           <span class="eyebrow">Featured puzzle</span>
           <h2>Today's Crossword</h2>
         </div>
-        <span class="badge">5 × 5 · Beginner</span>
+        <span class="badge">5×5 to 8×8 · Mixed</span>
       </div>
 
       <div class="card home-puzzle">
@@ -1172,7 +1388,7 @@ a {
   <div class="container puzzle-header">
     <span class="eyebrow">Daily crossword</span>
     <h1 id="daily-title">Today's Crossword</h1>
-    <p>5 × 5 Cross word Puzzle</p>
+    <p id="daily-subtitle">5 × 5 to 8 × 8 Crossword Puzzles</p>
   </div>
 
   <div class="container">
@@ -1282,8 +1498,8 @@ a {
       <section class="card form-card">
         <h2>Your crossword</h2>
         <p>
-          Enter words and clues. Use 3–5 letter words
-          for this beginner 5×5 puzzle.
+          Enter words and clues. Use 3–8 letter words
+          for this 8×8 puzzle. Words can be up to 8 letters long.
         </p>
 
         <div id="word-inputs"></div>
@@ -1501,7 +1717,15 @@ const DAILY_PUZZLE = {
    2. GLOBAL STATE
 ------------------------------------------ */
 
-const SIZE = 5;
+const DEFAULT_SIZE = 5;   // size of old shared links and the DAILY_PUZZLE demo above
+
+// "Create your own puzzle" always builds an 8×8 grid, so words can be
+// up to 8 letters long and five words fit far more easily.
+const CREATOR_SIZE = 8;
+const MAX_CREATOR_WORDS = 8;
+
+// Grid sizes used by the Daily Crossword page (see words.txt).
+const DAILY_SIZES = [5, 6, 7, 8];
 
 let dailyGame = null;
 let sharedGame = null;
@@ -1516,56 +1740,198 @@ let sharedInterval = null;
 let creatorWords = [];
 
 // The list of puzzles used by the Daily Crossword page. This starts
-// out built from DEFAULT_PUZZLE_WORDS below (so multiple puzzles work
-// even when this page is opened as a local file), and gets replaced
-// with whatever is in words.txt if that file can be fetched (see
-// loadPuzzlesFromFile() further down), so it can be edited without
-// touching any code.
-const DEFAULT_PUZZLE_WORDS = [
-  [
-    { word: "APPLE", clue: "A fruit that can be red or green" },
-    { word: "PLANT", clue: "A living thing that grows in soil" },
-    { word: "PEN", clue: "Something you write with" },
-    { word: "EAT", clue: "What you do when you have food" },
-    { word: "PEAR", clue: "A fruit that is often shaped like a teardrop" }
-  ],
-  [
-    { word: "RAIN", clue: "Water that falls from clouds" },
-    { word: "WIND", clue: "Moving air you can feel but not see" },
-    { word: "SUN", clue: "The star at the center of our solar system" },
-    { word: "STORM", clue: "Heavy wind and rain together" }
-  ],
-  [
-    { word: "MANGO", clue: "A sweet tropical fruit with a large seed" },
-    { word: "GRAPE", clue: "A small fruit that grows in bunches on a vine" },
-    { word: "PEAR", clue: "A fruit that is often shaped like a teardrop" },
-    { word: "LIME", clue: "A small green citrus fruit" }
-  ]
+// out built from DEFAULT_PUZZLES below (so multiple puzzles of every
+// size work even when this page is opened as a local file), and gets
+// replaced with whatever is in words.txt if that file can be fetched
+// (see loadPuzzlesFromFile() further down), so it can be edited
+// without touching any code.
+const DEFAULT_PUZZLES = [
+  { size: 5, words: [["APPLE", "A fruit that can be red or green"], ["PLANT", "A living thing that grows in soil"], ["PEN", "Something you write with"], ["EAT", "What you do when you have food"], ["PEAR", "A fruit that is often shaped like a teardrop"]] },
+  { size: 5, words: [["RAIN", "Water that falls from clouds"], ["WIND", "Moving air you can feel but not see"], ["SUN", "The star at the center of our solar system"], ["STORM", "Heavy wind and rain together"]] },
+  { size: 5, words: [["MANGO", "A sweet tropical fruit with a large seed"], ["GRAPE", "A small fruit that grows in bunches on a vine"], ["PEAR", "A fruit that is often shaped like a teardrop"], ["LIME", "A small green citrus fruit"]] },
+  { size: 6, words: [["CARROT", "An orange root vegetable"], ["TRAIN", "It runs on tracks"], ["STORM", "Heavy wind and rain together"], ["COAT", "You wear it to keep warm outside"], ["INK", "Liquid used in a pen"]] },
+  { size: 6, words: [["ORANGE", "A round citrus fruit"], ["COFFEE", "A hot brown drink made from beans"], ["RAIN", "Water that falls from clouds"], ["BEACH", "A sandy place beside the sea"], ["EAGLE", "A large bird of prey"]] },
+  { size: 7, words: [["WEATHER", "Rain, sun or snow, for example"], ["SHOE", "You wear it on your foot"], ["JUICE", "A drink made from squeezed fruit"], ["RADIO", "You listen to music on it"], ["HORSE", "An animal you can ride"], ["SNOW", "White flakes that fall in winter"], ["SHAPE", "A circle or a square, for example"]] },
+  { size: 7, words: [["AIRPORT", "A place where planes take off and land"], ["RICE", "Small white grains often eaten with curry"], ["TRAFFIC", "Many cars on the road"], ["TRAIN", "It runs on tracks"], ["SEA", "Salt water that covers most of Earth"], ["SONG", "Words you sing to music"]] },
+  { size: 8, words: [["COMPUTER", "A machine you type on"], ["CAMPFIRE", "A fire you sit around outdoors"], ["CLOCK", "It tells you the time"], ["BANANA", "A long yellow fruit monkeys love"], ["JAM", "Sweet fruit spread for bread"], ["MUD", "Wet, soft earth"], ["BIRD", "An animal with feathers and wings"]] },
+  { size: 8, words: [["SHOULDER", "It connects your arm to your body"], ["RAINBOW", "A colorful arch in the sky after rain"], ["BLANKET", "A warm cover for your bed"], ["SUNSHINE", "Bright, warm light during the day"], ["ICE", "Frozen water"], ["ZEBRA", "An African animal with black and white stripes"]] }
 ];
 
+// A daily puzzle entry ("spec") is just { size, words }. The crossword
+// layout is only worked out when that puzzle is actually shown (see
+// resolvePuzzle), so loading a words.txt with hundreds of puzzles
+// stays instant.
 function buildDefaultPuzzles() {
-  return DEFAULT_PUZZLE_WORDS
-    .map(words => generateCrossword(words))
-    .filter(Boolean);
+  return DEFAULT_PUZZLES.map(item => ({
+    size: item.size,
+    words: item.words.map(([word, clue]) => ({ word, clue }))
+  }));
 }
 
-// Picks a fully random puzzle index, different from excludeIndex when
-// possible (so "give me a different one" always actually changes it).
+// Returns the playable layout for a puzzle entry (building and
+// caching it on first use), or null if the words can't be arranged.
+function resolvePuzzle(spec) {
+  if (spec.layout === undefined) {
+    spec.layout = generateCrossword(
+      spec.words,
+      spec.size || DEFAULT_SIZE,
+      { preferSpan: true }
+    );
+  }
+
+  return spec.layout;
+}
+
+function shuffleArray(list) {
+  const copy = [...list];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+
+  return copy;
+}
+
+// ---- Which daily puzzle comes next -------------------------------
+// Puzzles are served from a shuffled queue that alternates between
+// the grid sizes (5x5, 6x6, 7x7, 8x8 mixed together), and nothing
+// repeats until every puzzle has been played. Puzzles already shown
+// are remembered in this browser, so a page refresh doesn't bring
+// the same puzzle back either.
+
+const SEEN_KEY = "crossworld_seen_daily_v1";
+let seenPuzzleIds = loadSeenPuzzles();
+let dailyQueue = [];
+
+function puzzleId(puzzle) {
+  const text = puzzle.size + ":" +
+    puzzle.words.map(item => item.word).sort().join(",");
+
+  let hash = 5381;
+
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash * 33) ^ text.charCodeAt(i)) >>> 0;
+  }
+
+  return hash.toString(36);
+}
+
+function loadSeenPuzzles() {
+  try {
+    const list = JSON.parse(localStorage.getItem(SEEN_KEY) || "[]");
+    return new Set(Array.isArray(list) ? list : []);
+  } catch (error) {
+    return new Set();
+  }
+}
+
+function saveSeenPuzzles() {
+  try {
+    localStorage.setItem(SEEN_KEY, JSON.stringify([...seenPuzzleIds]));
+  } catch (error) {
+    // Storage blocked (private mode etc.) — in-memory tracking still works.
+  }
+}
+
+function markPuzzleSeen(puzzle) {
+  const id = puzzleId(puzzle);
+
+  if (!seenPuzzleIds.has(id)) {
+    seenPuzzleIds.add(id);
+    saveSeenPuzzles();
+  }
+}
+
+function buildDailyQueue(lastIndex) {
+  let pool = PUZZLES
+    .map((puzzle, index) => index)
+    .filter(index =>
+      PUZZLES[index].layout !== null &&
+      !seenPuzzleIds.has(puzzleId(PUZZLES[index]))
+    );
+
+  // Everything has been played: start a fresh round.
+  if (pool.length === 0) {
+    seenPuzzleIds.clear();
+    saveSeenPuzzles();
+    pool = PUZZLES
+      .map((puzzle, index) => index)
+      .filter(index => PUZZLES[index].layout !== null);
+  }
+
+  const bySize = new Map();
+
+  shuffleArray(pool).forEach(index => {
+    const size = PUZZLES[index].size || DEFAULT_SIZE;
+
+    if (!bySize.has(size)) bySize.set(size, []);
+    bySize.get(size).push(index);
+  });
+
+  // Deal one puzzle from each size in turn, so sizes keep alternating.
+  const groups = shuffleArray([...bySize.values()]);
+  const queue = [];
+
+  while (groups.some(group => group.length > 0)) {
+    groups.forEach(group => {
+      if (group.length > 0) queue.push(group.shift());
+    });
+  }
+
+  // Never open a new round with the puzzle that was just on screen.
+  if (queue.length > 1 && queue[0] === lastIndex) {
+    queue.push(queue.shift());
+  }
+
+  return queue;
+}
+
+// Returns the index of the next daily puzzle, different from
+// excludeIndex whenever there is more than one puzzle. The returned
+// puzzle always has a playable layout.
 function pickRandomPuzzleIndex(excludeIndex) {
-  if (PUZZLES.length <= 1) return 0;
 
-  let index;
-  do {
-    index = Math.floor(Math.random() * PUZZLES.length);
-  } while (index === excludeIndex);
+  for (let attempt = 0; attempt < PUZZLES.length + 5; attempt++) {
 
-  return index;
+    let next = 0;
+
+    if (PUZZLES.length > 1) {
+      if (dailyQueue.length === 0) {
+        dailyQueue = buildDailyQueue(excludeIndex);
+      }
+
+      next = dailyQueue.shift();
+
+      if (next === excludeIndex && dailyQueue.length > 0) {
+        dailyQueue.push(next);
+        next = dailyQueue.shift();
+      }
+    }
+
+    if (next !== undefined && PUZZLES[next] && resolvePuzzle(PUZZLES[next])) {
+      return next;
+    }
+  }
+
+  // Nothing usable (should never happen): fall back to the demo puzzle.
+  PUZZLES = [fallbackPuzzleEntry()];
+  dailyQueue = [];
+  return 0;
+}
+
+function fallbackPuzzleEntry() {
+  return {
+    size: DAILY_PUZZLE.size,
+    words: DAILY_PUZZLE.words,
+    layout: DAILY_PUZZLE
+  };
 }
 
 let PUZZLES = buildDefaultPuzzles();
-if (PUZZLES.length === 0) PUZZLES = [DAILY_PUZZLE];
+if (PUZZLES.length === 0) PUZZLES = [fallbackPuzzleEntry()];
 
-let dailyPuzzleIndex = pickRandomPuzzleIndex();
+let dailyPuzzleIndex = -1;
 let dailyAwaitingNextPuzzle = false;
 
 /* ------------------------------------------
@@ -1594,6 +1960,110 @@ function showPage(pageId) {
   }
 
   window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+/* ------------------------------------------
+   BOMBS IN BLOCKED CELLS
+   Every blocked (black) cell holds a bomb. Tapping it sets it off
+   inside that one cell, then a new bomb pops back in, ready again.
+------------------------------------------ */
+
+const BOMB_ART = `
+<span class="bomb-art" aria-hidden="true">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="48" cy="93" rx="24" ry="4" fill="#000" opacity="0.35"/>
+    <circle cx="48" cy="62" r="30" fill="url(#bombBodyGrad)" stroke="#6b0a12" stroke-width="2"/>
+    <path d="M22 74 L27 69 M25 78 L30 73" stroke="#7a0f18" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>
+    <path d="M70 70 L76 64 M68 76 L74 70" stroke="#7a0f18" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>
+    <ellipse cx="34" cy="47" rx="8" ry="4.5" transform="rotate(-35 34 47)" fill="#fff" opacity="0.35"/>
+    <path d="M35 62 Q35 50 48 50 Q61 50 61 62 Q61 67 57 70 L57 76 L39 76 L39 70 Q35 67 35 62 Z" fill="#fff"/>
+    <ellipse cx="42.5" cy="62" rx="4" ry="4.8" fill="#9b0f19"/>
+    <ellipse cx="53.5" cy="62" rx="4" ry="4.8" fill="#9b0f19"/>
+    <path d="M48 66 L45.5 71 L50.5 71 Z" fill="#9b0f19"/>
+    <path d="M43.5 73 V76 M48 73 V76 M52.5 73 V76" stroke="#9b0f19" stroke-width="1.4"/>
+    <ellipse cx="48" cy="34" rx="12" ry="5.5" fill="#3a3f47" stroke="#15171b" stroke-width="1.5"/>
+    <ellipse cx="48" cy="33" rx="6.5" ry="2.6" fill="#0f1114"/>
+    <path d="M48 33 Q54 22 66 20" fill="none" stroke="#f1f1f1" stroke-width="4" stroke-linecap="round"/>
+    <path d="M48 33 Q54 22 66 20" fill="none" stroke="#8a8f98" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 5"/>
+    <g class="bomb-flame">
+      <path d="M67 20 C58 18 58 8 64 2 C64 8 69 8 71 4 C77 8 77 16 73 20 C71 23 69 24 67 20 Z" fill="#ff7a00"/>
+      <path d="M67 19 C62 17 62 11 66 7 C67 10 70 10 71 8 C74 11 73 16 70 19 C69 21 68 21 67 19 Z" fill="#ffc21a"/>
+      <path d="M67 18 C65 16 66 13 68 11 C69 13 70 14 69 17 C69 18 68 19 67 18 Z" fill="#fff6c8"/>
+    </g>
+    <g class="bomb-glint" fill="#ffe27a">
+      <circle cx="76" cy="10" r="1.6"/>
+      <circle cx="58" cy="6" r="1.3"/>
+      <circle cx="79" cy="20" r="1.2"/>
+    </g>
+  </svg>
+</span>
+<span class="bomb-fx" aria-hidden="true">
+  <i class="fx-flash"></i>
+  <i class="fx-ring"></i>
+  <i class="fx-ring two"></i>
+  <i class="fx-smoke"></i>
+  <i class="fx-spark" style="--a:0deg"></i>
+  <i class="fx-spark" style="--a:45deg"></i>
+  <i class="fx-spark" style="--a:90deg"></i>
+  <i class="fx-spark" style="--a:135deg"></i>
+  <i class="fx-spark" style="--a:180deg"></i>
+  <i class="fx-spark" style="--a:225deg"></i>
+  <i class="fx-spark" style="--a:270deg"></i>
+  <i class="fx-spark" style="--a:315deg"></i>
+</span>`;
+
+// Gradients are defined once for every bomb on the page.
+function ensureBombDefs() {
+  if (document.getElementById("bomb-defs")) return;
+
+  const holder = document.createElement("div");
+
+  holder.innerHTML = `
+    <svg id="bomb-defs" width="0" height="0" aria-hidden="true"
+         style="position:absolute;width:0;height:0;overflow:hidden">
+      <defs>
+        <radialGradient id="bombBodyGrad" cx="38%" cy="32%" r="80%">
+          <stop offset="0%" stop-color="#ff6a5c"/>
+          <stop offset="55%" stop-color="#e0212c"/>
+          <stop offset="100%" stop-color="#a80f1b"/>
+        </radialGradient>
+      </defs>
+    </svg>`;
+
+  document.body.appendChild(holder.firstElementChild);
+}
+
+function igniteBomb(cell) {
+  if (cell.classList.contains("boom")) return;
+
+  cell.classList.remove("return");
+  cell.classList.add("boom");
+
+  setTimeout(() => {
+    cell.classList.remove("boom");
+    cell.classList.add("return");
+
+    setTimeout(() => cell.classList.remove("return"), 550);
+  }, 1000);
+}
+
+// Turns a blocked cell (a <button class="cell black">) into a bomb.
+function decorateBombCell(cell) {
+  ensureBombDefs();
+
+  cell.classList.add("bomb-cell");
+  cell.tabIndex = -1;
+  cell.setAttribute("aria-label", "Bomb. Tap to set it off.");
+
+  // Desynchronise the bombs so they don't all wobble in step.
+  cell.style.setProperty("--bd", `-${(Math.random() * 2.5).toFixed(2)}s`);
+
+  cell.innerHTML = BOMB_ART;
+
+  // Keep keyboard focus where it is so typing into the puzzle
+  // (and the mobile keyboard) isn't interrupted.
+  cell.addEventListener("mousedown", event => event.preventDefault());
+  cell.addEventListener("click", () => igniteBomb(cell));
 }
 
 function formatTime(seconds) {
@@ -1640,6 +2110,12 @@ function encodePuzzle(puzzle) {
     compact.t = puzzle.title;
   }
 
+  // Older links never stored a size (they were always 5x5), so the
+  // size is only written when it differs from that default.
+  if (puzzle.size && puzzle.size !== DEFAULT_SIZE) {
+    compact.s = puzzle.size;
+  }
+
   return base64UrlEncode(JSON.stringify(compact));
 }
 
@@ -1651,7 +2127,7 @@ function decodePuzzle(encoded) {
     if (data && Array.isArray(data.w)) {
       return {
         title: data.t || "Custom Crossword",
-        size: SIZE,
+        size: Number.isInteger(data.s) ? data.s : DEFAULT_SIZE,
         words: data.w.map(([word, clue, row, col, dir]) => ({
           word,
           clue,
@@ -1710,7 +2186,7 @@ function base64UrlDecode(encoded) {
    4. BUILD GRID
 ------------------------------------------ */
 
-function createEmptyGrid(size = SIZE) {
+function createEmptyGrid(size = DEFAULT_SIZE) {
   return Array.from({ length: size }, () =>
     Array.from({ length: size }, () => ({
       letter: "",
@@ -1723,7 +2199,7 @@ function createEmptyGrid(size = SIZE) {
 }
 
 function buildGrid(puzzle) {
-  const grid = createEmptyGrid(puzzle.size || SIZE);
+  const grid = createEmptyGrid(puzzle.size || DEFAULT_SIZE);
 
   puzzle.words.forEach((word, index) => {
     const text = cleanWord(word.word);
@@ -1803,7 +2279,7 @@ class CrosswordGame {
     this.downElement = downElement;
 
     this.grid = buildGrid(puzzle);
-    this.size = puzzle.size || SIZE;
+    this.size = puzzle.size || DEFAULT_SIZE;
 
     this.answers = Array.from(
       { length: this.size },
@@ -1832,8 +2308,24 @@ class CrosswordGame {
   render() {
     this.renderGrid();
     this.renderClues();
-    this.selectCell(0, 0);
+    this.selectFirstOpenCell();
     this.updateProgress();
+  }
+
+  // Bigger grids often have a blocked top-left corner, so start on
+  // the first cell that can actually be typed into.
+  selectFirstOpenCell() {
+    for (let r = 0; r < this.size; r++) {
+      for (let c = 0; c < this.size; c++) {
+        const cell = this.grid[r][c];
+
+        if (cell.black) continue;
+
+        this.direction = cell.across !== null ? "across" : "down";
+        this.selectCell(r, c);
+        return;
+      }
+    }
   }
 
   renderGrid() {
@@ -1841,6 +2333,7 @@ class CrosswordGame {
 
     this.gridElement.style.gridTemplateColumns =
       `repeat(${this.size}, 1fr)`;
+    this.gridElement.dataset.size = this.size;
 
     for (let r = 0; r < this.size; r++) {
       for (let c = 0; c < this.size; c++) {
@@ -1863,7 +2356,7 @@ class CrosswordGame {
 
         if (cell.black) {
           button.classList.add("black");
-          button.disabled = true;
+          decorateBombCell(button);
         } else {
 
           if (cell.number !== null) {
@@ -2355,8 +2848,15 @@ function startDailyGame() {
 
   setCheckButtonMode(false);
 
+  const dailyPuzzle = resolvePuzzle(PUZZLES[dailyPuzzleIndex]);
+  const dailySize = dailyPuzzle.size || DEFAULT_SIZE;
+
+  markPuzzleSeen(PUZZLES[dailyPuzzleIndex]);
+  $("daily-subtitle").textContent =
+    `${dailySize} × ${dailySize} Crossword Puzzle`;
+
   dailyGame = new CrosswordGame(
-    PUZZLES[dailyPuzzleIndex],
+    dailyPuzzle,
     $("daily-grid"),
     $("across-clues"),
     $("down-clues"),
@@ -2604,8 +3104,10 @@ function renderHomePreview() {
 
   element.innerHTML = "";
 
-  for (let r = 0; r < SIZE; r++) {
-    for (let c = 0; c < SIZE; c++) {
+  const previewSize = DAILY_PUZZLE.size;
+
+  for (let r = 0; r < previewSize; r++) {
+    for (let c = 0; c < previewSize; c++) {
       const cell = document.createElement("div");
 
       cell.className = "preview-cell";
@@ -2625,10 +3127,10 @@ function renderHomePreview() {
 
 function addWordInput(word = "", clue = "") {
 
-  if (creatorWords.length >= 5) {
+  if (creatorWords.length >= MAX_CREATOR_WORDS) {
     setStatus(
       "creator-status",
-      "You can add up to 5 words in this prototype.",
+      `You can add up to ${MAX_CREATOR_WORDS} words in this prototype.`,
       "error"
     );
     return;
@@ -2650,7 +3152,7 @@ function addWordInput(word = "", clue = "") {
 
   const wordInput = document.createElement("input");
   wordInput.type = "text";
-  wordInput.maxLength = 5;
+  wordInput.maxLength = CREATOR_SIZE;
   wordInput.placeholder = "APPLE";
   wordInput.value = word;
   wordInput.autocomplete = "off";
@@ -2711,63 +3213,81 @@ function renderCreatorInputs() {
 
 function updateWordCount() {
   $("word-count").textContent =
-    `${creatorWords.length} / 5 words added`;
+    `${creatorWords.length} / ${MAX_CREATOR_WORDS} words added`;
 }
 
 $("add-word-btn").addEventListener("click", () => {
   addWordInput();
 });
 
+// Puts the Create page back to a blank state: two empty word rows,
+// no preview, no share link, no messages. Called every time the
+// person opens the Create page, so nothing from an earlier puzzle
+// is left behind.
+function resetCreatorForm() {
+
+  creatorWords = [];
+  creatorPuzzle = null;
+
+  $("word-inputs").innerHTML = "";
+
+  addWordInput();
+  addWordInput();
+
+  const previewGrid = $("creator-grid");
+  previewGrid.innerHTML = "";
+  previewGrid.style.gridTemplateColumns = "";
+  delete previewGrid.dataset.size;
+
+  $("creator-preview-info").textContent =
+    "Add words and generate your puzzle.";
+
+  $("share-url").value = "";
+  $("share-box").classList.add("hidden");
+
+  setStatus("creator-status", "");
+}
+
 /* ------------------------------------------
    11. CROSSWORD GENERATOR
-   Backtracking placement algorithm.
+   Backtracking placement algorithm. generateCrossword(words, size)
+   works for any grid size; the Creator uses 8x8, Daily uses 5-8.
+   options.preferSpan asks for a layout that touches all four edges
+   (used for the Daily puzzles so a 7x7 really looks like a 7x7).
 ------------------------------------------ */
 
-function generateCrossword(words) {
+function generateCrossword(words, size = DEFAULT_SIZE, options = {}) {
 
-  const size = SIZE;
-  const grid = Array.from(
-    { length: size },
-    () => Array(size).fill(null)
-  );
+  const preferSpan = options.preferSpan === true;
+  const nodeBudget = options.maxNodes || 60000;
 
-  // Tracks which direction(s) have a word running through each
-  // cell. This is what lets us tell a legitimate perpendicular
-  // crossing (across meets down at one shared cell) apart from two
-  // words of the SAME direction silently overlapping/chaining into
-  // one continuous run, which would break clue numbering and make
-  // the grid ambiguous to solve.
-  const dirGrid = Array.from(
-    { length: size },
-    () => Array.from({ length: size }, () => ({ across: false, down: false }))
-  );
-
-  const sorted = words
+  const items = words
     .map(item => ({
       word: cleanWord(item.word),
-      clue: item.clue.trim()
+      clue: String(item.clue || "").trim()
     }))
     .sort((a, b) => b.word.length - a.word.length);
 
-  if (sorted.length === 0) {
-    return null;
-  }
+  if (items.length === 0) return null;
 
-  if (sorted.some(item =>
+  if (items.some(item =>
     item.word.length < 2 ||
     item.word.length > size
   )) {
     return null;
   }
 
+  const grid = Array.from({ length: size }, () => Array(size).fill(null));
+
+  const dirGrid = Array.from({ length: size }, () =>
+    Array.from({ length: size }, () => ({ across: false, down: false }))
+  );
+
   const placements = [];
+  const usedItems = new Set();
 
   function canPlace(word, row, col, direction) {
 
-    // The cell immediately before the start, and immediately after
-    // the end, of this word (in its own direction) must be
-    // completely empty. Otherwise the word would silently run into
-    // whatever is already there and merge into one longer entry.
     const beforeR = row - (direction === "down" ? 1 : 0);
     const beforeC = col - (direction === "across" ? 1 : 0);
 
@@ -2802,19 +3322,10 @@ function generateCrossword(words) {
       if (existing !== null) {
 
         if (existing !== word[i]) return false;
-
-        // A cell can only be shared as a perpendicular crossing.
-        // If a word in this SAME direction already runs through
-        // here, placing this word would chain the two into one
-        // ambiguous run instead of a real intersection.
         if (dirGrid[r][c][direction]) return false;
 
       } else {
 
-        // A brand-new (non-crossing) cell for this word: the two
-        // cells perpendicular to the word's direction must be
-        // empty, or this cell would accidentally touch an
-        // unrelated word and form an unintended extra entry.
         if (direction === "across") {
           if (
             (r > 0 && grid[r - 1][c] !== null) ||
@@ -2836,8 +3347,9 @@ function generateCrossword(words) {
     return true;
   }
 
-  function place(word, row, col, direction) {
+  function place(itemIndex, row, col, direction) {
 
+    const word = items[itemIndex].word;
     const letterChanges = [];
     const dirChanges = [];
 
@@ -2857,9 +3369,10 @@ function generateCrossword(words) {
       }
     }
 
-    placements.push({ word, row, col, direction });
+    placements.push({ itemIndex, row, col, direction });
+    usedItems.add(itemIndex);
 
-    return { letterChanges, dirChanges, direction };
+    return { letterChanges, dirChanges, direction, itemIndex };
   }
 
   function undo(changed) {
@@ -2873,10 +3386,14 @@ function generateCrossword(words) {
     });
 
     placements.pop();
+    usedItems.delete(changed.itemIndex);
   }
 
-  function findCandidates(word, requireCrossing) {
+  // Returns every legal spot for a word. `crosses` counts how many
+  // existing letters the word would share.
+  function findCandidates(itemIndex, requireCrossing) {
 
+    const word = items[itemIndex].word;
     const candidates = [];
 
     for (let row = 0; row < size; row++) {
@@ -2886,20 +3403,16 @@ function generateCrossword(words) {
 
           if (!canPlace(word, row, col, direction)) continue;
 
-          let crosses = false;
+          let crosses = 0;
 
           for (let i = 0; i < word.length; i++) {
-
             const r = row + (direction === "down" ? i : 0);
             const c = col + (direction === "across" ? i : 0);
-
-            if (grid[r][c] === word[i]) {
-              crosses = true;
-            }
+            if (grid[r][c] === word[i]) crosses++;
           }
 
-          if (!requireCrossing || crosses) {
-            candidates.push({ row, col, direction });
+          if (!requireCrossing || crosses > 0) {
+            candidates.push({ itemIndex, row, col, direction, crosses });
           }
         }
       }
@@ -2908,68 +3421,154 @@ function generateCrossword(words) {
     return candidates;
   }
 
-  function solve(index) {
+  function coversWholeGrid() {
 
-    if (index >= sorted.length) return true;
+    let minR = size, maxR = -1, minC = size, maxC = -1;
 
-    const word = sorted[index].word;
-
-    let candidates = findCandidates(word, index > 0);
-
-    // For the first word, try center placement.
-    if (index === 0) {
-      candidates.sort((a, b) => {
-        const center = (size - 1) / 2;
-
-        const da = Math.abs(a.row - center) +
-                   Math.abs(a.col - center);
-
-        const db = Math.abs(b.row - center) +
-                   Math.abs(b.col - center);
-
-        return da - db;
-      });
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (grid[r][c] === null) continue;
+        if (r < minR) minR = r;
+        if (r > maxR) maxR = r;
+        if (c < minC) minC = c;
+        if (c > maxC) maxC = c;
+      }
     }
 
-    for (const candidate of candidates) {
+    return minR === 0 && minC === 0 &&
+           maxR === size - 1 && maxC === size - 1;
+  }
 
-      const changed = place(
-        word,
-        candidate.row,
-        candidate.col,
-        candidate.direction
-      );
+  function attempt(requireSpan) {
 
-      if (solve(index + 1)) {
-        return true;
+    let nodes = 0;
+    let gaveUp = false;
+    const visited = new Set();
+
+    function stateKey() {
+      return placements
+        .map(p => `${p.itemIndex}:${p.row},${p.col},${p.direction[0]}`)
+        .sort()
+        .join("|");
+    }
+
+    function solve() {
+
+      if (placements.length === items.length) {
+        return !requireSpan || coversWholeGrid();
       }
 
-      undo(changed);
+      if (gaveUp) return false;
+
+      if (++nodes > nodeBudget) {
+        gaveUp = true;
+        return false;
+      }
+
+      const key = stateKey();
+      if (visited.has(key)) return false;
+      visited.add(key);
+
+      let candidates = [];
+
+      if (placements.length === 0) {
+        // Start with the longest word; every other word then has to
+        // cross something that is already on the board.
+        candidates = findCandidates(0, false);
+
+        const center = (size - 1) / 2;
+
+        candidates.sort((a, b) => {
+          const da = Math.abs(a.row - center) + Math.abs(a.col - center);
+          const db = Math.abs(b.row - center) + Math.abs(b.col - center);
+          return da - db;
+        });
+
+      } else {
+
+        for (let i = 0; i < items.length; i++) {
+          if (usedItems.has(i)) continue;
+          candidates.push(...findCandidates(i, true));
+        }
+
+        // Prefer spots that touch more letters, then longer words.
+        candidates.sort((a, b) =>
+          b.crosses - a.crosses ||
+          items[b.itemIndex].word.length - items[a.itemIndex].word.length
+        );
+      }
+
+      for (const candidate of candidates) {
+
+        const changed = place(
+          candidate.itemIndex,
+          candidate.row,
+          candidate.col,
+          candidate.direction
+        );
+
+        if (solve()) return true;
+
+        undo(changed);
+
+        if (gaveUp) return false;
+      }
+
+      return false;
     }
 
-    return false;
+    return solve();
   }
 
-  if (!solve(0)) {
-    return null;
+  let solved = false;
+
+  if (preferSpan) solved = attempt(true);
+
+  if (!solved) {
+    // Reset the board (a failed attempt always undoes itself, but be safe).
+    placements.length = 0;
+    usedItems.clear();
+    solved = attempt(false);
   }
+
+  if (!solved) return null;
+
+  // Centre the finished layout inside the grid so a small puzzle
+  // doesn't sit in one corner.
+  let minR = size, maxR = -1, minC = size, maxC = -1;
+
+  placements.forEach(p => {
+    const len = items[p.itemIndex].word.length;
+    const endR = p.row + (p.direction === "down" ? len - 1 : 0);
+    const endC = p.col + (p.direction === "across" ? len - 1 : 0);
+    minR = Math.min(minR, p.row);
+    minC = Math.min(minC, p.col);
+    maxR = Math.max(maxR, endR);
+    maxC = Math.max(maxC, endC);
+  });
+
+  const shiftR = Math.floor((size - (maxR - minR + 1)) / 2) - minR;
+  const shiftC = Math.floor((size - (maxC - minC + 1)) / 2) - minC;
+
+  const result = placements
+    .map(p => ({
+      word: items[p.itemIndex].word,
+      clue: items[p.itemIndex].clue,
+      row: p.row + shiftR,
+      col: p.col + shiftC,
+      direction: p.direction
+    }))
+    // Reading order keeps the Across/Down clue lists in number order.
+    .sort((a, b) =>
+      a.row - b.row ||
+      a.col - b.col ||
+      (a.direction === b.direction ? 0 : a.direction === "across" ? -1 : 1)
+    );
 
   return {
     title: "Custom Crossword",
     size,
-    words: placements.map(item => {
-      const source = sorted.find(
-        w => w.word === item.word
-      );
-
-      return {
-        word: item.word,
-        clue: source ? source.clue : "",
-        row: item.row,
-        col: item.col,
-        direction: item.direction
-      };
-    })
+    words: result
   };
 }
 
@@ -3004,10 +3603,10 @@ $("generate-btn").addEventListener("click", () => {
     return;
   }
 
-  if (words.some(item => item.word.length > 5)) {
+  if (words.some(item => item.word.length > CREATOR_SIZE)) {
     setStatus(
       "creator-status",
-      "Each word must be 5 letters or fewer.",
+      `Each word must be ${CREATOR_SIZE} letters or fewer.`,
       "error"
     );
     return;
@@ -3022,12 +3621,12 @@ $("generate-btn").addEventListener("click", () => {
     return;
   }
 
-  const puzzle = generateCrossword(words);
+  const puzzle = generateCrossword(words, CREATOR_SIZE);
 
   if (!puzzle) {
     setStatus(
       "creator-status",
-      "These words could not form a connected crossword. Try different words.",
+      "These words could not form a connected crossword. Try words that share letters with each other.",
       "error"
     );
     return;
@@ -3050,10 +3649,14 @@ function renderCreatorPreview(puzzle) {
   const grid = buildGrid(puzzle);
   const element = $("creator-grid");
 
-  element.innerHTML = "";
+  const size = puzzle.size || DEFAULT_SIZE;
 
-  for (let r = 0; r < SIZE; r++) {
-    for (let c = 0; c < SIZE; c++) {
+  element.innerHTML = "";
+  element.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+  element.dataset.size = size;
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
 
       const cell = grid[r][c];
 
@@ -3063,6 +3666,7 @@ function renderCreatorPreview(puzzle) {
 
       if (cell.black) {
         button.classList.add("black");
+        decorateBombCell(button);
       } else {
 
         if (cell.number !== null) {
@@ -3084,7 +3688,7 @@ function renderCreatorPreview(puzzle) {
   }
 
   $("creator-preview-info").textContent =
-    `${puzzle.words.length} words · 5 × 5 grid`;
+    `${puzzle.words.length} words · ${size} × ${size} grid`;
 }
 
 /* ------------------------------------------
@@ -3187,8 +3791,35 @@ function loadSharedPuzzle() {
     return;
   }
 
+  puzzle.size = puzzle.size || DEFAULT_SIZE;
+
+  const sizeOk =
+    Number.isInteger(puzzle.size) &&
+    puzzle.size >= DAILY_SIZES[0] &&
+    puzzle.size <= DAILY_SIZES[DAILY_SIZES.length - 1];
+
+  const wordsOk = sizeOk && puzzle.words.every(item => {
+    if (
+      !item ||
+      typeof item.word !== "string" ||
+      !Number.isInteger(item.row) ||
+      !Number.isInteger(item.col) ||
+      (item.direction !== "across" && item.direction !== "down")
+    ) {
+      return false;
+    }
+
+    const length = cleanWord(item.word).length;
+    const endRow = item.row + (item.direction === "down" ? length - 1 : 0);
+    const endCol = item.col + (item.direction === "across" ? length - 1 : 0);
+
+    return length > 0 &&
+      item.row >= 0 && item.col >= 0 &&
+      endRow < puzzle.size && endCol < puzzle.size;
+  });
+
   if (
-    puzzle.size !== 5 ||
+    !wordsOk ||
     puzzle.words.length === 0
   ) {
     showPage("home");
@@ -3201,7 +3832,7 @@ function loadSharedPuzzle() {
     puzzle.title || "Friend's Crossword";
 
   $("shared-subtitle").textContent =
-    "A custom crossword shared with you.";
+    `A custom ${puzzle.size} × ${puzzle.size} crossword shared with you.`;
 
   showPage("shared");
   startSharedGame(puzzle);
@@ -3276,6 +3907,7 @@ function route() {
     startDailyGame();
 
   } else if (routeName === "create") {
+    resetCreatorForm();
     showPage("create");
 
   } else {
@@ -3299,74 +3931,113 @@ window.addEventListener("hashchange", route);
 
 function parsePuzzleFile(text) {
 
-  const blocks = text
-    .split(/\r?\n\s*-{3,}\s*\r?\n/)
-    .map(block => block.trim())
-    .filter(Boolean);
-
   const puzzles = [];
 
-  blocks.forEach(block => {
+  // Grid size for the puzzles that follow. A block with no GRID line
+  // above it is 5x5, so an older words.txt keeps working unchanged.
+  let size = DEFAULT_SIZE;
+  let current = [];
 
-    const words = block
-      .split(/\r?\n/)
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith("#"))
-      .map(line => {
-        const separatorIndex = line.indexOf("|");
-
-        if (separatorIndex === -1) return null;
-
-        const word = cleanWord(line.slice(0, separatorIndex));
-        const clue = line.slice(separatorIndex + 1).trim();
-
-        return { word, clue };
-      })
-      .filter(item =>
-        item &&
-        item.word.length >= 2 &&
-        item.word.length <= SIZE &&
-        item.clue
-      );
+  function flush() {
+    const words = current;
+    current = [];
 
     if (words.length < 2) return;
 
-    const puzzle = generateCrossword(words);
+    if (size === null) {
+      console.warn("words.txt: skipped a puzzle under an unsupported GRID size.");
+      return;
+    }
 
-    if (puzzle) puzzles.push(puzzle);
+    // The crossword layout is built later, when the puzzle is shown.
+    puzzles.push({ size, words });
+  }
+
+  text.split(/\r?\n/).forEach(rawLine => {
+
+    const line = rawLine.trim();
+
+    if (!line || line.startsWith("#")) return;
+
+    // "---" ends the current puzzle.
+    if (/^-{3,}$/.test(line)) {
+      flush();
+      return;
+    }
+
+    // "GRID: 6x6" (or "[6x6]") sets the size for the puzzles below.
+    const header = line.match(
+      /^(?:grid\s*[:=]?\s*|\[)\s*(\d+)\s*[x×*]\s*(\d+)\s*\]?$/i
+    );
+
+    if (header) {
+      flush();
+
+      const rows = Number(header[1]);
+      const cols = Number(header[2]);
+
+      size = (
+        rows === cols &&
+        DAILY_SIZES.includes(rows)
+      ) ? rows : null;
+
+      return;
+    }
+
+    const separatorIndex = line.indexOf("|");
+
+    if (separatorIndex === -1) return;
+
+    const word = cleanWord(line.slice(0, separatorIndex));
+    const clue = line.slice(separatorIndex + 1).trim();
+
+    if (
+      size !== null &&
+      word.length >= 2 &&
+      word.length <= size &&
+      clue
+    ) {
+      current.push({ word, clue });
+    }
   });
+
+  flush();
 
   return puzzles;
 }
 
 async function loadPuzzlesFromFile() {
-  try {
-    const response = await fetch("words.txt", { cache: "no-store" });
+  // "word.txt" is accepted as a fallback name in case the file was
+  // saved without the "s".
+  const fileNames = ["words.txt", "word.txt"];
 
-    if (!response.ok) {
-      throw new Error("words.txt could not be fetched");
+  for (const fileName of fileNames) {
+    try {
+      const response = await fetch(fileName, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(fileName + " could not be fetched");
+      }
+
+      const text = await response.text();
+      const puzzles = parsePuzzleFile(text);
+
+      if (puzzles.length === 0) {
+        console.warn(fileName + " had no valid puzzles.");
+        continue;
+      }
+
+      return puzzles;
+
+    } catch (error) {
+      // Expected if the file is missing, or if the page is opened
+      // directly as a local file:// URL instead of over http(s).
+      console.warn("Could not load " + fileName, error);
     }
-
-    const text = await response.text();
-    const puzzles = parsePuzzleFile(text);
-
-    if (puzzles.length === 0) {
-      console.warn("words.txt had no valid puzzles; using the built-in puzzle.");
-      return null;
-    }
-
-    return puzzles;
-
-  } catch (error) {
-    // Falls back to the built-in DAILY_PUZZLE. This is expected if
-    // words.txt is missing, or if the page is opened directly as a
-    // local file:// URL instead of being served over http(s).
-    console.warn(
-      "Could not load words.txt — using the built-in puzzle instead.",
-      error
-    );
-    return null;
   }
+
+  console.warn("Using the built-in puzzles instead.");
+  return null;
 }
 
 /* ------------------------------------------
@@ -3375,20 +4046,18 @@ async function loadPuzzlesFromFile() {
 
 renderHomePreview();
 
-addWordInput();
-addWordInput();
+resetCreatorForm();
 
 loadPuzzlesFromFile().then(puzzles => {
   if (puzzles) {
     PUZZLES = puzzles;
   }
 
-  // Pick a fresh random puzzle now that the final puzzle set
-  // (built-in or loaded from words.txt) is known. route() below
-  // will randomize again anyway if it lands on the Daily page, but
-  // this keeps dailyPuzzleIndex valid even if something reads it
-  // before that.
-  dailyPuzzleIndex = pickRandomPuzzleIndex();
+  // The puzzle set is final now (built-in or loaded from words.txt),
+  // so start the daily rotation from scratch. route() below picks
+  // the first puzzle if it lands on the Daily page.
+  dailyQueue = [];
+  dailyPuzzleIndex = -1;
 
   route();
 });
