@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cross-world.in/sitemap.xml

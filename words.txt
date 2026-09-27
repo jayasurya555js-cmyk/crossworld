@@ -1,0 +1,4313 @@
+# =====================================================================
+# Crossword Challenge — Words & Hints
+# =====================================================================
+#
+# Edit this file to change what shows up on the Daily Crossword page.
+# No code editing required — just save this file and refresh the site.
+#
+# FORMAT (one word per line):
+#   WORD | Clue text for that word
+#
+# GRID SIZE SECTIONS:
+#   A line like "GRID: 6x6" (or "[6x6]") sets the grid size for every
+#   puzzle after it, until the next GRID line. Valid sizes are 5, 6, 7,
+#   and 8. Anything before the first GRID line defaults to 5x5 — so an
+#   older words.txt with no GRID line at all still works unchanged.
+#
+# RULES:
+#   - Each word must be 2 letters up to the current grid size.
+#   - Every word needs a clue after the "|".
+#   - Lines starting with # are comments and are ignored, except the
+#     special "GRID: NxN" line described above.
+#   - Separate each PUZZLE (a group of words sharing one grid) with a
+#     line containing only three dashes: ---
+#   - Each puzzle needs at least 2 words, and the words should share
+#     letters so they can cross in the grid. A puzzle that can't be
+#     arranged into a connected grid is skipped automatically.
+#
+# The Daily Crossword page deals puzzles from a shuffled queue that
+# alternates between grid sizes (5x5, 6x6, 7x7, 8x8 mixed together),
+# and remembers (in your browser) which puzzles you've already seen so
+# nothing repeats until every puzzle has been played once.
+# =====================================================================
+
+GRID: 5x5
+
+# ---------- EASY (3-word puzzles) ----------
+
+# Puzzle 5x5 #1
+WALK | To move on foot at a normal pace
+ERA | A distinct period in history
+SKY | The space above the earth
+
+---
+
+# Puzzle 5x5 #2
+JOY | A feeling of great happiness
+DOOR | You open this to enter a room
+RYE | A grain used to make bread
+
+---
+
+# Puzzle 5x5 #3
+SIT | To rest on your bottom
+SOW | A female pig
+BOOT | A tall, sturdy shoe
+
+---
+
+# Puzzle 5x5 #4
+HERO | A person admired for great deeds
+DOG | Man's best friend
+LEG | The limb used for walking
+
+---
+
+# Puzzle 5x5 #5
+OVEN | An appliance used for baking
+PIE | A baked dessert with a crust
+SOW | A female pig
+
+---
+
+# Puzzle 5x5 #6
+EAT | What you do when you have food
+WASH | To clean with water
+HEN | A female chicken
+
+---
+
+# Puzzle 5x5 #7
+DEER | A forest animal with antlers
+EAR | The organ used for hearing
+RUN | To move quickly on foot
+
+---
+
+# Puzzle 5x5 #8
+CUB | A baby bear or lion
+BAG | Something you carry things in
+CALF | A baby cow
+
+---
+
+# Puzzle 5x5 #9
+TAKE | To get hold of something
+OWE | To be in debt for money
+AGE | How many years old someone is
+
+---
+
+# Puzzle 5x5 #10
+RAT | A small rodent with a long tail
+EAT | What you do when you have food
+FOUR | The number after three
+
+---
+
+# Puzzle 5x5 #11
+CAR | A vehicle with four wheels
+ARM | The limb between shoulder and hand
+PARK | A public green space for recreation
+
+---
+
+# Puzzle 5x5 #12
+SEW | To join fabric with a needle and thread
+SEAL | A flippered marine mammal
+TOE | A digit on your foot
+
+---
+
+# Puzzle 5x5 #13
+BELT | Worn around the waist to hold up pants
+PIE | A baked dessert with a crust
+TREE | A tall plant with a trunk and branches
+
+---
+
+# Puzzle 5x5 #14
+SOCK | Worn on the foot, inside a shoe
+SUN | The star at the center of our solar system
+RICE | A staple grain eaten around the world
+
+---
+
+# Puzzle 5x5 #15
+LEG | The limb used for walking
+DESK | Furniture used for writing or studying
+PEAK | The top of a mountain
+
+---
+
+# Puzzle 5x5 #16
+LEG | The limb used for walking
+GOAT | A farm animal known for climbing
+SALT | A seasoning found in the sea
+
+---
+
+# Puzzle 5x5 #17
+JAR | A glass container, often for jam
+RAIN | Water that falls from clouds
+SINK | Where you wash dishes or your hands
+
+---
+
+# Puzzle 5x5 #18
+BUS | A large vehicle for many passengers
+CAB | A taxi
+STEAK | A slice of meat, often grilled
+
+---
+
+# Puzzle 5x5 #19
+CUB | A baby bear or lion
+BUS | A large vehicle for many passengers
+CHESS | A strategy board game played with kings and queens
+
+---
+
+# Puzzle 5x5 #20
+SIT | To rest on your bottom
+LIME | A small green citrus fruit
+ISLE | A small island
+
+---
+
+# Puzzle 5x5 #21
+ERA | A distinct period in history
+SEED | What a plant grows from
+SWAN | An elegant white water bird
+
+---
+
+# Puzzle 5x5 #22
+LIFT | To raise something up
+COLT | A young male horse
+JOG | To run at a slow, steady pace
+
+---
+
+# Puzzle 5x5 #23
+BELT | Worn around the waist to hold up pants
+MINT | A fresh-tasting herb
+EYE | The organ used for seeing
+
+---
+
+# Puzzle 5x5 #24
+COW | A farm animal that gives milk
+WOLF | A wild relative of the dog
+LEAF | A green part of a plant that grows on branches
+
+---
+
+# Puzzle 5x5 #25
+SAND | Tiny grains found on beaches
+SHOP | To go and buy things
+COT | A small, portable bed
+
+---
+
+# Puzzle 5x5 #26
+LAKE | A large body of fresh water
+SELL | To exchange goods for money
+APE | A large primate with no tail
+
+---
+
+# Puzzle 5x5 #27
+MAT | A flat piece placed on the floor
+PLAY | To engage in an activity for fun
+TALK | To speak with someone
+
+---
+
+# Puzzle 5x5 #28
+ERA | A distinct period in history
+HONEY | A sweet substance made by bees
+SOIL | The ground plants grow in
+
+---
+
+# Puzzle 5x5 #29
+MELT | To turn from solid to liquid with heat
+MASK | Worn to cover the face
+SONG | A piece of music with lyrics
+
+---
+
+# Puzzle 5x5 #30
+ROAD | A path made for vehicles
+ROOF | The covering on top of a house
+HAWK | A sharp-eyed bird of prey
+
+---
+
+# Puzzle 5x5 #31
+BIRD | An animal with feathers that can fly
+DOOR | You open this to enter a room
+BELT | Worn around the waist to hold up pants
+
+---
+
+# Puzzle 5x5 #32
+MULE | A hybrid of a horse and donkey
+COMB | A tool used to tidy hair
+TEAM | A group that plays together
+
+---
+
+# Puzzle 5x5 #33
+ASS | Another name for a donkey
+SUGAR | A sweet, crystalline substance
+TOAD | A dry-skinned relative of the frog
+
+---
+
+# Puzzle 5x5 #34
+FLY | To move through the air
+KOALA | An Australian animal that eats eucalyptus
+TOAD | A dry-skinned relative of the frog
+
+---
+
+# Puzzle 5x5 #35
+FIND | To discover the location of something
+READ | To look at and understand written words
+ROPE | A thick cord used for tying or climbing
+
+---
+
+# Puzzle 5x5 #36
+SHOP | To go and buy things
+ROPE | A thick cord used for tying or climbing
+CORN | A yellow vegetable grown on a cob
+
+---
+
+# Puzzle 5x5 #37
+FOUR | The number after three
+HORSE | An animal often ridden or used to pull carts
+SOW | A female pig
+
+---
+
+# Puzzle 5x5 #38
+SIT | To rest on your bottom
+RIVER | A large, flowing body of fresh water
+RICE | A staple grain eaten around the world
+
+---
+
+# Puzzle 5x5 #39
+BAKE | To cook food using dry heat, like in an oven
+MELT | To turn from solid to liquid with heat
+WALK | To move on foot at a normal pace
+
+---
+
+# Puzzle 5x5 #40
+ROOF | The covering on top of a house
+RUG | A small carpet
+CROWN | A headpiece worn by royalty
+
+---
+
+# Puzzle 5x5 #41
+SHUT | To close something
+SALT | A seasoning found in the sea
+TWIN | One of two children born at the same time
+
+---
+
+# Puzzle 5x5 #42
+NINE | The number after eight
+TOWN | A small city
+OVEN | An appliance used for baking
+
+---
+
+# Puzzle 5x5 #43
+VOTE | To formally choose in an election
+CORAL | A hard structure built by sea organisms
+CAT | A common pet that meows
+
+---
+
+# Puzzle 5x5 #44
+SINK | Where you wash dishes or your hands
+SWAN | An elegant white water bird
+WASH | To clean with water
+
+---
+
+# Puzzle 5x5 #45
+READ | To look at and understand written words
+PEN | Something you write with
+PANDA | A black-and-white bear that eats bamboo
+
+---
+
+# Puzzle 5x5 #46
+HAWK | A sharp-eyed bird of prey
+TAR | A thick black substance used on roads
+CHAIR | Furniture you sit on
+
+---
+
+# Puzzle 5x5 #47
+OAT | A grain used to make porridge
+STORE | A place where you buy goods
+HERO | A person admired for great deeds
+
+---
+
+# Puzzle 5x5 #48
+SUN | The star at the center of our solar system
+QUIET | Making very little noise
+SELL | To exchange goods for money
+
+---
+
+# Puzzle 5x5 #49
+SMILE | An expression showing happiness
+ISLE | A small island
+EWE | A female sheep
+
+---
+
+# Puzzle 5x5 #50
+GATE | A hinged barrier at an entrance
+RUST | A reddish-brown color, also corrosion on metal
+HOUR | A period of 60 minutes
+
+---
+
+# Puzzle 5x5 #51
+CITY | A large, populated urban area
+CAB | A taxi
+STOVE | An appliance used for cooking food
+
+---
+
+# Puzzle 5x5 #52
+GAME | An activity played for fun or competition
+WEEK | A period of seven days
+CAMP | A temporary outdoor place to stay
+
+---
+
+# Puzzle 5x5 #53
+MAID | A person employed to clean a house
+SEED | What a plant grows from
+BLUE | The color of the sky on a clear day
+
+---
+
+# Puzzle 5x5 #54
+MALL | A large building with many shops
+MAP | A drawing that shows where places are
+FIELD | An open area of grass or crops
+
+---
+
+# Puzzle 5x5 #55
+POT | A container used for cooking
+WRITE | To put words on paper
+DOOR | You open this to enter a room
+
+---
+
+# Puzzle 5x5 #56
+PINK | A pale reddish color
+MAP | A drawing that shows where places are
+ANKLE | The joint between your foot and leg
+
+---
+
+# Puzzle 5x5 #57
+WRITE | To put words on paper
+PEAR | A fruit that is often shaped like a teardrop
+WIN | To succeed in a contest
+
+---
+
+# Puzzle 5x5 #58
+IRON | An appliance used to smooth clothes
+ARROW | A pointed shaft shot from a bow
+POD | A casing that holds seeds like peas
+
+---
+
+# Puzzle 5x5 #59
+TOWN | A small city
+LOSE | To no longer have something
+ELBOW | The joint in the middle of your arm
+
+---
+
+# Puzzle 5x5 #60
+GRAY | The color between black and white
+LEARN | To gain knowledge or a skill
+GOLD | A shiny, valuable yellow metal
+
+---
+
+# Puzzle 5x5 #61
+GAME | An activity played for fun or competition
+TEEN | A person aged between 13 and 19
+RAVEN | A large, black bird known for intelligence
+
+---
+
+# Puzzle 5x5 #62
+GECKO | A small lizard that can climb walls
+SEED | What a plant grows from
+SELL | To exchange goods for money
+
+---
+
+# Puzzle 5x5 #63
+BUS | A large vehicle for many passengers
+CLIMB | To move upward, often on a mountain
+BRUSH | A tool with bristles, used for painting or hair
+
+---
+
+# Puzzle 5x5 #64
+WIND | Moving air you can feel but not see
+LEARN | To gain knowledge or a skill
+RACE | A competition to see who is fastest
+
+---
+
+# Puzzle 5x5 #65
+COOK | To prepare food using heat
+COMET | An icy object in space with a glowing tail
+MINT | A fresh-tasting herb
+
+---
+
+# Puzzle 5x5 #66
+SMOKE | The gray cloud that rises from a fire
+FLAME | The visible part of a fire
+ASS | Another name for a donkey
+
+---
+
+# Puzzle 5x5 #67
+WASH | To clean with water
+LAUGH | The sound made when something is funny
+BELL | A device that makes a ringing sound
+
+---
+
+# Puzzle 5x5 #68
+MAKE | To create something
+WASH | To clean with water
+SUGAR | A sweet, crystalline substance
+
+---
+
+# Puzzle 5x5 #69
+SHOES | Worn to protect and cover the feet
+HAT | Something worn on the head
+GHOST | A spirit believed to haunt places
+
+---
+
+# Puzzle 5x5 #70
+CAMP | A temporary outdoor place to stay
+SPIN | To turn around quickly
+EAGLE | A large bird of prey with sharp eyesight
+
+---
+
+# Puzzle 5x5 #71
+SOAP | Used with water to clean your hands
+PANDA | A black-and-white bear that eats bamboo
+HAWK | A sharp-eyed bird of prey
+
+---
+
+# Puzzle 5x5 #72
+COUCH | A long, cushioned seat for a living room
+COLT | A young male horse
+MIST | A thin fog
+
+---
+
+# Puzzle 5x5 #73
+CUP | A small container for drinking
+CLIMB | To move upward, often on a mountain
+CHAIR | Furniture you sit on
+
+---
+
+# Puzzle 5x5 #74
+PRICE | The amount something costs
+SHIP | A large vessel that travels by sea
+BLUE | The color of the sky on a clear day
+
+---
+
+# Puzzle 5x5 #75
+MONEY | What you use to buy things
+SMILE | An expression showing happiness
+TIE | Worn around the neck with a suit
+
+---
+
+# Puzzle 5x5 #76
+JUICE | A drink made from fruit
+SHIRT | A piece of clothing worn on the upper body
+BUS | A large vehicle for many passengers
+
+---
+
+# Puzzle 5x5 #77
+SNOW | White flakes that fall in winter
+SOCK | Worn on the foot, inside a shoe
+STORM | Heavy wind and rain together
+
+---
+
+# Puzzle 5x5 #78
+SNOW | White flakes that fall in winter
+WHALE | The largest animal in the ocean
+GATE | A hinged barrier at an entrance
+
+---
+
+# Puzzle 5x5 #79
+GREEN | The color of grass
+GUM | Soft tissue around the teeth
+NIGHT | The time of day when it's dark
+
+---
+
+# Puzzle 5x5 #80
+VEST | A sleeveless piece of clothing
+PAINT | Colored liquid used to decorate surfaces
+PLAY | To engage in an activity for fun
+
+---
+
+# Puzzle 5x5 #81
+TOOTH | A hard part of the mouth used for chewing
+SHEEP | A woolly farm animal
+RYE | A grain used to make bread
+
+---
+
+# Puzzle 5x5 #82
+WITCH | A person, often in stories, with magical powers
+PEACH | A fuzzy, sweet orange fruit
+GOAT | A farm animal known for climbing
+
+---
+
+# Puzzle 5x5 #83
+WRITE | To put words on paper
+MAID | A person employed to clean a house
+DANCE | To move your body to music
+
+---
+
+# Puzzle 5x5 #84
+SPEED | How fast something moves
+REST | To relax and stop working
+PHONE | A device used to make calls
+
+---
+
+# Puzzle 5x5 #85
+STONE | A small piece of rock
+TOOTH | A hard part of the mouth used for chewing
+IRON | An appliance used to smooth clothes
+
+---
+
+# Puzzle 5x5 #86
+CHESS | A strategy board game played with kings and queens
+CITY | A large, populated urban area
+SMILE | An expression showing happiness
+
+---
+
+# Puzzle 5x5 #87
+BELL | A device that makes a ringing sound
+FLAME | The visible part of a fire
+WAGON | A four-wheeled vehicle pulled by animals
+
+---
+
+# Puzzle 5x5 #88
+KOALA | An Australian animal that eats eucalyptus
+CLIMB | To move upward, often on a mountain
+LAMP | A device that gives off light
+
+---
+
+# Puzzle 5x5 #89
+STEAK | A slice of meat, often grilled
+STORM | Heavy wind and rain together
+JADE | A green gemstone
+
+---
+
+# Puzzle 5x5 #90
+PLANE | A flying vehicle with wings
+SPARK | A tiny flash of light or fire
+SPIN | To turn around quickly
+
+---
+
+# Puzzle 5x5 #91
+SHIRT | A piece of clothing worn on the upper body
+GLASS | A container used for drinking, made of a clear material
+SOIL | The ground plants grow in
+
+---
+
+# Puzzle 5x5 #92
+LAUGH | The sound made when something is funny
+DUNE | A hill of sand
+QUEEN | A female monarch
+
+---
+
+# Puzzle 5x5 #93
+TABLE | Furniture you eat or work at
+OTTER | A playful, swimming mammal
+COMB | A tool used to tidy hair
+
+---
+
+# Puzzle 5x5 #94
+WRITE | To put words on paper
+CARD | A small piece of stiff paper, used for games or notes
+STEAK | A slice of meat, often grilled
+
+---
+
+# Puzzle 5x5 #95
+SNOW | White flakes that fall in winter
+STORE | A place where you buy goods
+HEART | The organ that pumps blood
+
+---
+
+# Puzzle 5x5 #96
+PLANE | A flying vehicle with wings
+SUGAR | A sweet, crystalline substance
+DUNE | A hill of sand
+
+---
+
+# Puzzle 5x5 #97
+SOFA | A long, cushioned piece of furniture
+GRASS | The green plant that covers lawns
+CROWN | A headpiece worn by royalty
+
+---
+
+# Puzzle 5x5 #98
+DUCK | A water bird that quacks
+GECKO | A small lizard that can climb walls
+SMOKE | The gray cloud that rises from a fire
+
+---
+
+# Puzzle 5x5 #99
+GHOST | A spirit believed to haunt places
+LAUGH | The sound made when something is funny
+IRON | An appliance used to smooth clothes
+
+---
+
+# Puzzle 5x5 #100
+MAGIC | Mysterious, seemingly impossible power
+CLIFF | A steep rock face
+ARROW | A pointed shaft shot from a bow
+
+---
+
+# ---------- MEDIUM (4-word puzzles) ----------
+
+# Puzzle 5x5 #101
+SEA | A large body of salt water
+ANT | A tiny insect that lives in colonies
+TEA | A hot drink made from leaves
+EAT | What you do when you have food
+
+---
+
+# Puzzle 5x5 #102
+LEG | The limb used for walking
+RUG | A small carpet
+WOLF | A wild relative of the dog
+WAR | An armed conflict between nations
+
+---
+
+# Puzzle 5x5 #103
+JUG | A container for pouring liquids
+GOLD | A shiny, valuable yellow metal
+OWE | To be in debt for money
+POD | A casing that holds seeds like peas
+
+---
+
+# Puzzle 5x5 #104
+LID | A cover for a pot or jar
+SELL | To exchange goods for money
+FISH | An animal that swims and breathes with gills
+BUD | The early stage of a flower or leaf
+
+---
+
+# Puzzle 5x5 #105
+MAT | A flat piece placed on the floor
+AUNT | Your parent's sister
+VASE | A container used to hold flowers
+KEY | Used to open a lock
+
+---
+
+# Puzzle 5x5 #106
+CRY | To shed tears
+RUST | A reddish-brown color, also corrosion on metal
+LIFT | To raise something up
+BIN | A container for trash
+
+---
+
+# Puzzle 5x5 #107
+WORK | To do a job or task
+LOSE | To no longer have something
+ELK | A large member of the deer family
+EAT | What you do when you have food
+
+---
+
+# Puzzle 5x5 #108
+COW | A farm animal that gives milk
+LION | The king of the jungle
+FIG | A sweet fruit with many small seeds
+MOON | The natural satellite of Earth
+
+---
+
+# Puzzle 5x5 #109
+SPEED | How fast something moves
+GEM | A precious stone
+SKI | To glide down snow on two boards
+COD | A common food fish
+
+---
+
+# Puzzle 5x5 #110
+VINE | A climbing or trailing plant
+WAVE | A moving ridge of water
+BIN | A container for trash
+OWL | A nocturnal bird known for wisdom
+
+---
+
+# Puzzle 5x5 #111
+JADE | A green gemstone
+HAM | A cut of meat from a pig
+RIDE | To travel on or in a vehicle or animal
+TIE | Worn around the neck with a suit
+
+---
+
+# Puzzle 5x5 #112
+EYE | The organ used for seeing
+QUIET | Making very little noise
+PEN | Something you write with
+SKI | To glide down snow on two boards
+
+---
+
+# Puzzle 5x5 #113
+BAG | Something you carry things in
+TUB | A container for bathing
+BRAIN | The organ used for thinking
+NET | A mesh used to catch fish
+
+---
+
+# Puzzle 5x5 #114
+LOCK | To secure something with a key
+DOOR | You open this to enter a room
+ELK | A large member of the deer family
+BEE | An insect that makes honey
+
+---
+
+# Puzzle 5x5 #115
+BED | Furniture you sleep on
+BRAIN | The organ used for thinking
+SEA | A large body of salt water
+PAN | A flat cooking container
+
+---
+
+# Puzzle 5x5 #116
+ELK | A large member of the deer family
+GOAL | The target you aim to score in
+RING | A circular piece of jewelry
+MINT | A fresh-tasting herb
+
+---
+
+# Puzzle 5x5 #117
+HONEY | A sweet substance made by bees
+PLAY | To engage in an activity for fun
+JOG | To run at a slow, steady pace
+OWL | A nocturnal bird known for wisdom
+
+---
+
+# Puzzle 5x5 #118
+RICE | A staple grain eaten around the world
+YEAR | A period of 365 days
+VEST | A sleeveless piece of clothing
+BAT | A flying mammal, or sports equipment
+
+---
+
+# Puzzle 5x5 #119
+WORD | A unit of language with meaning
+GHOST | A spirit believed to haunt places
+JOG | To run at a slow, steady pace
+COT | A small, portable bed
+
+---
+
+# Puzzle 5x5 #120
+JAR | A glass container, often for jam
+SEAL | A flippered marine mammal
+SHIP | A large vessel that travels by sea
+LEAF | A green part of a plant that grows on branches
+
+---
+
+# Puzzle 5x5 #121
+FOX | A clever, red-furred wild animal
+STOVE | An appliance used for cooking food
+SUN | The star at the center of our solar system
+FROG | An amphibian that hops and croaks
+
+---
+
+# Puzzle 5x5 #122
+TOE | A digit on your foot
+MULE | A hybrid of a horse and donkey
+CUP | A small container for drinking
+COMET | An icy object in space with a glowing tail
+
+---
+
+# Puzzle 5x5 #123
+MAT | A flat piece placed on the floor
+TAR | A thick black substance used on roads
+DEER | A forest animal with antlers
+SMOKE | The gray cloud that rises from a fire
+
+---
+
+# Puzzle 5x5 #124
+MUD | Wet, sticky soil
+FIELD | An open area of grass or crops
+DEER | A forest animal with antlers
+RYE | A grain used to make bread
+
+---
+
+# Puzzle 5x5 #125
+MONEY | What you use to buy things
+SOUP | A warm liquid food often eaten with a spoon
+ELK | A large member of the deer family
+KEY | Used to open a lock
+
+---
+
+# Puzzle 5x5 #126
+GREEN | The color of grass
+CAVE | A hollow space underground
+SEA | A large body of salt water
+FAN | A device that moves air to cool you
+
+---
+
+# Puzzle 5x5 #127
+DEW | Moisture that forms overnight on grass
+MELT | To turn from solid to liquid with heat
+STEAK | A slice of meat, often grilled
+TAR | A thick black substance used on roads
+
+---
+
+# Puzzle 5x5 #128
+GOAT | A farm animal known for climbing
+SING | To make music with your voice
+JOG | To run at a slow, steady pace
+SHOP | To go and buy things
+
+---
+
+# Puzzle 5x5 #129
+BEE | An insect that makes honey
+ORBIT | The path an object takes around another in space
+RYE | A grain used to make bread
+FOUR | The number after three
+
+---
+
+# Puzzle 5x5 #130
+PIG | A pink farm animal that oinks
+GAME | An activity played for fun or competition
+WRITE | To put words on paper
+JAR | A glass container, often for jam
+
+---
+
+# Puzzle 5x5 #131
+KEY | Used to open a lock
+VASE | A container used to hold flowers
+OWE | To be in debt for money
+STEAK | A slice of meat, often grilled
+
+---
+
+# Puzzle 5x5 #132
+MINT | A fresh-tasting herb
+NUT | A hard-shelled edible seed
+WHITE | The color of snow
+TEA | A hot drink made from leaves
+
+---
+
+# Puzzle 5x5 #133
+OAT | A grain used to make porridge
+PLANE | A flying vehicle with wings
+BAT | A flying mammal, or sports equipment
+SOIL | The ground plants grow in
+
+---
+
+# Puzzle 5x5 #134
+ISLE | A small island
+SPOON | A utensil used for eating soup or cereal
+FOX | A clever, red-furred wild animal
+NUT | A hard-shelled edible seed
+
+---
+
+# Puzzle 5x5 #135
+SHUT | To close something
+BAT | A flying mammal, or sports equipment
+HIP | The joint between the leg and torso
+HOUSE | A building where people live
+
+---
+
+# Puzzle 5x5 #136
+SUN | The star at the center of our solar system
+STORM | Heavy wind and rain together
+BOOT | A tall, sturdy shoe
+GUM | Soft tissue around the teeth
+
+---
+
+# Puzzle 5x5 #137
+SCARF | A piece of fabric worn around the neck
+FROG | An amphibian that hops and croaks
+WAR | An armed conflict between nations
+SUB | A vessel that travels underwater
+
+---
+
+# Puzzle 5x5 #138
+TOE | A digit on your foot
+BEE | An insect that makes honey
+TOAD | A dry-skinned relative of the frog
+APPLE | A fruit that can be red or green
+
+---
+
+# Puzzle 5x5 #139
+EYE | The organ used for seeing
+PEACH | A fuzzy, sweet orange fruit
+VASE | A container used to hold flowers
+HIP | The joint between the leg and torso
+
+---
+
+# Puzzle 5x5 #140
+SINK | Where you wash dishes or your hands
+RUN | To move quickly on foot
+LION | The king of the jungle
+PULL | To apply force to bring something closer
+
+---
+
+# Puzzle 5x5 #141
+HAPPY | Feeling joy or pleasure
+GYM | A place to exercise
+SPEED | How fast something moves
+HOP | To jump on one foot
+
+---
+
+# Puzzle 5x5 #142
+DUSK | The time just before night
+SLEEP | To rest with your eyes closed at night
+PIG | A pink farm animal that oinks
+SEED | What a plant grows from
+
+---
+
+# Puzzle 5x5 #143
+APPLE | A fruit that can be red or green
+SOUP | A warm liquid food often eaten with a spoon
+DROP | To let something fall
+LEG | The limb used for walking
+
+---
+
+# Puzzle 5x5 #144
+BLACK | The color of night
+LAUGH | The sound made when something is funny
+NUT | A hard-shelled edible seed
+HAT | Something worn on the head
+
+---
+
+# Puzzle 5x5 #145
+PLAY | To engage in an activity for fun
+OCEAN | A vast body of salt water
+CAPE | A sleeveless cloak worn over the shoulders
+SOY | A bean used to make tofu and sauce
+
+---
+
+# Puzzle 5x5 #146
+SCARF | A piece of fabric worn around the neck
+YEAR | A period of 365 days
+ANT | A tiny insect that lives in colonies
+TREE | A tall plant with a trunk and branches
+
+---
+
+# Puzzle 5x5 #147
+EAT | What you do when you have food
+SPARK | A tiny flash of light or fire
+PIZZA | A round baked dish topped with cheese
+RYE | A grain used to make bread
+
+---
+
+# Puzzle 5x5 #148
+CAKE | A sweet baked dessert
+PEN | Something you write with
+BLACK | The color of night
+LAKE | A large body of fresh water
+
+---
+
+# Puzzle 5x5 #149
+BRUSH | A tool with bristles, used for painting or hair
+BABY | A very young child
+JUG | A container for pouring liquids
+FISH | An animal that swims and breathes with gills
+
+---
+
+# Puzzle 5x5 #150
+POT | A container used for cooking
+TIDE | The rise and fall of the sea
+SPACE | The vast area beyond Earth's atmosphere
+DUSK | The time just before night
+
+---
+
+# Puzzle 5x5 #151
+PHONE | A device used to make calls
+ROPE | A thick cord used for tying or climbing
+MOP | A tool used to clean floors
+JUMP | To push off the ground into the air
+
+---
+
+# Puzzle 5x5 #152
+BLACK | The color of night
+LEG | The limb used for walking
+KICK | To strike with the foot
+DUSK | The time just before night
+
+---
+
+# Puzzle 5x5 #153
+MEAT | Food that comes from animals
+TEEN | A person aged between 13 and 19
+ANKLE | The joint between your foot and leg
+FAN | A device that moves air to cool you
+
+---
+
+# Puzzle 5x5 #154
+SHIP | A large vessel that travels by sea
+JUMP | To push off the ground into the air
+SEA | A large body of salt water
+YACHT | A luxurious sailing or motor boat
+
+---
+
+# Puzzle 5x5 #155
+GLOVE | Clothing worn to protect the hand
+SONG | A piece of music with lyrics
+GOLD | A shiny, valuable yellow metal
+BEE | An insect that makes honey
+
+---
+
+# Puzzle 5x5 #156
+WOLF | A wild relative of the dog
+SWORD | A long bladed weapon
+SHOP | To go and buy things
+DIG | To make a hole in the ground
+
+---
+
+# Puzzle 5x5 #157
+EAT | What you do when you have food
+CHESS | A strategy board game played with kings and queens
+MELT | To turn from solid to liquid with heat
+SELL | To exchange goods for money
+
+---
+
+# Puzzle 5x5 #158
+EARTH | The planet we live on
+CAB | A taxi
+TIDE | The rise and fall of the sea
+TEAL | A blue-green color
+
+---
+
+# Puzzle 5x5 #159
+SPOON | A utensil used for eating soup or cereal
+DROP | To let something fall
+READ | To look at and understand written words
+SOY | A bean used to make tofu and sauce
+
+---
+
+# Puzzle 5x5 #160
+ICE | Frozen water
+RAVEN | A large, black bird known for intelligence
+TAKE | To get hold of something
+PEAK | The top of a mountain
+
+---
+
+# Puzzle 5x5 #161
+VINE | A climbing or trailing plant
+SPACE | The vast area beyond Earth's atmosphere
+RUST | A reddish-brown color, also corrosion on metal
+OAR | Used to row a boat
+
+---
+
+# Puzzle 5x5 #162
+EAGLE | A large bird of prey with sharp eyesight
+LOSE | To no longer have something
+ARROW | A pointed shaft shot from a bow
+ERA | A distinct period in history
+
+---
+
+# Puzzle 5x5 #163
+BREAD | A baked food made from flour
+READ | To look at and understand written words
+DOVE | A bird symbolizing peace
+BABY | A very young child
+
+---
+
+# Puzzle 5x5 #164
+GHOST | A spirit believed to haunt places
+RING | A circular piece of jewelry
+AUNT | Your parent's sister
+COOK | To prepare food using heat
+
+---
+
+# Puzzle 5x5 #165
+BIRD | An animal with feathers that can fly
+PANDA | A black-and-white bear that eats bamboo
+ROBIN | A red-breasted songbird
+BAG | Something you carry things in
+
+---
+
+# Puzzle 5x5 #166
+RIDE | To travel on or in a vehicle or animal
+JUICE | A drink made from fruit
+TOE | A digit on your foot
+JEANS | Casual pants made of denim
+
+---
+
+# Puzzle 5x5 #167
+SAW | A tool used to cut wood
+PANDA | A black-and-white bear that eats bamboo
+SALT | A seasoning found in the sea
+PAINT | Colored liquid used to decorate surfaces
+
+---
+
+# Puzzle 5x5 #168
+PLANE | A flying vehicle with wings
+POT | A container used for cooking
+CROWN | A headpiece worn by royalty
+DOOR | You open this to enter a room
+
+---
+
+# Puzzle 5x5 #169
+WHITE | The color of snow
+SEW | To join fabric with a needle and thread
+JUICE | A drink made from fruit
+REST | To relax and stop working
+
+---
+
+# Puzzle 5x5 #170
+DUNE | A hill of sand
+COUCH | A long, cushioned seat for a living room
+SCARF | A piece of fabric worn around the neck
+EYE | The organ used for seeing
+
+---
+
+# Puzzle 5x5 #171
+BLOOM | To produce flowers
+MEAT | Food that comes from animals
+ORBIT | The path an object takes around another in space
+OWE | To be in debt for money
+
+---
+
+# Puzzle 5x5 #172
+IRON | An appliance used to smooth clothes
+SHOES | Worn to protect and cover the feet
+PANTS | Clothing worn to cover the legs
+CAR | A vehicle with four wheels
+
+---
+
+# Puzzle 5x5 #173
+FLY | To move through the air
+SCARF | A piece of fabric worn around the neck
+CLIMB | To move upward, often on a mountain
+BEAR | A large, furry forest animal
+
+---
+
+# Puzzle 5x5 #174
+GEM | A precious stone
+STONE | A small piece of rock
+ROPE | A thick cord used for tying or climbing
+STORM | Heavy wind and rain together
+
+---
+
+# Puzzle 5x5 #175
+DOG | Man's best friend
+OTTER | A playful, swimming mammal
+PHONE | A device used to make calls
+GROW | To increase in size over time
+
+---
+
+# Puzzle 5x5 #176
+SHOES | Worn to protect and cover the feet
+VOTE | To formally choose in an election
+SHOP | To go and buy things
+SAND | Tiny grains found on beaches
+
+---
+
+# Puzzle 5x5 #177
+COW | A farm animal that gives milk
+TOWN | A small city
+PRICE | The amount something costs
+OTTER | A playful, swimming mammal
+
+---
+
+# Puzzle 5x5 #178
+CROWN | A headpiece worn by royalty
+NUT | A hard-shelled edible seed
+GRAPE | A small fruit that grows in bunches on a vine
+PEAR | A fruit that is often shaped like a teardrop
+
+---
+
+# Puzzle 5x5 #179
+BUD | The early stage of a flower or leaf
+BRUSH | A tool with bristles, used for painting or hair
+REEF | A ridge of coral or rock near the ocean surface
+SHOES | Worn to protect and cover the feet
+
+---
+
+# Puzzle 5x5 #180
+ICE | Frozen water
+HONEY | A sweet substance made by bees
+KNIFE | A tool with a blade, used for cutting
+KICK | To strike with the foot
+
+---
+
+# Puzzle 5x5 #181
+TIDE | The rise and fall of the sea
+HORSE | An animal often ridden or used to pull carts
+RUG | A small carpet
+BRUSH | A tool with bristles, used for painting or hair
+
+---
+
+# Puzzle 5x5 #182
+DANCE | To move your body to music
+STOVE | An appliance used for cooking food
+BUD | The early stage of a flower or leaf
+OVEN | An appliance used for baking
+
+---
+
+# Puzzle 5x5 #183
+ROBIN | A red-breasted songbird
+MONEY | What you use to buy things
+HOUR | A period of 60 minutes
+GUM | Soft tissue around the teeth
+
+---
+
+# Puzzle 5x5 #184
+SIT | To rest on your bottom
+SING | To make music with your voice
+CROWN | A headpiece worn by royalty
+SKIRT | A garment that hangs from the waist
+
+---
+
+# Puzzle 5x5 #185
+ICE | Frozen water
+WHITE | The color of snow
+COMET | An icy object in space with a glowing tail
+FISH | An animal that swims and breathes with gills
+
+---
+
+# Puzzle 5x5 #186
+VEST | A sleeveless piece of clothing
+OTTER | A playful, swimming mammal
+SHIRT | A piece of clothing worn on the upper body
+COD | A common food fish
+
+---
+
+# Puzzle 5x5 #187
+ARROW | A pointed shaft shot from a bow
+RIVER | A large, flowing body of fresh water
+OWL | A nocturnal bird known for wisdom
+REST | To relax and stop working
+
+---
+
+# Puzzle 5x5 #188
+HAWK | A sharp-eyed bird of prey
+WHALE | The largest animal in the ocean
+HAT | Something worn on the head
+KOALA | An Australian animal that eats eucalyptus
+
+---
+
+# Puzzle 5x5 #189
+KING | A male monarch
+GHOST | A spirit believed to haunt places
+HORSE | An animal often ridden or used to pull carts
+COT | A small, portable bed
+
+---
+
+# Puzzle 5x5 #190
+SMILE | An expression showing happiness
+JEANS | Casual pants made of denim
+KICK | To strike with the foot
+SING | To make music with your voice
+
+---
+
+# Puzzle 5x5 #191
+SHOES | Worn to protect and cover the feet
+PHONE | A device used to make calls
+ANT | A tiny insect that lives in colonies
+NIGHT | The time of day when it's dark
+
+---
+
+# Puzzle 5x5 #192
+GAME | An activity played for fun or competition
+ROAD | A path made for vehicles
+STOVE | An appliance used for cooking food
+ORBIT | The path an object takes around another in space
+
+---
+
+# Puzzle 5x5 #193
+MELT | To turn from solid to liquid with heat
+SPEED | How fast something moves
+EAGLE | A large bird of prey with sharp eyesight
+SALT | A seasoning found in the sea
+
+---
+
+# Puzzle 5x5 #194
+TOOTH | A hard part of the mouth used for chewing
+HAIL | Balls of ice that fall from the sky
+LOCK | To secure something with a key
+STOVE | An appliance used for cooking food
+
+---
+
+# Puzzle 5x5 #195
+OCEAN | A vast body of salt water
+SINK | Where you wash dishes or your hands
+MUSIC | Organized sound that people enjoy listening to
+MAKE | To create something
+
+---
+
+# Puzzle 5x5 #196
+CAKE | A sweet baked dessert
+SUGAR | A sweet, crystalline substance
+MUSIC | Organized sound that people enjoy listening to
+HERO | A person admired for great deeds
+
+---
+
+# Puzzle 5x5 #197
+OCEAN | A vast body of salt water
+HORSE | An animal often ridden or used to pull carts
+SEW | To join fabric with a needle and thread
+DANCE | To move your body to music
+
+---
+
+# Puzzle 5x5 #198
+CUB | A baby bear or lion
+CHAIR | Furniture you sit on
+WATCH | A small clock worn on the wrist
+CORAL | A hard structure built by sea organisms
+
+---
+
+# Puzzle 5x5 #199
+SHIP | A large vessel that travels by sea
+BEACH | A sandy area next to the sea
+SNAKE | A long, legless reptile
+ZEBRA | A striped African animal related to the horse
+
+---
+
+# Puzzle 5x5 #200
+QUEEN | A female monarch
+SMILE | An expression showing happiness
+MUSIC | Organized sound that people enjoy listening to
+LION | The king of the jungle
+
+---
+
+# ---------- HARD (5-word puzzles) ----------
+
+# Puzzle 5x5 #201
+PIE | A baked dessert with a crust
+MOP | A tool used to clean floors
+ARM | The limb between shoulder and hand
+VINE | A climbing or trailing plant
+VAN | A boxy vehicle used to carry cargo
+
+---
+
+# Puzzle 5x5 #202
+TIDE | The rise and fall of the sea
+SKI | To glide down snow on two boards
+TIE | Worn around the neck with a suit
+APE | A large primate with no tail
+NET | A mesh used to catch fish
+
+---
+
+# Puzzle 5x5 #203
+LAMB | A baby sheep
+RAM | A male sheep
+RUG | A small carpet
+ASS | Another name for a donkey
+BAG | Something you carry things in
+
+---
+
+# Puzzle 5x5 #204
+SOW | A female pig
+GLASS | A container used for drinking, made of a clear material
+AXE | A tool for chopping wood
+BEE | An insect that makes honey
+BIN | A container for trash
+
+---
+
+# Puzzle 5x5 #205
+ASS | Another name for a donkey
+MAID | A person employed to clean a house
+SOFA | A long, cushioned piece of furniture
+OWL | A nocturnal bird known for wisdom
+OAT | A grain used to make porridge
+
+---
+
+# Puzzle 5x5 #206
+BELT | Worn around the waist to hold up pants
+HAT | Something worn on the head
+RACE | A competition to see who is fastest
+EAR | The organ used for hearing
+DEW | Moisture that forms overnight on grass
+
+---
+
+# Puzzle 5x5 #207
+WIN | To succeed in a contest
+ANT | A tiny insect that lives in colonies
+DANCE | To move your body to music
+DEW | Moisture that forms overnight on grass
+EWE | A female sheep
+
+---
+
+# Puzzle 5x5 #208
+EWE | A female sheep
+STORE | A place where you buy goods
+BEE | An insect that makes honey
+RAT | A small rodent with a long tail
+SIT | To rest on your bottom
+
+---
+
+# Puzzle 5x5 #209
+WAR | An armed conflict between nations
+AGE | How many years old someone is
+SAW | A tool used to cut wood
+SHARK | A predatory fish with sharp teeth
+COW | A farm animal that gives milk
+
+---
+
+# Puzzle 5x5 #210
+DEW | Moisture that forms overnight on grass
+DOG | Man's best friend
+TIE | Worn around the neck with a suit
+WHITE | The color of snow
+ZOO | A place where wild animals are kept for viewing
+
+---
+
+# Puzzle 5x5 #211
+ANGRY | Feeling strong displeasure
+RIB | A curved bone in the chest
+FOG | A thick cloud near the ground
+TUB | A container for bathing
+SAW | A tool used to cut wood
+
+---
+
+# Puzzle 5x5 #212
+GECKO | A small lizard that can climb walls
+FOG | A thick cloud near the ground
+CRY | To shed tears
+FIG | A sweet fruit with many small seeds
+FOLD | To bend something over on itself
+
+---
+
+# Puzzle 5x5 #213
+RACE | A competition to see who is fastest
+SEA | A large body of salt water
+EWE | A female sheep
+ICE | Frozen water
+TABLE | Furniture you eat or work at
+
+---
+
+# Puzzle 5x5 #214
+STEAK | A slice of meat, often grilled
+BAKE | To cook food using dry heat, like in an oven
+NET | A mesh used to catch fish
+EYE | The organ used for seeing
+DEW | Moisture that forms overnight on grass
+
+---
+
+# Puzzle 5x5 #215
+WHALE | The largest animal in the ocean
+SAW | A tool used to cut wood
+SIT | To rest on your bottom
+NET | A mesh used to catch fish
+MEAT | Food that comes from animals
+
+---
+
+# Puzzle 5x5 #216
+HOP | To jump on one foot
+FOG | A thick cloud near the ground
+ONYX | A black gemstone
+NIGHT | The time of day when it's dark
+APE | A large primate with no tail
+
+---
+
+# Puzzle 5x5 #217
+MUG | A large cup with a handle
+DIG | To make a hole in the ground
+CLOUD | A white or gray shape floating in the sky
+JUG | A container for pouring liquids
+MILK | A white drink from cows
+
+---
+
+# Puzzle 5x5 #218
+OPEN | To make something no longer closed
+BIN | A container for trash
+ROOF | The covering on top of a house
+FARM | A place where crops or animals are raised
+RIB | A curved bone in the chest
+
+---
+
+# Puzzle 5x5 #219
+HAM | A cut of meat from a pig
+PLATE | A flat dish used for serving food
+NET | A mesh used to catch fish
+SAW | A tool used to cut wood
+SHIP | A large vessel that travels by sea
+
+---
+
+# Puzzle 5x5 #220
+OAR | Used to row a boat
+JAW | The bone that holds your teeth
+ARROW | A pointed shaft shot from a bow
+GRAY | The color between black and white
+OAT | A grain used to make porridge
+
+---
+
+# Puzzle 5x5 #221
+BEACH | A sandy area next to the sea
+BAG | Something you carry things in
+SHUT | To close something
+EWE | A female sheep
+BED | Furniture you sleep on
+
+---
+
+# Puzzle 5x5 #222
+SKY | The space above the earth
+SUB | A vessel that travels underwater
+SPACE | The vast area beyond Earth's atmosphere
+YEAR | A period of 365 days
+SEW | To join fabric with a needle and thread
+
+---
+
+# Puzzle 5x5 #223
+WAR | An armed conflict between nations
+OWE | To be in debt for money
+QUEEN | A female monarch
+RIDE | To travel on or in a vehicle or animal
+BIN | A container for trash
+
+---
+
+# Puzzle 5x5 #224
+CAT | A common pet that meows
+TALK | To speak with someone
+COD | A common food fish
+TRUCK | A large vehicle used to carry goods
+ZOO | A place where wild animals are kept for viewing
+
+---
+
+# Puzzle 5x5 #225
+NUT | A hard-shelled edible seed
+TREE | A tall plant with a trunk and branches
+PHONE | A device used to make calls
+HOP | To jump on one foot
+JOG | To run at a slow, steady pace
+
+---
+
+# Puzzle 5x5 #226
+ASS | Another name for a donkey
+SOAP | Used with water to clean your hands
+ZEBRA | A striped African animal related to the horse
+ZOO | A place where wild animals are kept for viewing
+BOX | A container with straight sides
+
+---
+
+# Puzzle 5x5 #227
+OWL | A nocturnal bird known for wisdom
+ROBE | A loose outer garment
+GOAL | The target you aim to score in
+HELP | To assist someone
+TOY | Something children play with
+
+---
+
+# Puzzle 5x5 #228
+ASS | Another name for a donkey
+SAW | A tool used to cut wood
+PARK | A public green space for recreation
+PLANT | A living thing that grows in soil
+AXE | A tool for chopping wood
+
+---
+
+# Puzzle 5x5 #229
+ZOO | A place where wild animals are kept for viewing
+TOOTH | A hard part of the mouth used for chewing
+EARTH | The planet we live on
+MAT | A flat piece placed on the floor
+AGE | How many years old someone is
+
+---
+
+# Puzzle 5x5 #230
+STOVE | An appliance used for cooking food
+TEA | A hot drink made from leaves
+MAP | A drawing that shows where places are
+CAR | A vehicle with four wheels
+MUSIC | Organized sound that people enjoy listening to
+
+---
+
+# Puzzle 5x5 #231
+HOUSE | A building where people live
+EAR | The organ used for hearing
+ROOF | The covering on top of a house
+CAR | A vehicle with four wheels
+RACE | A competition to see who is fastest
+
+---
+
+# Puzzle 5x5 #232
+PLANT | A living thing that grows in soil
+OAT | A grain used to make porridge
+APE | A large primate with no tail
+TREE | A tall plant with a trunk and branches
+VASE | A container used to hold flowers
+
+---
+
+# Puzzle 5x5 #233
+AXE | A tool for chopping wood
+JAR | A glass container, often for jam
+IRON | An appliance used to smooth clothes
+COIN | A round piece of metal used as money
+HEART | The organ that pumps blood
+
+---
+
+# Puzzle 5x5 #234
+ZERO | The number that means nothing
+TOWN | A small city
+POD | A casing that holds seeds like peas
+POWER | The ability to do something with strength
+HAT | Something worn on the head
+
+---
+
+# Puzzle 5x5 #235
+SPACE | The vast area beyond Earth's atmosphere
+PLAY | To engage in an activity for fun
+SOW | A female pig
+ERA | A distinct period in history
+SPIN | To turn around quickly
+
+---
+
+# Puzzle 5x5 #236
+SHELL | The hard outer covering of some sea creatures
+DEW | Moisture that forms overnight on grass
+AXE | A tool for chopping wood
+SOIL | The ground plants grow in
+LAKE | A large body of fresh water
+
+---
+
+# Puzzle 5x5 #237
+CAT | A common pet that meows
+WALL | A vertical structure that divides space
+PLUM | A small, sweet purple fruit
+TEACH | To help someone learn
+HAM | A cut of meat from a pig
+
+---
+
+# Puzzle 5x5 #238
+MOLE | A small burrowing animal
+RAM | A male sheep
+PHONE | A device used to make calls
+ZOO | A place where wild animals are kept for viewing
+TYPE | To enter text using a keyboard
+
+---
+
+# Puzzle 5x5 #239
+HELP | To assist someone
+OCEAN | A vast body of salt water
+PEN | Something you write with
+PAN | A flat cooking container
+TOWN | A small city
+
+---
+
+# Puzzle 5x5 #240
+CUB | A baby bear or lion
+BEAR | A large, furry forest animal
+HELP | To assist someone
+HIP | The joint between the leg and torso
+BRUSH | A tool with bristles, used for painting or hair
+
+---
+
+# Puzzle 5x5 #241
+CUP | A small container for drinking
+MOUSE | A tiny rodent, or a computer pointing device
+ISLE | A small island
+SWIM | To move through water using your body
+SUB | A vessel that travels underwater
+
+---
+
+# Puzzle 5x5 #242
+WAGON | A four-wheeled vehicle pulled by animals
+SOY | A bean used to make tofu and sauce
+SONG | A piece of music with lyrics
+ANT | A tiny insect that lives in colonies
+HAWK | A sharp-eyed bird of prey
+
+---
+
+# Puzzle 5x5 #243
+GEM | A precious stone
+YAM | A starchy root vegetable
+HEN | A female chicken
+POWER | The ability to do something with strength
+HAPPY | Feeling joy or pleasure
+
+---
+
+# Puzzle 5x5 #244
+SEW | To join fabric with a needle and thread
+SHELL | The hard outer covering of some sea creatures
+ROSE | A flower known for its thorns
+BALL | A round object used in many sports
+TUB | A container for bathing
+
+---
+
+# Puzzle 5x5 #245
+OWL | A nocturnal bird known for wisdom
+SHELL | The hard outer covering of some sea creatures
+JOG | To run at a slow, steady pace
+DIG | To make a hole in the ground
+PANTS | Clothing worn to cover the legs
+
+---
+
+# Puzzle 5x5 #246
+HEN | A female chicken
+DAWN | The first light of the morning
+DOG | Man's best friend
+PUSH | To apply force to move something away
+GRASS | The green plant that covers lawns
+
+---
+
+# Puzzle 5x5 #247
+AGE | How many years old someone is
+CAR | A vehicle with four wheels
+MAKE | To create something
+PEACH | A fuzzy, sweet orange fruit
+PAGE | One sheet of a book
+
+---
+
+# Puzzle 5x5 #248
+BIN | A container for trash
+PAN | A flat cooking container
+MALL | A large building with many shops
+MOUSE | A tiny rodent, or a computer pointing device
+LAMB | A baby sheep
+
+---
+
+# Puzzle 5x5 #249
+OTTER | A playful, swimming mammal
+PANTS | Clothing worn to cover the legs
+TOE | A digit on your foot
+ARM | The limb between shoulder and hand
+BAT | A flying mammal, or sports equipment
+
+---
+
+# Puzzle 5x5 #250
+MEAT | Food that comes from animals
+STORM | Heavy wind and rain together
+DOG | Man's best friend
+BAT | A flying mammal, or sports equipment
+SWIM | To move through water using your body
+
+---
+
+# Puzzle 5x5 #251
+FIG | A sweet fruit with many small seeds
+GRAPE | A small fruit that grows in bunches on a vine
+DAWN | The first light of the morning
+PIE | A baked dessert with a crust
+RING | A circular piece of jewelry
+
+---
+
+# Puzzle 5x5 #252
+LIP | Part of the mouth
+BELL | A device that makes a ringing sound
+CLIMB | To move upward, often on a mountain
+MALL | A large building with many shops
+CAR | A vehicle with four wheels
+
+---
+
+# Puzzle 5x5 #253
+EWE | A female sheep
+EAR | The organ used for hearing
+ELBOW | The joint in the middle of your arm
+COOK | To prepare food using heat
+BOOK | Pages bound together with a cover
+
+---
+
+# Puzzle 5x5 #254
+KOALA | An Australian animal that eats eucalyptus
+ZOO | A place where wild animals are kept for viewing
+SPACE | The vast area beyond Earth's atmosphere
+APE | A large primate with no tail
+AXE | A tool for chopping wood
+
+---
+
+# Puzzle 5x5 #255
+BEAR | A large, furry forest animal
+RAIN | Water that falls from clouds
+EARTH | The planet we live on
+MAT | A flat piece placed on the floor
+YAM | A starchy root vegetable
+
+---
+
+# Puzzle 5x5 #256
+BLOOM | To produce flowers
+MUD | Wet, sticky soil
+BED | Furniture you sleep on
+JUMP | To push off the ground into the air
+DROP | To let something fall
+
+---
+
+# Puzzle 5x5 #257
+STORE | A place where you buy goods
+TOY | Something children play with
+DUNE | A hill of sand
+LAND | The solid part of the Earth's surface
+DUSK | The time just before night
+
+---
+
+# Puzzle 5x5 #258
+PIG | A pink farm animal that oinks
+MAID | A person employed to clean a house
+ANKLE | The joint between your foot and leg
+SEA | A large body of salt water
+PANDA | A black-and-white bear that eats bamboo
+
+---
+
+# Puzzle 5x5 #259
+EYE | The organ used for seeing
+SHEEP | A woolly farm animal
+SOLAR | Relating to the sun
+PAN | A flat cooking container
+RIDE | To travel on or in a vehicle or animal
+
+---
+
+# Puzzle 5x5 #260
+BLOOM | To produce flowers
+POT | A container used for cooking
+SUB | A vessel that travels underwater
+HOUR | A period of 60 minutes
+DREAM | Images and thoughts that occur during sleep
+
+---
+
+# Puzzle 5x5 #261
+GROW | To increase in size over time
+EAGLE | A large bird of prey with sharp eyesight
+SOIL | The ground plants grow in
+SEAL | A flippered marine mammal
+WEB | A structure spun by a spider
+
+---
+
+# Puzzle 5x5 #262
+POD | A casing that holds seeds like peas
+ROPE | A thick cord used for tying or climbing
+NET | A mesh used to catch fish
+POWER | The ability to do something with strength
+WHALE | The largest animal in the ocean
+
+---
+
+# Puzzle 5x5 #263
+WEED | An unwanted plant
+COW | A farm animal that gives milk
+SMOKE | The gray cloud that rises from a fire
+SOUP | A warm liquid food often eaten with a spoon
+PULL | To apply force to bring something closer
+
+---
+
+# Puzzle 5x5 #264
+CHESS | A strategy board game played with kings and queens
+SPARK | A tiny flash of light or fire
+CUB | A baby bear or lion
+VAN | A boxy vehicle used to carry cargo
+BANK | A place where you keep your money
+
+---
+
+# Puzzle 5x5 #265
+HEART | The organ that pumps blood
+JAR | A glass container, often for jam
+RAM | A male sheep
+YACHT | A luxurious sailing or motor boat
+REST | To relax and stop working
+
+---
+
+# Puzzle 5x5 #266
+ROSE | A flower known for its thorns
+OAT | A grain used to make porridge
+RIB | A curved bone in the chest
+STONE | A small piece of rock
+SHEEP | A woolly farm animal
+
+---
+
+# Puzzle 5x5 #267
+ERA | A distinct period in history
+PLANT | A living thing that grows in soil
+NIGHT | The time of day when it's dark
+HIP | The joint between the leg and torso
+OVEN | An appliance used for baking
+
+---
+
+# Puzzle 5x5 #268
+HEART | The organ that pumps blood
+LEARN | To gain knowledge or a skill
+GOLD | A shiny, valuable yellow metal
+HAM | A cut of meat from a pig
+NUT | A hard-shelled edible seed
+
+---
+
+# Puzzle 5x5 #269
+RIB | A curved bone in the chest
+BLUE | The color of the sky on a clear day
+EAGLE | A large bird of prey with sharp eyesight
+JAR | A glass container, often for jam
+TABLE | Furniture you eat or work at
+
+---
+
+# Puzzle 5x5 #270
+SKI | To glide down snow on two boards
+SPACE | The vast area beyond Earth's atmosphere
+TEA | A hot drink made from leaves
+MOSS | A soft green plant that grows on rocks
+SCARF | A piece of fabric worn around the neck
+
+---
+
+# Puzzle 5x5 #271
+PEAK | The top of a mountain
+ARROW | A pointed shaft shot from a bow
+WAR | An armed conflict between nations
+OWE | To be in debt for money
+PRICE | The amount something costs
+
+---
+
+# Puzzle 5x5 #272
+RYE | A grain used to make bread
+TEA | A hot drink made from leaves
+STORE | A place where you buy goods
+ELBOW | The joint in the middle of your arm
+LOSE | To no longer have something
+
+---
+
+# Puzzle 5x5 #273
+ICE | Frozen water
+TRAIN | A vehicle that runs on tracks
+ANT | A tiny insect that lives in colonies
+BAKE | To cook food using dry heat, like in an oven
+MANGO | A sweet tropical fruit with a large seed
+
+---
+
+# Puzzle 5x5 #274
+SEW | To join fabric with a needle and thread
+VOTE | To formally choose in an election
+ORBIT | The path an object takes around another in space
+WITCH | A person, often in stories, with magical powers
+BUS | A large vehicle for many passengers
+
+---
+
+# Puzzle 5x5 #275
+BAKE | To cook food using dry heat, like in an oven
+MANGO | A sweet tropical fruit with a large seed
+REST | To relax and stop working
+GROW | To increase in size over time
+FOG | A thick cloud near the ground
+
+---
+
+# Puzzle 5x5 #276
+TREE | A tall plant with a trunk and branches
+RIDE | To travel on or in a vehicle or animal
+SHIRT | A piece of clothing worn on the upper body
+LIP | Part of the mouth
+ISLE | A small island
+
+---
+
+# Puzzle 5x5 #277
+SNOW | White flakes that fall in winter
+DUSK | The time just before night
+SMOKE | The gray cloud that rises from a fire
+BEAR | A large, furry forest animal
+SUB | A vessel that travels underwater
+
+---
+
+# Puzzle 5x5 #278
+CUB | A baby bear or lion
+GECKO | A small lizard that can climb walls
+POND | A small body of still water
+BUD | The early stage of a flower or leaf
+SUGAR | A sweet, crystalline substance
+
+---
+
+# Puzzle 5x5 #279
+OVEN | An appliance used for baking
+TEAM | A group that plays together
+AGE | How many years old someone is
+DUNE | A hill of sand
+GLOVE | Clothing worn to protect the hand
+
+---
+
+# Puzzle 5x5 #280
+CAB | A taxi
+RICE | A staple grain eaten around the world
+EAGLE | A large bird of prey with sharp eyesight
+BAG | Something you carry things in
+EARTH | The planet we live on
+
+---
+
+# Puzzle 5x5 #281
+MONEY | What you use to buy things
+PEN | Something you write with
+PLUM | A small, sweet purple fruit
+HONEY | A sweet substance made by bees
+MOP | A tool used to clean floors
+
+---
+
+# Puzzle 5x5 #282
+SHUT | To close something
+SOW | A female pig
+STONE | A small piece of rock
+TAKE | To get hold of something
+MEAT | Food that comes from animals
+
+---
+
+# Puzzle 5x5 #283
+ANKLE | The joint between your foot and leg
+SKY | The space above the earth
+SNAKE | A long, legless reptile
+FLAG | A piece of cloth representing a country
+PEN | Something you write with
+
+---
+
+# Puzzle 5x5 #284
+WEB | A structure spun by a spider
+BREAD | A baked food made from flour
+MAP | A drawing that shows where places are
+PRICE | The amount something costs
+ROAD | A path made for vehicles
+
+---
+
+# Puzzle 5x5 #285
+SHIRT | A piece of clothing worn on the upper body
+GATE | A hinged barrier at an entrance
+LIME | A small green citrus fruit
+WEED | An unwanted plant
+BUS | A large vehicle for many passengers
+
+---
+
+# Puzzle 5x5 #286
+SOUP | A warm liquid food often eaten with a spoon
+OCEAN | A vast body of salt water
+LAND | The solid part of the Earth's surface
+PLAY | To engage in an activity for fun
+PULL | To apply force to bring something closer
+
+---
+
+# Puzzle 5x5 #287
+WEEK | A period of seven days
+WIND | Moving air you can feel but not see
+CROWN | A headpiece worn by royalty
+FOG | A thick cloud near the ground
+GLOVE | Clothing worn to protect the hand
+
+---
+
+# Puzzle 5x5 #288
+DEER | A forest animal with antlers
+WHITE | The color of snow
+BAT | A flying mammal, or sports equipment
+SKIRT | A garment that hangs from the waist
+MASK | Worn to cover the face
+
+---
+
+# Puzzle 5x5 #289
+APPLE | A fruit that can be red or green
+TEAM | A group that plays together
+FIELD | An open area of grass or crops
+TEA | A hot drink made from leaves
+SEED | What a plant grows from
+
+---
+
+# Puzzle 5x5 #290
+GREEN | The color of grass
+MULE | A hybrid of a horse and donkey
+JUG | A container for pouring liquids
+SONG | A piece of music with lyrics
+SHELL | The hard outer covering of some sea creatures
+
+---
+
+# Puzzle 5x5 #291
+HOUSE | A building where people live
+COD | A common food fish
+FISH | An animal that swims and breathes with gills
+SHOES | Worn to protect and cover the feet
+MIST | A thin fog
+
+---
+
+# Puzzle 5x5 #292
+LIGHT | The opposite of darkness
+MEAT | Food that comes from animals
+SWAN | An elegant white water bird
+TOE | A digit on your foot
+SHELL | The hard outer covering of some sea creatures
+
+---
+
+# Puzzle 5x5 #293
+TIGER | A large striped wild cat
+GLASS | A container used for drinking, made of a clear material
+JEANS | Casual pants made of denim
+SKI | To glide down snow on two boards
+JAM | A sweet fruit spread
+
+---
+
+# Puzzle 5x5 #294
+DOG | Man's best friend
+VOTE | To formally choose in an election
+HORSE | An animal often ridden or used to pull carts
+GATE | A hinged barrier at an entrance
+TIGER | A large striped wild cat
+
+---
+
+# Puzzle 5x5 #295
+HEART | The organ that pumps blood
+SHOP | To go and buy things
+GAME | An activity played for fun or competition
+PIE | A baked dessert with a crust
+WATCH | A small clock worn on the wrist
+
+---
+
+# Puzzle 5x5 #296
+BEACH | A sandy area next to the sea
+SEED | What a plant grows from
+LID | A cover for a pot or jar
+APPLE | A fruit that can be red or green
+BELT | Worn around the waist to hold up pants
+
+---
+
+# Puzzle 5x5 #297
+PAINT | Colored liquid used to decorate surfaces
+PAGE | One sheet of a book
+GEM | A precious stone
+TRAIN | A vehicle that runs on tracks
+GOWN | A long, formal dress
+
+---
+
+# Puzzle 5x5 #298
+POWER | The ability to do something with strength
+JUMP | To push off the ground into the air
+SMOKE | The gray cloud that rises from a fire
+FOG | A thick cloud near the ground
+VASE | A container used to hold flowers
+
+---
+
+# Puzzle 5x5 #299
+MALL | A large building with many shops
+MAGIC | Mysterious, seemingly impossible power
+RACE | A competition to see who is fastest
+CANOE | A narrow boat propelled by paddles
+FAN | A device that moves air to cool you
+
+---
+
+# Puzzle 5x5 #300
+STONE | A small piece of rock
+SPOON | A utensil used for eating soup or cereal
+HOUSE | A building where people live
+CAT | A common pet that meows
+COOK | To prepare food using heat
+
+---
+
+GRID: 6x6
+
+# ---------- EASY ----------
+
+# Puzzle 6x6 #1
+JOG | To run at a slow, steady pace
+GYM | A place to exercise
+GAME | An activity played for fun or competition
+
+---
+
+# Puzzle 6x6 #2
+WAR | An armed conflict between nations
+PLAYER | Someone who takes part in a game
+DOVE | A bird symbolizing peace
+
+---
+
+# Puzzle 6x6 #3
+KING | A male monarch
+WHITE | The color of snow
+BED | Furniture you sleep on
+
+---
+
+# Puzzle 6x6 #4
+WALK | To move on foot at a normal pace
+COLT | A young male horse
+PARROT | A colorful bird that can mimic speech
+
+---
+
+# Puzzle 6x6 #5
+EARTH | The planet we live on
+IRON | An appliance used to smooth clothes
+BRAVE | Willing to face danger or pain
+
+---
+
+# Puzzle 6x6 #6
+MEMORY | The ability to remember, or a stored memory
+LEARN | To gain knowledge or a skill
+TOOTH | A hard part of the mouth used for chewing
+
+---
+
+# Puzzle 6x6 #7
+FALCON | A fast-flying bird of prey
+TRUCK | A large vehicle used to carry goods
+AUTUMN | The season when leaves fall
+
+---
+
+# Puzzle 6x6 #8
+SAND | Tiny grains found on beaches
+AXE | A tool for chopping wood
+LOSE | To no longer have something
+
+---
+
+# Puzzle 6x6 #9
+TROPHY | An award given for winning a contest
+NET | A mesh used to catch fish
+GECKO | A small lizard that can climb walls
+
+---
+
+# Puzzle 6x6 #10
+COMB | A tool used to tidy hair
+BOX | A container with straight sides
+MONKEY | A playful primate that lives in trees
+
+---
+
+# Puzzle 6x6 #11
+CRY | To shed tears
+YOGURT | A creamy, tangy dairy food
+ARROW | A pointed shaft shot from a bow
+
+---
+
+# Puzzle 6x6 #12
+KITTEN | A baby cat
+COMET | An icy object in space with a glowing tail
+DINNER | The main evening meal
+
+---
+
+# Puzzle 6x6 #13
+HOUSE | A building where people live
+NUMBER | A mathematical value like 1, 2, or 3
+WHALE | The largest animal in the ocean
+
+---
+
+# Puzzle 6x6 #14
+GATE | A hinged barrier at an entrance
+MELTED | Turned from solid into liquid
+HONEY | A sweet substance made by bees
+
+---
+
+# Puzzle 6x6 #15
+COUSIN | The child of your aunt or uncle
+MOSS | A soft green plant that grows on rocks
+GOLD | A shiny, valuable yellow metal
+
+---
+
+# Puzzle 6x6 #16
+YAM | A starchy root vegetable
+WHALE | The largest animal in the ocean
+GOWN | A long, formal dress
+
+---
+
+# Puzzle 6x6 #17
+BEACH | A sandy area next to the sea
+KOALA | An Australian animal that eats eucalyptus
+TOWN | A small city
+
+---
+
+# Puzzle 6x6 #18
+MALL | A large building with many shops
+TRAIN | A vehicle that runs on tracks
+WINDOW | A glass opening in a wall
+
+---
+
+# Puzzle 6x6 #19
+SOLAR | Relating to the sun
+REEF | A ridge of coral or rock near the ocean surface
+DUNE | A hill of sand
+
+---
+
+# Puzzle 6x6 #20
+SPOON | A utensil used for eating soup or cereal
+TOAD | A dry-skinned relative of the frog
+NINE | The number after eight
+
+---
+
+# ---------- MEDIUM ----------
+
+# Puzzle 6x6 #21
+SEED | What a plant grows from
+DOG | Man's best friend
+ICE | Frozen water
+SOAP | Used with water to clean your hands
+
+---
+
+# Puzzle 6x6 #22
+LEG | The limb used for walking
+LEAF | A green part of a plant that grows on branches
+VALLEY | Low land between hills or mountains
+SNAKE | A long, legless reptile
+
+---
+
+# Puzzle 6x6 #23
+ANSWER | A reply to a question
+PLAYER | Someone who takes part in a game
+PULL | To apply force to bring something closer
+SNOW | White flakes that fall in winter
+
+---
+
+# Puzzle 6x6 #24
+FISH | An animal that swims and breathes with gills
+SOW | A female pig
+WAR | An armed conflict between nations
+FOLD | To bend something over on itself
+
+---
+
+# Puzzle 6x6 #25
+PAN | A flat cooking container
+EAGLE | A large bird of prey with sharp eyesight
+EWE | A female sheep
+NINE | The number after eight
+
+---
+
+# Puzzle 6x6 #26
+TAR | A thick black substance used on roads
+BEACH | A sandy area next to the sea
+CHEESE | A dairy food made from milk
+FIVE | The number after four
+
+---
+
+# Puzzle 6x6 #27
+FOX | A clever, red-furred wild animal
+OFFICE | A place where people do administrative work
+MOOSE | A large deer with wide antlers
+YELLOW | The color of a banana or the sun
+
+---
+
+# Puzzle 6x6 #28
+SOAP | Used with water to clean your hands
+SOLAR | Relating to the sun
+IRON | An appliance used to smooth clothes
+CAB | A taxi
+
+---
+
+# Puzzle 6x6 #29
+WASH | To clean with water
+APE | A large primate with no tail
+TREE | A tall plant with a trunk and branches
+SPACE | The vast area beyond Earth's atmosphere
+
+---
+
+# Puzzle 6x6 #30
+BEE | An insect that makes honey
+ORBIT | The path an object takes around another in space
+SNOW | White flakes that fall in winter
+SUB | A vessel that travels underwater
+
+---
+
+# Puzzle 6x6 #31
+JAR | A glass container, often for jam
+DEER | A forest animal with antlers
+OPEN | To make something no longer closed
+QUEEN | A female monarch
+
+---
+
+# Puzzle 6x6 #32
+NINE | The number after eight
+DAWN | The first light of the morning
+HEN | A female chicken
+FARM | A place where crops or animals are raised
+
+---
+
+# Puzzle 6x6 #33
+CAVE | A hollow space underground
+REST | To relax and stop working
+FARM | A place where crops or animals are raised
+ANGRY | Feeling strong displeasure
+
+---
+
+# Puzzle 6x6 #34
+TRAIN | A vehicle that runs on tracks
+DANCE | To move your body to music
+SOCK | Worn on the foot, inside a shoe
+POT | A container used for cooking
+
+---
+
+# Puzzle 6x6 #35
+DEER | A forest animal with antlers
+JAR | A glass container, often for jam
+BROKEN | Damaged so it no longer works
+COFFEE | A caffeinated drink made from roasted beans
+
+---
+
+# Puzzle 6x6 #36
+TIGER | A large striped wild cat
+MAROON | A dark brownish-red color
+PIG | A pink farm animal that oinks
+MANGO | A sweet tropical fruit with a large seed
+
+---
+
+# Puzzle 6x6 #37
+TUNNEL | An underground passage
+LIGHT | The opposite of darkness
+ANT | A tiny insect that lives in colonies
+GUM | Soft tissue around the teeth
+
+---
+
+# Puzzle 6x6 #38
+WALL | A vertical structure that divides space
+MAT | A flat piece placed on the floor
+MOP | A tool used to clean floors
+MALL | A large building with many shops
+
+---
+
+# Puzzle 6x6 #39
+FAMILY | A group of related people
+TURTLE | A reptile that carries its shell
+PARK | A public green space for recreation
+CLIFF | A steep rock face
+
+---
+
+# Puzzle 6x6 #40
+RUN | To move quickly on foot
+MARKET | A place where goods are bought and sold
+SEW | To join fabric with a needle and thread
+FROZEN | Turned into ice, or extremely cold
+
+---
+
+# ---------- HARD ----------
+
+# Puzzle 6x6 #41
+LIFT | To raise something up
+PLATE | A flat dish used for serving food
+PEAR | A fruit that is often shaped like a teardrop
+HOP | To jump on one foot
+HEN | A female chicken
+
+---
+
+# Puzzle 6x6 #42
+SUN | The star at the center of our solar system
+REST | To relax and stop working
+ANT | A tiny insect that lives in colonies
+EAR | The organ used for hearing
+BASKET | A container woven from strips of material
+
+---
+
+# Puzzle 6x6 #43
+PIE | A baked dessert with a crust
+COOKIE | A small, sweet baked treat
+DONKEY | A sturdy pack animal related to the horse
+TEEN | A person aged between 13 and 19
+TOE | A digit on your foot
+
+---
+
+# Puzzle 6x6 #44
+CARD | A small piece of stiff paper, used for games or notes
+ORANGE | A round citrus fruit, also a color
+TREE | A tall plant with a trunk and branches
+SPOON | A utensil used for eating soup or cereal
+EAR | The organ used for hearing
+
+---
+
+# Puzzle 6x6 #45
+DESK | Furniture used for writing or studying
+BELT | Worn around the waist to hold up pants
+SILENT | Making no sound
+STONE | A small piece of rock
+NUMBER | A mathematical value like 1, 2, or 3
+
+---
+
+# Puzzle 6x6 #46
+TAR | A thick black substance used on roads
+ANIMAL | A living creature that isn't a plant
+BRAIN | The organ used for thinking
+PARK | A public green space for recreation
+STEAK | A slice of meat, often grilled
+
+---
+
+# Puzzle 6x6 #47
+WAR | An armed conflict between nations
+NATURE | The physical world, apart from humans
+SPOKEN | Said out loud
+DANCE | To move your body to music
+CARD | A small piece of stiff paper, used for games or notes
+
+---
+
+# Puzzle 6x6 #48
+HOUR | A period of 60 minutes
+GRAPE | A small fruit that grows in bunches on a vine
+POCKET | A small pouch sewn into clothing
+WEB | A structure spun by a spider
+BOOK | Pages bound together with a cover
+
+---
+
+# Puzzle 6x6 #49
+MUD | Wet, sticky soil
+STORM | Heavy wind and rain together
+BOTTLE | A container, often for liquid, with a narrow neck
+SAW | A tool used to cut wood
+TOE | A digit on your foot
+
+---
+
+# Puzzle 6x6 #50
+BEAR | A large, furry forest animal
+BRAIN | The organ used for thinking
+SUNSET | When the sun goes down in the evening
+MOOSE | A large deer with wide antlers
+RIB | A curved bone in the chest
+
+---
+
+# Puzzle 6x6 #51
+OFFICE | A place where people do administrative work
+TIE | Worn around the neck with a suit
+FAN | A device that moves air to cool you
+SPOON | A utensil used for eating soup or cereal
+NINE | The number after eight
+
+---
+
+# Puzzle 6x6 #52
+SWIM | To move through water using your body
+RING | A circular piece of jewelry
+GYM | A place to exercise
+SEASON | One of the four parts of the year
+SMILE | An expression showing happiness
+
+---
+
+# Puzzle 6x6 #53
+SIT | To rest on your bottom
+TRAIN | A vehicle that runs on tracks
+TOMATO | A red fruit often used like a vegetable
+AUTUMN | The season when leaves fall
+BAG | Something you carry things in
+
+---
+
+# Puzzle 6x6 #54
+VOTE | To formally choose in an election
+BAKE | To cook food using dry heat, like in an oven
+EYE | The organ used for seeing
+TUB | A container for bathing
+PAGE | One sheet of a book
+
+---
+
+# Puzzle 6x6 #55
+TALK | To speak with someone
+BELT | Worn around the waist to hold up pants
+TAR | A thick black substance used on roads
+WEB | A structure spun by a spider
+LETTER | A written message, or a symbol like A or B
+
+---
+
+# Puzzle 6x6 #56
+GRAY | The color between black and white
+SOFA | A long, cushioned piece of furniture
+DOG | Man's best friend
+SOLAR | Relating to the sun
+SEASON | One of the four parts of the year
+
+---
+
+# Puzzle 6x6 #57
+SKI | To glide down snow on two boards
+ROBIN | A red-breasted songbird
+RACE | A competition to see who is fastest
+CANOE | A narrow boat propelled by paddles
+STAR | A glowing point of light in the night sky
+
+---
+
+# Puzzle 6x6 #58
+BUS | A large vehicle for many passengers
+AUNT | Your parent's sister
+NUT | A hard-shelled edible seed
+JEANS | Casual pants made of denim
+JOY | A feeling of great happiness
+
+---
+
+# Puzzle 6x6 #59
+MULE | A hybrid of a horse and donkey
+SECRET | Something kept hidden from others
+LIGHT | The opposite of darkness
+MIRROR | You see your reflection in this
+RAM | A male sheep
+
+---
+
+# Puzzle 6x6 #60
+CAR | A vehicle with four wheels
+TRUCK | A large vehicle used to carry goods
+FRIEND | A person you like and trust
+RUG | A small carpet
+DANCE | To move your body to music
+
+---
+
+GRID: 7x7
+
+# ---------- EASY ----------
+
+# Puzzle 7x7 #1
+THEATER | A place where plays or films are shown
+WEED | An unwanted plant
+CAPE | A sleeveless cloak worn over the shoulders
+
+---
+
+# Puzzle 7x7 #2
+STATION | A stop along a train or bus route
+NOON | The middle of the day
+MOON | The natural satellite of Earth
+
+---
+
+# Puzzle 7x7 #3
+APE | A large primate with no tail
+TOMATO | A red fruit often used like a vegetable
+JOG | To run at a slow, steady pace
+
+---
+
+# Puzzle 7x7 #4
+PAINT | Colored liquid used to decorate surfaces
+SPIDER | An eight-legged creature that spins webs
+EWE | A female sheep
+
+---
+
+# Puzzle 7x7 #5
+EVENING | The part of the day before night
+PANDA | A black-and-white bear that eats bamboo
+MAT | A flat piece placed on the floor
+
+---
+
+# Puzzle 7x7 #6
+BRAVE | Willing to face danger or pain
+GLOVE | Clothing worn to protect the hand
+FLAG | A piece of cloth representing a country
+
+---
+
+# Puzzle 7x7 #7
+HOLIDAY | A day of celebration or rest from work
+CRAYON | A wax stick used for coloring
+SHARK | A predatory fish with sharp teeth
+
+---
+
+# Puzzle 7x7 #8
+SHOVEL | A tool used to dig
+GENTLE | Kind and mild in manner
+THEATER | A place where plays or films are shown
+
+---
+
+# Puzzle 7x7 #9
+SPEED | How fast something moves
+RIDE | To travel on or in a vehicle or animal
+SUNRISE | When the sun comes up in the morning
+
+---
+
+# Puzzle 7x7 #10
+SILENCE | Complete quiet with no sound
+PINK | A pale reddish color
+BEE | An insect that makes honey
+
+---
+
+# Puzzle 7x7 #11
+SPEED | How fast something moves
+SOLAR | Relating to the sun
+PEAK | The top of a mountain
+
+---
+
+# Puzzle 7x7 #12
+BOOK | Pages bound together with a cover
+BRAVE | Willing to face danger or pain
+TALK | To speak with someone
+
+---
+
+# Puzzle 7x7 #13
+PEOPLE | More than one person
+HAIL | Balls of ice that fall from the sky
+FOLD | To bend something over on itself
+
+---
+
+# Puzzle 7x7 #14
+SPIDER | An eight-legged creature that spins webs
+TUESDAY | The day after Monday
+LAKE | A large body of fresh water
+
+---
+
+# Puzzle 7x7 #15
+HONEST | Truthful and sincere
+GOLD | A shiny, valuable yellow metal
+RIVER | A large, flowing body of fresh water
+
+---
+
+# Puzzle 7x7 #16
+TIDE | The rise and fall of the sea
+MAT | A flat piece placed on the floor
+PLANT | A living thing that grows in soil
+
+---
+
+# Puzzle 7x7 #17
+AIRPORT | A place where planes take off and land
+HIP | The joint between the leg and torso
+SOAP | Used with water to clean your hands
+
+---
+
+# Puzzle 7x7 #18
+COMPANY | A business organization
+CHESS | A strategy board game played with kings and queens
+VASE | A container used to hold flowers
+
+---
+
+# Puzzle 7x7 #19
+PIN | A small, sharp fastener
+FIVE | The number after four
+KITCHEN | The room where food is prepared
+
+---
+
+# Puzzle 7x7 #20
+TOMATO | A red fruit often used like a vegetable
+PHONE | A device used to make calls
+MELTED | Turned from solid into liquid
+
+---
+
+# ---------- MEDIUM ----------
+
+# Puzzle 7x7 #21
+LUGGAGE | Bags and suitcases used for traveling
+SECRET | Something kept hidden from others
+MUSIC | Organized sound that people enjoy listening to
+SHOVEL | A tool used to dig
+
+---
+
+# Puzzle 7x7 #22
+BIRD | An animal with feathers that can fly
+DROP | To let something fall
+LAMB | A baby sheep
+PROBLEM | A difficulty that needs to be solved
+
+---
+
+# Puzzle 7x7 #23
+AIRPORT | A place where planes take off and land
+RAIN | Water that falls from clouds
+COFFEE | A caffeinated drink made from roasted beans
+GLASS | A container used for drinking, made of a clear material
+
+---
+
+# Puzzle 7x7 #24
+LOCK | To secure something with a key
+LIFT | To raise something up
+WOLF | A wild relative of the dog
+ROOF | The covering on top of a house
+
+---
+
+# Puzzle 7x7 #25
+POND | A small body of still water
+STONE | A small piece of rock
+PLANET | A large body that orbits a star
+SWIM | To move through water using your body
+
+---
+
+# Puzzle 7x7 #26
+COIN | A round piece of metal used as money
+TOMATO | A red fruit often used like a vegetable
+PEN | Something you write with
+LETTER | A written message, or a symbol like A or B
+
+---
+
+# Puzzle 7x7 #27
+SHIP | A large vessel that travels by sea
+MAGIC | Mysterious, seemingly impossible power
+MORNING | The early part of the day
+NIGHT | The time of day when it's dark
+
+---
+
+# Puzzle 7x7 #28
+LAND | The solid part of the Earth's surface
+LEARN | To gain knowledge or a skill
+CRY | To shed tears
+FALCON | A fast-flying bird of prey
+
+---
+
+# Puzzle 7x7 #29
+ROCKET | A vehicle that can travel into space
+ELBOW | The joint in the middle of your arm
+THEATER | A place where plays or films are shown
+WAVE | A moving ridge of water
+
+---
+
+# Puzzle 7x7 #30
+MELT | To turn from solid to liquid with heat
+QUEEN | A female monarch
+CUPCAKE | A small, individual sponge cake
+NETWORK | A connected system, like computers or people
+
+---
+
+# Puzzle 7x7 #31
+FIVE | The number after four
+SHIP | A large vessel that travels by sea
+PLASTIC | A synthetic material used to make many objects
+SHARK | A predatory fish with sharp teeth
+
+---
+
+# Puzzle 7x7 #32
+EAR | The organ used for hearing
+LAMB | A baby sheep
+VILLAGE | A small community, smaller than a town
+OFFICE | A place where people do administrative work
+
+---
+
+# Puzzle 7x7 #33
+COOKIE | A small, sweet baked treat
+PEAR | A fruit that is often shaped like a teardrop
+MACHINE | A device built to do a specific job
+PANDA | A black-and-white bear that eats bamboo
+
+---
+
+# Puzzle 7x7 #34
+LAMB | A baby sheep
+CAPE | A sleeveless cloak worn over the shoulders
+BLACK | The color of night
+CAB | A taxi
+
+---
+
+# Puzzle 7x7 #35
+BOOK | Pages bound together with a cover
+STEAK | A slice of meat, often grilled
+CORN | A yellow vegetable grown on a cob
+ARM | The limb between shoulder and hand
+
+---
+
+# Puzzle 7x7 #36
+GRAY | The color between black and white
+MACHINE | A device built to do a specific job
+GIVE | To hand something to someone
+READ | To look at and understand written words
+
+---
+
+# Puzzle 7x7 #37
+FAN | A device that moves air to cool you
+TEACHER | A person who helps others learn
+LOSE | To no longer have something
+RAVEN | A large, black bird known for intelligence
+
+---
+
+# Puzzle 7x7 #38
+BOOK | Pages bound together with a cover
+COOKIE | A small, sweet baked treat
+ERA | A distinct period in history
+JAW | The bone that holds your teeth
+
+---
+
+# Puzzle 7x7 #39
+JOY | A feeling of great happiness
+CHOSEN | Selected out of several options
+DOLPHIN | A smart, friendly sea mammal
+PAGE | One sheet of a book
+
+---
+
+# Puzzle 7x7 #40
+VASE | A container used to hold flowers
+HONEY | A sweet substance made by bees
+SHEEP | A woolly farm animal
+FIREFLY | An insect that glows in the dark
+
+---
+
+# ---------- HARD ----------
+
+# Puzzle 7x7 #41
+TIDE | The rise and fall of the sea
+PLANET | A large body that orbits a star
+STONE | A small piece of rock
+SHOES | Worn to protect and cover the feet
+MAKE | To create something
+
+---
+
+# Puzzle 7x7 #42
+PLASTIC | A synthetic material used to make many objects
+BAKE | To cook food using dry heat, like in an oven
+PIZZA | A round baked dish topped with cheese
+SUB | A vessel that travels underwater
+OCTOPUS | A sea creature with eight arms
+
+---
+
+# Puzzle 7x7 #43
+SWAN | An elegant white water bird
+SERPENT | A snake, especially in old stories
+VINE | A climbing or trailing plant
+POD | A casing that holds seeds like peas
+COMET | An icy object in space with a glowing tail
+
+---
+
+# Puzzle 7x7 #44
+SPECIAL | Better or different than what is usual
+SKI | To glide down snow on two boards
+APPLE | A fruit that can be red or green
+BABY | A very young child
+RAVEN | A large, black bird known for intelligence
+
+---
+
+# Puzzle 7x7 #45
+SILENT | Making no sound
+BICYCLE | A two-wheeled vehicle you pedal
+OAT | A grain used to make porridge
+BED | Furniture you sleep on
+MUSIC | Organized sound that people enjoy listening to
+
+---
+
+# Puzzle 7x7 #46
+ELK | A large member of the deer family
+TAKE | To get hold of something
+SUNSET | When the sun goes down in the evening
+MIST | A thin fog
+EYE | The organ used for seeing
+
+---
+
+# Puzzle 7x7 #47
+BALL | A round object used in many sports
+AXE | A tool for chopping wood
+TURTLE | A reptile that carries its shell
+APE | A large primate with no tail
+THEATER | A place where plays or films are shown
+
+---
+
+# Puzzle 7x7 #48
+CHOSEN | Selected out of several options
+ANT | A tiny insect that lives in colonies
+TROPHY | An award given for winning a contest
+CORAL | A hard structure built by sea organisms
+LEG | The limb used for walking
+
+---
+
+# Puzzle 7x7 #49
+LETTER | A written message, or a symbol like A or B
+PLASTIC | A synthetic material used to make many objects
+PLAY | To engage in an activity for fun
+EARTH | The planet we live on
+RACE | A competition to see who is fastest
+
+---
+
+# Puzzle 7x7 #50
+SING | To make music with your voice
+ORANGE | A round citrus fruit, also a color
+MEMORY | The ability to remember, or a stored memory
+WALL | A vertical structure that divides space
+SKY | The space above the earth
+
+---
+
+# Puzzle 7x7 #51
+LIP | Part of the mouth
+PANDA | A black-and-white bear that eats bamboo
+TOAD | A dry-skinned relative of the frog
+NETWORK | A connected system, like computers or people
+LIGHT | The opposite of darkness
+
+---
+
+# Puzzle 7x7 #52
+TABLE | Furniture you eat or work at
+VEST | A sleeveless piece of clothing
+BEAR | A large, furry forest animal
+BELL | A device that makes a ringing sound
+HONEY | A sweet substance made by bees
+
+---
+
+# Puzzle 7x7 #53
+AUNT | Your parent's sister
+DINNER | The main evening meal
+GROW | To increase in size over time
+FREEDOM | The state of being free
+LADDER | Used to climb up to higher places
+
+---
+
+# Puzzle 7x7 #54
+BRAIN | The organ used for thinking
+BRAVE | Willing to face danger or pain
+RIDE | To travel on or in a vehicle or animal
+SEW | To join fabric with a needle and thread
+BANANA | A long yellow tropical fruit
+
+---
+
+# Puzzle 7x7 #55
+POWER | The ability to do something with strength
+FEELING | An emotion or physical sensation
+RECIPE | Instructions for cooking a dish
+RING | A circular piece of jewelry
+POD | A casing that holds seeds like peas
+
+---
+
+# Puzzle 7x7 #56
+MOOSE | A large deer with wide antlers
+ISLE | A small island
+SHELL | The hard outer covering of some sea creatures
+SEASON | One of the four parts of the year
+SWAN | An elegant white water bird
+
+---
+
+# Puzzle 7x7 #57
+CAVE | A hollow space underground
+WEED | An unwanted plant
+WHALE | The largest animal in the ocean
+DIG | To make a hole in the ground
+LAUGH | The sound made when something is funny
+
+---
+
+# Puzzle 7x7 #58
+CAR | A vehicle with four wheels
+WAVE | A moving ridge of water
+CORAL | A hard structure built by sea organisms
+SWIM | To move through water using your body
+ANSWER | A reply to a question
+
+---
+
+# Puzzle 7x7 #59
+TEAM | A group that plays together
+ELBOW | The joint in the middle of your arm
+BOOK | Pages bound together with a cover
+SPACE | The vast area beyond Earth's atmosphere
+WALK | To move on foot at a normal pace
+
+---
+
+# Puzzle 7x7 #60
+DANCE | To move your body to music
+FRIEND | A person you like and trust
+BIRD | An animal with feathers that can fly
+GREEN | The color of grass
+FOUR | The number after three
+
+---
+
+# Puzzle 7x7 #61
+TEEN | A person aged between 13 and 19
+ICE | Frozen water
+MELTED | Turned from solid into liquid
+SINK | Where you wash dishes or your hands
+KITTEN | A baby cat
+JADE | A green gemstone
+
+---
+
+# Puzzle 7x7 #62
+FOX | A clever, red-furred wild animal
+VOTE | To formally choose in an election
+KITTEN | A baby cat
+GHOST | A spirit believed to haunt places
+FLAG | A piece of cloth representing a country
+DESERT | A vast, dry, sandy area
+
+---
+
+# Puzzle 7x7 #63
+WITCH | A person, often in stories, with magical powers
+CUP | A small container for drinking
+OWL | A nocturnal bird known for wisdom
+SPECIAL | Better or different than what is usual
+WEB | A structure spun by a spider
+SPARK | A tiny flash of light or fire
+
+---
+
+# Puzzle 7x7 #64
+SNOW | White flakes that fall in winter
+HOUR | A period of 60 minutes
+SAND | Tiny grains found on beaches
+THOUGHT | An idea or opinion in the mind
+WAR | An armed conflict between nations
+MOTHER | A female parent
+
+---
+
+# Puzzle 7x7 #65
+DANCE | To move your body to music
+CAPTAIN | The leader of a ship or team
+BEACH | A sandy area next to the sea
+EAT | What you do when you have food
+PAGE | One sheet of a book
+CRY | To shed tears
+
+---
+
+# Puzzle 7x7 #66
+DOVE | A bird symbolizing peace
+MELT | To turn from solid to liquid with heat
+PAGE | One sheet of a book
+MOUSE | A tiny rodent, or a computer pointing device
+GOLDEN | Made of, or colored like, gold
+SEED | What a plant grows from
+
+---
+
+# Puzzle 7x7 #67
+COW | A farm animal that gives milk
+WINTER | The coldest season of the year
+SILENT | Making no sound
+WASH | To clean with water
+PEACH | A fuzzy, sweet orange fruit
+TRAIN | A vehicle that runs on tracks
+
+---
+
+# Puzzle 7x7 #68
+FARM | A place where crops or animals are raised
+DAWN | The first light of the morning
+MONSTER | A scary, imaginary creature
+POTATO | A starchy vegetable that grows underground
+ASS | Another name for a donkey
+GOAT | A farm animal known for climbing
+
+---
+
+# Puzzle 7x7 #69
+VILLAGE | A small community, smaller than a town
+SOAP | Used with water to clean your hands
+POND | A small body of still water
+PEN | Something you write with
+HIDDEN | Kept out of sight
+MAROON | A dark brownish-red color
+
+---
+
+# Puzzle 7x7 #70
+ICE | Frozen water
+VASE | A container used to hold flowers
+MAT | A flat piece placed on the floor
+SPECIAL | Better or different than what is usual
+PANCAKE | A flat, round cake cooked on a griddle
+ROBE | A loose outer garment
+
+---
+
+# Puzzle 7x7 #71
+TRAIN | A vehicle that runs on tracks
+OCTOPUS | A sea creature with eight arms
+PLUM | A small, sweet purple fruit
+AUTUMN | The season when leaves fall
+DUNE | A hill of sand
+PHONE | A device used to make calls
+
+---
+
+# Puzzle 7x7 #72
+MOLE | A small burrowing animal
+EVENING | The part of the day before night
+GREEN | The color of grass
+SNOW | White flakes that fall in winter
+JUG | A container for pouring liquids
+MOP | A tool used to clean floors
+
+---
+
+# Puzzle 7x7 #73
+TEACH | To help someone learn
+WATCH | A small clock worn on the wrist
+THEATER | A place where plays or films are shown
+ELK | A large member of the deer family
+AIRPORT | A place where planes take off and land
+POND | A small body of still water
+
+---
+
+# Puzzle 7x7 #74
+KITTEN | A baby cat
+DEW | Moisture that forms overnight on grass
+WIND | Moving air you can feel but not see
+LETTER | A written message, or a symbol like A or B
+OWL | A nocturnal bird known for wisdom
+SUDDEN | Happening quickly and unexpectedly
+
+---
+
+# Puzzle 7x7 #75
+TOOTH | A hard part of the mouth used for chewing
+MOMENT | A brief period of time
+MULE | A hybrid of a horse and donkey
+TEAM | A group that plays together
+QUIET | Making very little noise
+RAT | A small rodent with a long tail
+
+---
+
+GRID: 8x8
+
+# ---------- EASY ----------
+
+# Puzzle 8x8 #1
+MASK | Worn to cover the face
+OCEAN | A vast body of salt water
+SOUP | A warm liquid food often eaten with a spoon
+
+---
+
+# Puzzle 8x8 #2
+DOOR | You open this to enter a room
+FOOTBALL | A sport played by kicking a large ball
+SANDWICH | Food made of fillings between bread slices
+
+---
+
+# Puzzle 8x8 #3
+FALCON | A fast-flying bird of prey
+GROW | To increase in size over time
+COUCH | A long, cushioned seat for a living room
+
+---
+
+# Puzzle 8x8 #4
+STAR | A glowing point of light in the night sky
+PROBLEM | A difficulty that needs to be solved
+PUMPKIN | An orange gourd often carved at Halloween
+
+---
+
+# Puzzle 8x8 #5
+JAW | The bone that holds your teeth
+GARDEN | A place where plants and flowers are grown
+DINOSAUR | A prehistoric reptile, now extinct
+
+---
+
+# Puzzle 8x8 #6
+MOMENT | A brief period of time
+MULE | A hybrid of a horse and donkey
+JAM | A sweet fruit spread
+
+---
+
+# Puzzle 8x8 #7
+HONEST | Truthful and sincere
+THEATER | A place where plays or films are shown
+DAWN | The first light of the morning
+
+---
+
+# Puzzle 8x8 #8
+DOORBELL | A device pressed to announce a visitor
+SILENT | Making no sound
+SECOND | A very short unit of time
+
+---
+
+# Puzzle 8x8 #9
+BUCKET | A container used to carry liquids
+ERASER | Used to remove pencil marks
+CLIMATE | The typical weather pattern of a region
+
+---
+
+# Puzzle 8x8 #10
+SPIN | To turn around quickly
+CHICKEN | A common farm bird raised for eggs and meat
+STREAM | A small, flowing body of water
+
+---
+
+# Puzzle 8x8 #11
+GLASS | A container used for drinking, made of a clear material
+RUST | A reddish-brown color, also corrosion on metal
+BIRTHDAY | The day you were born, celebrated each year
+
+---
+
+# Puzzle 8x8 #12
+CLOUD | A white or gray shape floating in the sky
+ISLAND | A piece of land surrounded by water
+BED | Furniture you sleep on
+
+---
+
+# Puzzle 8x8 #13
+BUTTER | A dairy spread made from cream
+JOURNEY | A trip from one place to another
+MINT | A fresh-tasting herb
+
+---
+
+# Puzzle 8x8 #14
+MINUTE | A unit of time, 60 seconds long
+SMILE | An expression showing happiness
+OCEAN | A vast body of salt water
+
+---
+
+# Puzzle 8x8 #15
+SUITCASE | A case used to carry clothes while traveling
+OTTER | A playful, swimming mammal
+GOWN | A long, formal dress
+
+---
+
+# Puzzle 8x8 #16
+YAM | A starchy root vegetable
+COMB | A tool used to tidy hair
+BALLOON | An inflatable rubber toy that floats
+
+---
+
+# Puzzle 8x8 #17
+CAPTAIN | The leader of a ship or team
+HIDDEN | Kept out of sight
+HOUSE | A building where people live
+
+---
+
+# Puzzle 8x8 #18
+ALPHABET | The full set of letters used in a language
+PARROT | A colorful bird that can mimic speech
+STAR | A glowing point of light in the night sky
+
+---
+
+# Puzzle 8x8 #19
+HAPPY | Feeling joy or pleasure
+TOY | Something children play with
+YEAR | A period of 365 days
+
+---
+
+# Puzzle 8x8 #20
+GRASS | The green plant that covers lawns
+CAKE | A sweet baked dessert
+SPIDER | An eight-legged creature that spins webs
+
+---
+
+# ---------- MEDIUM ----------
+
+# Puzzle 8x8 #21
+PLATE | A flat dish used for serving food
+SEA | A large body of salt water
+MOUNTAIN | A very tall, steep landform
+RIDDLE | A tricky question with a clever answer
+
+---
+
+# Puzzle 8x8 #22
+MELTED | Turned from solid into liquid
+BAKE | To cook food using dry heat, like in an oven
+GLACIER | A huge, slow-moving mass of ice
+COMET | An icy object in space with a glowing tail
+
+---
+
+# Puzzle 8x8 #23
+SUDDEN | Happening quickly and unexpectedly
+PEACH | A fuzzy, sweet orange fruit
+HOUR | A period of 60 minutes
+SHIP | A large vessel that travels by sea
+
+---
+
+# Puzzle 8x8 #24
+MIRROR | You see your reflection in this
+RING | A circular piece of jewelry
+SPRING | The season when flowers bloom
+PUMPKIN | An orange gourd often carved at Halloween
+
+---
+
+# Puzzle 8x8 #25
+GLASS | A container used for drinking, made of a clear material
+SWAN | An elegant white water bird
+REST | To relax and stop working
+NUT | A hard-shelled edible seed
+
+---
+
+# Puzzle 8x8 #26
+SOIL | The ground plants grow in
+SEASON | One of the four parts of the year
+MAGIC | Mysterious, seemingly impossible power
+CORAL | A hard structure built by sea organisms
+
+---
+
+# Puzzle 8x8 #27
+MINUTE | A unit of time, 60 seconds long
+SPIN | To turn around quickly
+SOFA | A long, cushioned piece of furniture
+SISTER | A female sibling
+
+---
+
+# Puzzle 8x8 #28
+COFFEE | A caffeinated drink made from roasted beans
+GOAL | The target you aim to score in
+NECKLACE | Jewelry worn around the neck
+DOORBELL | A device pressed to announce a visitor
+
+---
+
+# Puzzle 8x8 #29
+ROOF | The covering on top of a house
+CANOE | A narrow boat propelled by paddles
+MONKEY | A playful primate that lives in trees
+SKIRT | A garment that hangs from the waist
+
+---
+
+# Puzzle 8x8 #30
+ORBIT | The path an object takes around another in space
+CLIMATE | The typical weather pattern of a region
+WRITE | To put words on paper
+TEACH | To help someone learn
+
+---
+
+# Puzzle 8x8 #31
+LID | A cover for a pot or jar
+LEARN | To gain knowledge or a skill
+BASKET | A container woven from strips of material
+PENGUIN | A flightless bird that lives in cold places
+
+---
+
+# Puzzle 8x8 #32
+GRASS | The green plant that covers lawns
+SEASON | One of the four parts of the year
+BACKPACK | A bag carried on the back with straps
+MOOSE | A large deer with wide antlers
+
+---
+
+# Puzzle 8x8 #33
+BED | Furniture you sleep on
+RIDE | To travel on or in a vehicle or animal
+PACKAGE | A wrapped parcel or box
+GOLD | A shiny, valuable yellow metal
+
+---
+
+# Puzzle 8x8 #34
+DINOSAUR | A prehistoric reptile, now extinct
+CAKE | A sweet baked dessert
+MAID | A person employed to clean a house
+CRY | To shed tears
+
+---
+
+# Puzzle 8x8 #35
+RUN | To move quickly on foot
+NINE | The number after eight
+LANGUAGE | A system of words used to communicate
+BABY | A very young child
+
+---
+
+# Puzzle 8x8 #36
+MAGAZINE | A regularly published collection of articles
+TIE | Worn around the neck with a suit
+DREAM | Images and thoughts that occur during sleep
+HELP | To assist someone
+
+---
+
+# Puzzle 8x8 #37
+SWIMMING | The activity of moving through water
+PENCIL | A tool used for writing, often with an eraser
+PLUM | A small, sweet purple fruit
+COMPANY | A business organization
+
+---
+
+# Puzzle 8x8 #38
+AQUARIUM | A tank or building that houses fish
+FROZEN | Turned into ice, or extremely cold
+FOUR | The number after three
+LIFT | To raise something up
+
+---
+
+# Puzzle 8x8 #39
+LUGGAGE | Bags and suitcases used for traveling
+TIDE | The rise and fall of the sea
+TOAD | A dry-skinned relative of the frog
+HEART | The organ that pumps blood
+
+---
+
+# Puzzle 8x8 #40
+LIBRARY | A place with many books to borrow or read
+ORANGE | A round citrus fruit, also a color
+HIDDEN | Kept out of sight
+TICKET | A slip that allows entry or travel
+
+---
+
+# ---------- HARD ----------
+
+# Puzzle 8x8 #41
+STONE | A small piece of rock
+TAR | A thick black substance used on roads
+ROSE | A flower known for its thorns
+COFFEE | A caffeinated drink made from roasted beans
+HAMSTER | A small furry rodent kept as a pet
+
+---
+
+# Puzzle 8x8 #42
+LIP | Part of the mouth
+PIZZA | A round baked dish topped with cheese
+SUITCASE | A case used to carry clothes while traveling
+FAN | A device that moves air to cool you
+AQUARIUM | A tank or building that houses fish
+
+---
+
+# Puzzle 8x8 #43
+LIGHT | The opposite of darkness
+LIP | Part of the mouth
+YOGURT | A creamy, tangy dairy food
+TOAD | A dry-skinned relative of the frog
+STADIUM | A large venue for sports events
+
+---
+
+# Puzzle 8x8 #44
+DOOR | You open this to enter a room
+OTTER | A playful, swimming mammal
+VILLAGE | A small community, smaller than a town
+MAROON | A dark brownish-red color
+SALT | A seasoning found in the sea
+
+---
+
+# Puzzle 8x8 #45
+GRASS | The green plant that covers lawns
+GRANDSON | The son of your child
+BOX | A container with straight sides
+NEIGHBOR | A person who lives nearby
+OFFICE | A place where people do administrative work
+
+---
+
+# Puzzle 8x8 #46
+OTTER | A playful, swimming mammal
+ELBOW | The joint in the middle of your arm
+PLANE | A flying vehicle with wings
+PRICE | The amount something costs
+LAMP | A device that gives off light
+
+---
+
+# Puzzle 8x8 #47
+VACUUM | A device used to clean floors
+APPLE | A fruit that can be red or green
+LOSE | To no longer have something
+PARK | A public green space for recreation
+MOUNTAIN | A very tall, steep landform
+
+---
+
+# Puzzle 8x8 #48
+TREASURE | A valuable hoard of gold or gems
+WALK | To move on foot at a normal pace
+WAIT | To stay in place until something happens
+STREAM | A small, flowing body of water
+HAWK | A sharp-eyed bird of prey
+
+---
+
+# Puzzle 8x8 #49
+COLT | A young male horse
+CUB | A baby bear or lion
+SELL | To exchange goods for money
+BAKE | To cook food using dry heat, like in an oven
+CAPE | A sleeveless cloak worn over the shoulders
+
+---
+
+# Puzzle 8x8 #50
+SHOVEL | A tool used to dig
+CLIMB | To move upward, often on a mountain
+CHICKEN | A common farm bird raised for eggs and meat
+PRINCESS | The daughter of a king or queen
+VEST | A sleeveless piece of clothing
+
+---
+
+# Puzzle 8x8 #51
+ENGINE | The part of a vehicle that makes it move
+DINNER | The main evening meal
+PUZZLE | A game that tests your problem-solving skills
+HOUR | A period of 60 minutes
+FAMILY | A group of related people
+
+---
+
+# Puzzle 8x8 #52
+GRAY | The color between black and white
+FEELING | An emotion or physical sensation
+JUICE | A drink made from fruit
+NET | A mesh used to catch fish
+SECRET | Something kept hidden from others
+
+---
+
+# Puzzle 8x8 #53
+CLIMB | To move upward, often on a mountain
+COUCH | A long, cushioned seat for a living room
+SILENCE | Complete quiet with no sound
+STOVE | An appliance used for cooking food
+CRAYON | A wax stick used for coloring
+
+---
+
+# Puzzle 8x8 #54
+TWIN | One of two children born at the same time
+ANGRY | Feeling strong displeasure
+PIE | A baked dessert with a crust
+ROPE | A thick cord used for tying or climbing
+SILENT | Making no sound
+
+---
+
+# Puzzle 8x8 #55
+WORD | A unit of language with meaning
+DANCE | To move your body to music
+SWIMMING | The activity of moving through water
+DESK | Furniture used for writing or studying
+BLOOM | To produce flowers
+
+---
+
+# Puzzle 8x8 #56
+DOORBELL | A device pressed to announce a visitor
+PLASTIC | A synthetic material used to make many objects
+COD | A common food fish
+NIGHT | The time of day when it's dark
+THOUGHT | An idea or opinion in the mind
+
+---
+
+# Puzzle 8x8 #57
+AIRPLANE | A flying vehicle with wings and engines
+VASE | A container used to hold flowers
+WATCH | A small clock worn on the wrist
+BEAN | A small edible seed grown in a pod
+PEAK | The top of a mountain
+
+---
+
+# Puzzle 8x8 #58
+TOAD | A dry-skinned relative of the frog
+WRITE | To put words on paper
+SISTER | A female sibling
+HORSE | An animal often ridden or used to pull carts
+MAP | A drawing that shows where places are
+
+---
+
+# Puzzle 8x8 #59
+LEAF | A green part of a plant that grows on branches
+ZEBRA | A striped African animal related to the horse
+ENGINE | The part of a vehicle that makes it move
+HAMSTER | A small furry rodent kept as a pet
+FORK | A utensil with prongs used for eating
+
+---
+
+# Puzzle 8x8 #60
+MEMORY | The ability to remember, or a stored memory
+DREAM | Images and thoughts that occur during sleep
+ROBIN | A red-breasted songbird
+IRON | An appliance used to smooth clothes
+SHELL | The hard outer covering of some sea creatures
+
+---
+
+# Puzzle 8x8 #61
+JEANS | Casual pants made of denim
+WATCH | A small clock worn on the wrist
+WAIT | To stay in place until something happens
+EARTH | The planet we live on
+JOURNEY | A trip from one place to another
+AIRPLANE | A flying vehicle with wings and engines
+
+---
+
+# Puzzle 8x8 #62
+BIRTHDAY | The day you were born, celebrated each year
+CLIMB | To move upward, often on a mountain
+CHILDREN | Young human beings
+HAMSTER | A small furry rodent kept as a pet
+ROPE | A thick cord used for tying or climbing
+WEB | A structure spun by a spider
+
+---
+
+# Puzzle 8x8 #63
+BASEBALL | A sport played with a bat and a ball
+WINTER | The coldest season of the year
+TABLE | Furniture you eat or work at
+EWE | A female sheep
+SUNSHINE | The light and warmth from the sun
+DREAM | Images and thoughts that occur during sleep
+
+---
+
+# Puzzle 8x8 #64
+DIAMOND | A hard, sparkling precious gem
+HEART | The organ that pumps blood
+HOSPITAL | A place where sick people are treated
+VILLAGE | A small community, smaller than a town
+GYM | A place to exercise
+MUSHROOM | A fungus, sometimes eaten as food
+
+---
+
+# Puzzle 8x8 #65
+NATURE | The physical world, apart from humans
+CAB | A taxi
+BRAVE | Willing to face danger or pain
+ELECTRIC | Powered by or relating to electricity
+STORE | A place where you buy goods
+TWIN | One of two children born at the same time
+
+---
+
+# Puzzle 8x8 #66
+SOFA | A long, cushioned piece of furniture
+FREEDOM | The state of being free
+NOON | The middle of the day
+CLIFF | A steep rock face
+CALENDAR | A chart showing the days, weeks and months
+GUM | Soft tissue around the teeth
+
+---
+
+# Puzzle 8x8 #67
+FOX | A clever, red-furred wild animal
+HERO | A person admired for great deeds
+PRESENT | A gift, or the current point in time
+DAUGHTER | A person's female child
+RING | A circular piece of jewelry
+RIVER | A large, flowing body of fresh water
+
+---
+
+# Puzzle 8x8 #68
+CROWN | A headpiece worn by royalty
+OVEN | An appliance used for baking
+LAVENDER | A purple flower with a calming scent
+FLY | To move through the air
+RAVEN | A large, black bird known for intelligence
+STORE | A place where you buy goods
+
+---
+
+# Puzzle 8x8 #69
+VACATION | A trip taken for rest or fun
+ANGRY | Feeling strong displeasure
+FIELD | An open area of grass or crops
+NUT | A hard-shelled edible seed
+SNAKE | A long, legless reptile
+TENT | A portable shelter used for camping
+
+---
+
+# Puzzle 8x8 #70
+APE | A large primate with no tail
+BEDROOM | The room where you sleep
+READ | To look at and understand written words
+HOUSE | A building where people live
+SPRING | The season when flowers bloom
+CROWN | A headpiece worn by royalty
+
+---
+
+# Puzzle 8x8 #71
+JOY | A feeling of great happiness
+MOP | A tool used to clean floors
+PLANT | A living thing that grows in soil
+WOODEN | Made of wood
+CANDLE | A wax stick with a wick, burned for light
+GUM | Soft tissue around the teeth
+
+---
+
+# Puzzle 8x8 #72
+GRASS | The green plant that covers lawns
+SLEEP | To rest with your eyes closed at night
+PIG | A pink farm animal that oinks
+BABY | A very young child
+FRIENDLY | Kind and pleasant toward others
+BIN | A container for trash
+
+---
+
+# Puzzle 8x8 #73
+BEAR | A large, furry forest animal
+THEATER | A place where plays or films are shown
+PARROT | A colorful bird that can mimic speech
+STUDY | To spend time learning about a subject
+KEY | Used to open a lock
+SHELL | The hard outer covering of some sea creatures
+
+---
+
+# Puzzle 8x8 #74
+RIDE | To travel on or in a vehicle or animal
+TENT | A portable shelter used for camping
+POWER | The ability to do something with strength
+TRUCK | A large vehicle used to carry goods
+PICTURE | An image, drawing, or photograph
+STAR | A glowing point of light in the night sky
+
+---
+
+# Puzzle 8x8 #75
+GLASS | A container used for drinking, made of a clear material
+GRAPE | A small fruit that grows in bunches on a vine
+LADDER | Used to climb up to higher places
+GUM | Soft tissue around the teeth
+SWORD | A long bladed weapon
+WITCH | A person, often in stories, with magical powers
+
+---
+
+# Puzzle 8x8 #76
+STORE | A place where you buy goods
+STORAGE | A place where things are kept
+MINT | A fresh-tasting herb
+PAINT | Colored liquid used to decorate surfaces
+SINK | Where you wash dishes or your hands
+TEAL | A blue-green color
+GENTLE | Kind and mild in manner
+
+---
+
+# Puzzle 8x8 #77
+MOLE | A small burrowing animal
+NOON | The middle of the day
+PANDA | A black-and-white bear that eats bamboo
+OCTAGON | A shape with eight sides
+BUD | The early stage of a flower or leaf
+MAROON | A dark brownish-red color
+FROG | An amphibian that hops and croaks
+
+---
+
+# Puzzle 8x8 #78
+COMB | A tool used to tidy hair
+BALL | A round object used in many sports
+BACKPACK | A bag carried on the back with straps
+CAB | A taxi
+PICTURE | An image, drawing, or photograph
+RING | A circular piece of jewelry
+BROWN | The color of chocolate
+
+---
+
+# Puzzle 8x8 #79
+FOOTBALL | A sport played by kicking a large ball
+BAT | A flying mammal, or sports equipment
+LAND | The solid part of the Earth's surface
+FOG | A thick cloud near the ground
+CLIFF | A steep rock face
+HOLIDAY | A day of celebration or rest from work
+STATION | A stop along a train or bus route
+
+---
+
+# Puzzle 8x8 #80
+BALL | A round object used in many sports
+CAB | A taxi
+MASK | Worn to cover the face
+PLASTIC | A synthetic material used to make many objects
+SILVER | A shiny, valuable gray-white metal
+MUD | Wet, sticky soil
+NATURE | The physical world, apart from humans
+
+---
+
+# Puzzle 8x8 #81
+HERO | A person admired for great deeds
+SECOND | A very short unit of time
+RACE | A competition to see who is fastest
+MONSTER | A scary, imaginary creature
+ANSWER | A reply to a question
+RUST | A reddish-brown color, also corrosion on metal
+MAROON | A dark brownish-red color
+
+---
+
+# Puzzle 8x8 #82
+MONKEY | A playful primate that lives in trees
+MOMENT | A brief period of time
+TOY | Something children play with
+COT | A small, portable bed
+PEAR | A fruit that is often shaped like a teardrop
+ASS | Another name for a donkey
+SOCK | Worn on the foot, inside a shoe
+
+---
+
+# Puzzle 8x8 #83
+BRAIN | The organ used for thinking
+SUITCASE | A case used to carry clothes while traveling
+CORN | A yellow vegetable grown on a cob
+BED | Furniture you sleep on
+CLIMB | To move upward, often on a mountain
+TIDE | The rise and fall of the sea
+TEA | A hot drink made from leaves
+
+---
+
+# Puzzle 8x8 #84
+CAB | A taxi
+CRAB | A sea creature with claws
+COURAGE | Bravery in the face of fear
+GEM | A precious stone
+MOMENT | A brief period of time
+MOON | The natural satellite of Earth
+KOALA | An Australian animal that eats eucalyptus
+
+---
+
+# Puzzle 8x8 #85
+VILLAGE | A small community, smaller than a town
+WAR | An armed conflict between nations
+LOSE | To no longer have something
+SUGAR | A sweet, crystalline substance
+BEAR | A large, furry forest animal
+VACATION | A trip taken for rest or fun
+SEA | A large body of salt water
+

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Crossword Challenge – Free Daily Crossword Puzzles Online</title>
+<meta name="description" content="Play 300+ free crossword puzzles from easy to hard with instant hints — no sign-up needed. Create and share your own custom crossword in seconds.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cross-world.in/">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp, Discord previews) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crossword Challenge">
+<meta property="og:title" content="Crossword Challenge – Free Daily Crossword Puzzles Online">
+<meta property="og:description" content="Play 300+ free crossword puzzles from easy to hard with instant hints — no sign-up needed. Create and share your own custom crossword in seconds.">
+<meta property="og:url" content="https://cross-world.in/">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Crossword Challenge – Free Daily Crossword Puzzles Online">
+<meta name="twitter:description" content="Play 300+ free crossword puzzles from easy to hard with instant hints — no sign-up needed. Create and share your own custom crossword in seconds.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Game",
+  "name": "Crossword Challenge",
+  "description": "Play 300+ free online crossword puzzles from easy to hard with instant hints and no sign-up. Create your own custom crossword and share it with friends.",
+  "url": "https://cross-world.in/",
+  "genre": "Word Game",
+  "isAccessibleForFree": true,
+  "applicationCategory": "Game"
+}
+</script>
+
+<link rel="stylesheet" href="styles.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9Z5E1VNY1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J9Z5E1VNY1');
+</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE
+     Replace ca-pub-XXXXXXXXXXXXXXXX below with your real
+     Publisher ID from adsense.google.com once your account
+     is approved.
+============================================================ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<!-- Hidden input used only to summon the mobile on-screen keyboard.
+     Mobile browsers only pop up a virtual keyboard when a real
+     focusable <input> receives focus, so cell clicks focus this
+     instead of relying on physical keydown events alone. -->
+<input
+  type="text"
+  id="key-capture"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="characters"
+  spellcheck="false"
+  inputmode="text"
+  aria-hidden="true"
+  tabindex="-1"
+/>
+
+<header class="site-header">
+  <div class="container navbar">
+    <a href="index.html" class="brand" aria-label="Crossword Challenge home">
+      <span>Crossworld</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="daily.html">Daily Puzzle</a>
+      <a href="create.html" class="nav-create">Create Crossword</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- =========================
+     HOME PAGE
+========================= -->
+
+<section class="page" aria-labelledby="home-title">
+
+  <div class="container hero">
+    <span class="eyebrow">Free online crossword puzzles</span>
+
+    <h1 id="home-title">
+      Think. Solve.<br>
+      Challenge your friends.
+    </h1>
+
+    <p>
+      Solve a crossword puzzle or create your own
+      with custom clues and share it with friends.
+    </p>
+
+    <div class="hero-actions">
+      <a href="daily.html" class="btn btn-primary">Play crossword →</a>
+      <a href="create.html" class="btn btn-secondary">Create your own</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="ad-slot">
+      <span class="ad-slot-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="AD_SLOT_HOME_TOP"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Featured puzzle</span>
+          <h2>Today's Crossword</h2>
+        </div>
+        <span class="badge">5×5 to 8×8 · Mixed</span>
+      </div>
+
+      <div class="card home-puzzle">
+
+        <div class="home-puzzle-info">
+          <span class="badge">Daily Crossword</span>
+
+          <h2>A quick word challenge for your day.</h2>
+
+          <p>
+            Solve a beginner-friendly crossword with
+            simple clues.
+          </p>
+
+          <div>
+            <a href="daily.html" class="btn btn-primary">
+              Start solving →
+            </a>
+          </div>
+        </div>
+
+        <div class="puzzle-preview">
+          <div class="preview-grid" id="home-preview-grid"
+               aria-label="Preview of today's crossword"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <div class="section-heading">
+        <h2>More ways to play</h2>
+      </div>
+
+      <div class="feature-grid">
+
+        <article class="card feature-card">
+          <div class="feature-icon">🧩</div>
+          <h3>Daily Crosswords</h3>
+          <p>
+            Discover a fresh crossword puzzle
+            and improve your word skills.
+          </p>
+        </article>
+
+        <article class="card feature-card">
+          <div class="feature-icon">✏️</div>
+          <h3>Create Your Own</h3>
+          <p>
+            Add your own words and clues.
+            Make a crossword in seconds.
+          </p>
+        </article>
+
+        <article class="card feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Challenge Friends</h3>
+          <p>
+            Share a puzzle link and see
+            who can solve your crossword.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="ad-slot tall">
+        <span class="ad-slot-label">Advertisement</span>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="AD_SLOT_HOME_CONTENT"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </section>
+
+  <section class="container info-section">
+    <h2>Free online crossword puzzles</h2>
+    <p>
+      Crossword Challenge is a simple place to solve
+      word puzzles and create your own custom crosswords.
+      Choose a daily puzzle or challenge a friend with
+      words and clues you create yourself.
+    </p>
+    <p>
+      Start solving today and discover a fun way to
+      practice vocabulary, test your memory, and enjoy
+      word games.
+    </p>
+  </section>
+
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span>© 2026 Crossworld</span>
+
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="index.html">Home</a>
+      <a href="daily.html">Puzzles</a>
+      <a href="create.html">Create</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+function renderHomePreview() {
+  const grid = buildGrid(DAILY_PUZZLE);
+  const element = $("home-preview-grid");
+
+  element.innerHTML = "";
+
+  const previewSize = DAILY_PUZZLE.size;
+
+  for (let r = 0; r < previewSize; r++) {
+    for (let c = 0; c < previewSize; c++) {
+      const cell = document.createElement("div");
+      cell.className = "preview-cell";
+      if (grid[r][c].black) cell.classList.add("black");
+      element.appendChild(cell);
+    }
+  }
+}
+
+renderHomePreview();
+initAds();
+</script>
+
+</body>
+</html>
