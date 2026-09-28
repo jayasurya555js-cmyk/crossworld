@@ -260,12 +260,14 @@ a {
 
 .ad-slot {
   min-height: 90px;
+  max-height: 100px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 16px;
+  padding: 12px;
   border: 1px dashed #cbd0d8;
   background: #fafafa;
   border-radius: 10px;
@@ -281,10 +283,17 @@ a {
 
 .ad-slot .adsbygoogle {
   width: 100%;
+  max-height: 80px;
+  overflow: hidden;
 }
 
 .ad-slot.tall {
   min-height: 180px;
+  max-height: 250px;
+}
+
+.ad-slot.tall .adsbygoogle {
+  max-height: 220px;
 }
 
 .badge {
