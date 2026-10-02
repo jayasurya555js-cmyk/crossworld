@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Free Word Search Puzzle Online | Crossword Challenge</title>
+<meta name="description" content="Play a free online word search puzzle. Find hidden words in a themed 12x12 letter grid, with instant hints. A new theme every time, no sign-up needed.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cross-world.in/wordsearch.html">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp, Discord previews) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crossword Challenge">
+<meta property="og:title" content="Free Word Search Puzzle Online | Crossword Challenge">
+<meta property="og:description" content="Play a free online word search puzzle. Find hidden words in a themed 12x12 letter grid, with instant hints. A new theme every time, no sign-up needed.">
+<meta property="og:url" content="https://cross-world.in/wordsearch.html">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Word Search Puzzle Online | Crossword Challenge">
+<meta name="twitter:description" content="Play a free online word search puzzle. Find hidden words in a themed 12x12 letter grid, with instant hints. A new theme every time, no sign-up needed.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Game",
+  "name": "Word Search Puzzle",
+  "description": "Play a free online word search puzzle. Find hidden words in a themed 12x12 letter grid, with instant hints and no sign-up required.",
+  "url": "https://cross-world.in/wordsearch.html",
+  "genre": "Word Game",
+  "isAccessibleForFree": true,
+  "applicationCategory": "Game"
+}
+</script>
+
+<link rel="stylesheet" href="styles.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9Z5E1VNY1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J9Z5E1VNY1');
+</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE
+     Replace ca-pub-XXXXXXXXXXXXXXXX below with your real
+     Publisher ID from adsense.google.com once your account
+     is approved.
+============================================================ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<!-- Hidden input used only to summon the mobile on-screen keyboard.
+     Mobile browsers only pop up a virtual keyboard when a real
+     focusable <input> receives focus, so cell clicks focus this
+     instead of relying on physical keydown events alone. -->
+<input
+  type="text"
+  id="key-capture"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="characters"
+  spellcheck="false"
+  inputmode="text"
+  aria-hidden="true"
+  tabindex="-1"
+/>
+
+<div id="site-header"></div>
+
+<main>
+<!-- =========================
+     WORD SEARCH PAGE
+========================= -->
+
+<section class="page" aria-labelledby="ws-title">
+
+  <div class="container puzzle-header">
+    <span class="eyebrow">Word search</span>
+    <h1 id="ws-title">Find the Hidden Words</h1>
+    <p>
+      Theme: <strong id="ws-theme-name">Loading…</strong>
+      · Click and drag (or tap the first and last letter) to find a word.
+    </p>
+  </div>
+
+  <div class="container">
+    <div class="ad-slot">
+      <span class="ad-slot-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="AD_SLOT_WORDSEARCH_TOP"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <div class="container section">
+    <div class="puzzle-layout">
+
+      <section class="card grid-panel" aria-label="Word search game">
+
+        <div class="grid-panel-top">
+          <strong>Word Search</strong>
+          <span class="timer" id="ws-timer">00:00</span>
+        </div>
+
+        <div
+          id="ws-grid"
+          class="ws-grid"
+          role="group"
+          aria-label="Word search letter grid">
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Found</span>
+            <span id="ws-progress-text">0 / 8</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar" id="ws-progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="grid-actions">
+          <button class="btn btn-secondary" id="ws-hint-btn">
+            💡 Hint (3 left)
+          </button>
+
+          <button class="btn btn-secondary" id="ws-reset-btn">
+            ↺ Reset
+          </button>
+
+          <button class="btn btn-primary" id="ws-new-btn">
+            🔀 New Puzzle
+          </button>
+        </div>
+
+        <div id="ws-status"
+             class="status-message"
+             role="status"
+             aria-live="polite">
+        </div>
+
+      </section>
+
+      <aside class="clues-panel" aria-label="Words to find">
+        <section class="card clue-group">
+          <h3>Find these words</h3>
+          <div id="ws-word-list" class="ws-word-list"></div>
+        </section>
+      </aside>
+
+    </div>
+  </div>
+
+  <div class="container section">
+    <div class="ad-slot">
+      <span class="ad-slot-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="AD_SLOT_WORDSEARCH_BOTTOM"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+</section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="app.js"></script>
+<script>
+/* ------------------------------------------
+   THEMED WORD LISTS
+   Word Search doesn't need words to cross each other the way a
+   crossword does, so these are simple themed lists rather than
+   words.txt-style clue pairs.
+------------------------------------------ */
+
+const WORD_SEARCH_SIZE = 12;
+
+const WORD_SEARCH_THEMES = [
+  { name: "Animals", words: ["LION", "TIGER", "ZEBRA", "ELEPHANT", "GIRAFFE", "MONKEY", "PANDA", "DOLPHIN"] },
+  { name: "Fruits", words: ["APPLE", "BANANA", "ORANGE", "GRAPE", "MANGO", "LEMON", "PEACH", "CHERRY"] },
+  { name: "Ocean", words: ["WHALE", "SHARK", "OCTOPUS", "DOLPHIN", "CORAL", "TURTLE", "JELLYFISH", "STARFISH"] },
+  { name: "Space", words: ["PLANET", "GALAXY", "COMET", "ROCKET", "ASTEROID", "SATURN", "ORBIT", "ASTRONAUT"] },
+  { name: "Sports", words: ["SOCCER", "TENNIS", "HOCKEY", "BASEBALL", "BOXING", "CYCLING", "SWIMMING", "GOLF"] },
+  { name: "School", words: ["PENCIL", "NOTEBOOK", "TEACHER", "STUDENT", "LIBRARY", "SCIENCE", "HOMEWORK", "LESSON"] },
+  { name: "Weather", words: ["RAINBOW", "THUNDER", "LIGHTNING", "BREEZE", "DROUGHT", "BLIZZARD", "HUMIDITY", "FORECAST"] },
+  { name: "Kitchen", words: ["KETTLE", "SPATULA", "BLENDER", "SKILLET", "COLANDER", "WHISK", "TOASTER", "PLATTER"] }
+];
+
+let wsGame = null;
+let wsTimer = 0;
+let wsInterval = null;
+let wsThemeIndex = -1;
+
+function pickRandomThemeIndex(excludeIndex) {
+  if (WORD_SEARCH_THEMES.length <= 1) return 0;
+
+  let index;
+  do {
+    index = Math.floor(Math.random() * WORD_SEARCH_THEMES.length);
+  } while (index === excludeIndex);
+
+  return index;
+}
+
+/* ------------------------------------------
+   GAME SETUP
+------------------------------------------ */
+
+function startWordSearchGame() {
+
+  clearInterval(wsInterval);
+  wsTimer = 0;
+
+  const theme = WORD_SEARCH_THEMES[wsThemeIndex];
+  const puzzle = generateWordSearch(theme.words, WORD_SEARCH_SIZE);
+
+  $("ws-theme-name").textContent = theme.name;
+
+  wsGame = new WordSearchGame(
+    puzzle,
+    $("ws-grid"),
+    $("ws-word-list"),
+    {
+      onProgress: (found, total) => {
+        $("ws-progress-text").textContent = `${found} / ${total}`;
+        $("ws-progress-bar").style.width = `${(found / total) * 100}%`;
+      },
+
+      onComplete: () => {
+        clearInterval(wsInterval);
+
+        trackEvent("puzzle_solved", {
+          puzzle_type: "wordsearch",
+          theme: theme.name,
+          seconds_taken: wsTimer,
+          hints_used: wsGame.hintsUsed
+        });
+
+        setStatus(
+          "ws-status",
+          `🎉 Great job! You found every word in ${formatTime(wsTimer)}.`,
+          "success"
+        );
+      },
+
+      onHintChange: (hintsLeft) => {
+        updateHintButton("ws-hint-btn", hintsLeft);
+      }
+    }
+  );
+
+  wsInterval = setInterval(() => {
+    wsTimer++;
+    $("ws-timer").textContent = formatTime(wsTimer);
+  }, 1000);
+
+  setStatus("ws-status", "");
+}
+
+function goToNextWordSearch() {
+  wsThemeIndex = pickRandomThemeIndex(wsThemeIndex);
+  startWordSearchGame();
+}
+
+/* ------------------------------------------
+   WORD SEARCH ACTIONS
+------------------------------------------ */
+
+$("ws-hint-btn").addEventListener("click", () => {
+  if (wsGame) wsGame.revealHint();
+});
+
+$("ws-reset-btn").addEventListener("click", () => {
+  startWordSearchGame();
+});
+
+$("ws-new-btn").addEventListener("click", () => {
+  goToNextWordSearch();
+});
+
+/* ------------------------------------------
+   INITIALIZE
+------------------------------------------ */
+
+renderHeader("wordsearch");
+renderFooter();
+initAds();
+
+wsThemeIndex = pickRandomThemeIndex(wsThemeIndex);
+startWordSearchGame();
+
+</script>
+
+</body>
+</html>

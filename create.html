@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Your Own Crossword Puzzle Free | Crossword Challenge</title>
+<meta name="description" content="Make your own crossword puzzle in seconds. Add your own words and clues, generate an 8x8 grid, and share a link so friends can solve it.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cross-world.in/create.html">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp, Discord previews) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crossword Challenge">
+<meta property="og:title" content="Create Your Own Crossword Puzzle Free | Crossword Challenge">
+<meta property="og:description" content="Make your own crossword puzzle in seconds. Add your own words and clues, generate an 8x8 grid, and share a link so friends can solve it.">
+<meta property="og:url" content="https://cross-world.in/create.html">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Create Your Own Crossword Puzzle Free | Crossword Challenge">
+<meta name="twitter:description" content="Make your own crossword puzzle in seconds. Add your own words and clues, generate an 8x8 grid, and share a link so friends can solve it.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Game",
+  "name": "Crossword Creator",
+  "description": "Create your own custom crossword puzzle for free. Add your own words and clues, generate an 8x8 grid, and share a link with friends.",
+  "url": "https://cross-world.in/create.html",
+  "genre": "Word Game",
+  "isAccessibleForFree": true,
+  "applicationCategory": "Game"
+}
+</script>
+
+<link rel="stylesheet" href="styles.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9Z5E1VNY1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J9Z5E1VNY1');
+</script>
+
+<!-- ============================================================
+     GOOGLE ADSENSE
+     Replace ca-pub-XXXXXXXXXXXXXXXX below with your real
+     Publisher ID from adsense.google.com once your account
+     is approved.
+============================================================ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<!-- Hidden input used only to summon the mobile on-screen keyboard.
+     Mobile browsers only pop up a virtual keyboard when a real
+     focusable <input> receives focus, so cell clicks focus this
+     instead of relying on physical keydown events alone. -->
+<input
+  type="text"
+  id="key-capture"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="characters"
+  spellcheck="false"
+  inputmode="text"
+  aria-hidden="true"
+  tabindex="-1"
+/>
+
+<div id="site-header"></div>
+
+<main>
+<!-- =========================
+     CREATE PAGE
+========================= -->
+
+<section class="page" aria-labelledby="create-title">
+
+  <div class="container page-title">
+    <span class="eyebrow">Custom crossword creator</span>
+    <h1 id="create-title">Create a crossword.<br>Challenge a friend.</h1>
+    <p>
+      Add your own words and hints. Generate a crossword
+      and share the puzzle with a friend.
+    </p>
+  </div>
+
+  <div class="container">
+    <div class="ad-slot">
+      <span class="ad-slot-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="AD_SLOT_CREATE_TOP"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <div class="container section">
+    <div class="creator-layout">
+
+      <section class="card form-card">
+        <h2>Your crossword</h2>
+        <p>
+          Enter words and clues. Use 3–8 letter words
+          for this 8×8 puzzle. Words can be up to 8 letters long.
+        </p>
+
+        <div id="word-inputs"></div>
+
+        <div class="word-count" id="word-count">
+          0 words added
+        </div>
+
+        <div class="creator-actions">
+          <button class="btn btn-secondary" id="add-word-btn">
+            + Add word
+          </button>
+
+          <button class="btn btn-primary" id="generate-btn">
+            Generate crossword →
+          </button>
+        </div>
+
+        <div id="creator-status"
+             class="status-message"
+             role="status"
+             aria-live="polite">
+        </div>
+      </section>
+
+      <section class="card preview-panel">
+        <h2>Preview</h2>
+        <p>
+          Your crossword will appear here.
+          Words must intersect to form a valid grid.
+        </p>
+
+        <div id="creator-grid"
+             class="creator-grid"
+             aria-label="Custom crossword preview">
+        </div>
+
+        <div id="creator-preview-info"
+             class="muted"
+             style="font-size:13px;text-align:center;">
+          Add words and generate your puzzle.
+        </div>
+
+        <div id="share-box" class="share-box hidden">
+          <h3>Your puzzle is ready 🎉</h3>
+
+          <input
+            id="share-url"
+            class="share-url"
+            type="text"
+            readonly
+            aria-label="Shareable puzzle URL">
+
+          <div class="share-actions">
+            <button class="btn btn-primary" id="copy-link-btn">
+              Copy link
+            </button>
+
+            <button class="btn btn-secondary" id="native-share-btn">
+              Share
+            </button>
+
+            <button class="btn btn-secondary" id="play-created-btn">
+              Play puzzle →
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="container section">
+    <div class="ad-slot tall">
+      <span class="ad-slot-label">Advertisement</span>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="AD_SLOT_CREATE_CONTENT"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+</section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="app.js"></script>
+<script>
+/* ------------------------------------------
+   CREATOR FORM
+------------------------------------------ */
+
+let creatorWords = [];
+let creatorPuzzle = null;
+
+function addWordInput(word = "", clue = "") {
+
+  if (creatorWords.length >= MAX_CREATOR_WORDS) {
+    setStatus(
+      "creator-status",
+      `You can add up to ${MAX_CREATOR_WORDS} words in this prototype.`,
+      "error"
+    );
+    return;
+  }
+
+  const index = creatorWords.length;
+
+  creatorWords.push({ word, clue });
+
+  const row = document.createElement("div");
+  row.className = "word-row";
+  row.dataset.index = index;
+
+  const wordField = document.createElement("div");
+  wordField.className = "field";
+
+  const wordLabel = document.createElement("label");
+  wordLabel.textContent = "Word";
+
+  const wordInput = document.createElement("input");
+  wordInput.type = "text";
+  wordInput.maxLength = CREATOR_SIZE;
+  wordInput.placeholder = "APPLE";
+  wordInput.value = word;
+  wordInput.autocomplete = "off";
+
+  wordInput.addEventListener("input", () => {
+    creatorWords[index].word = wordInput.value;
+  });
+
+  wordField.append(wordLabel, wordInput);
+
+  const clueField = document.createElement("div");
+  clueField.className = "field";
+
+  const clueLabel = document.createElement("label");
+  clueLabel.textContent = "Hint / Clue";
+
+  const clueInput = document.createElement("input");
+  clueInput.type = "text";
+  clueInput.placeholder = "A fruit";
+  clueInput.value = clue;
+  clueInput.maxLength = 100;
+
+  clueInput.addEventListener("input", () => {
+    creatorWords[index].clue = clueInput.value;
+  });
+
+  clueField.append(clueLabel, clueInput);
+
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "remove-word";
+  remove.textContent = "×";
+  remove.title = "Remove word";
+  remove.setAttribute("aria-label", "Remove word");
+
+  remove.addEventListener("click", () => {
+    creatorWords.splice(index, 1);
+    renderCreatorInputs();
+  });
+
+  row.append(wordField, clueField, remove);
+
+  $("word-inputs").appendChild(row);
+
+  updateWordCount();
+}
+
+function renderCreatorInputs() {
+  const values = [...creatorWords];
+
+  $("word-inputs").innerHTML = "";
+  creatorWords = [];
+
+  values.forEach(item => addWordInput(item.word, item.clue));
+
+  updateWordCount();
+}
+
+function updateWordCount() {
+  $("word-count").textContent =
+    `${creatorWords.length} / ${MAX_CREATOR_WORDS} words added`;
+}
+
+$("add-word-btn").addEventListener("click", () => {
+  addWordInput();
+});
+
+// Puts the Create page back to a blank state: two empty word rows,
+// no preview, no share link, no messages.
+function resetCreatorForm() {
+
+  creatorWords = [];
+  creatorPuzzle = null;
+
+  $("word-inputs").innerHTML = "";
+
+  addWordInput();
+  addWordInput();
+
+  const previewGrid = $("creator-grid");
+  previewGrid.innerHTML = "";
+  previewGrid.style.gridTemplateColumns = "";
+  delete previewGrid.dataset.size;
+
+  $("creator-preview-info").textContent =
+    "Add words and generate your puzzle.";
+
+  $("share-url").value = "";
+  $("share-box").classList.add("hidden");
+
+  setStatus("creator-status", "");
+}
+
+/* ------------------------------------------
+   GENERATE CREATOR PUZZLE
+------------------------------------------ */
+
+$("generate-btn").addEventListener("click", () => {
+
+  const words = creatorWords
+    .map(item => ({
+      word: cleanWord(item.word),
+      clue: item.clue.trim()
+    }))
+    .filter(item => item.word.length > 0);
+
+  if (words.length < 2) {
+    setStatus(
+      "creator-status",
+      "Please add at least 2 words.",
+      "error"
+    );
+    return;
+  }
+
+  if (words.some(item => item.word.length < 2)) {
+    setStatus(
+      "creator-status",
+      "Each word must contain at least 2 letters.",
+      "error"
+    );
+    return;
+  }
+
+  if (words.some(item => item.word.length > CREATOR_SIZE)) {
+    setStatus(
+      "creator-status",
+      `Each word must be ${CREATOR_SIZE} letters or fewer.`,
+      "error"
+    );
+    return;
+  }
+
+  if (words.some(item => !item.clue)) {
+    setStatus(
+      "creator-status",
+      "Please enter a hint for every word.",
+      "error"
+    );
+    return;
+  }
+
+  const puzzle = generateCrossword(words, CREATOR_SIZE);
+
+  if (!puzzle) {
+    setStatus(
+      "creator-status",
+      "These words could not form a connected crossword. Try words that share letters with each other.",
+      "error"
+    );
+    return;
+  }
+
+  creatorPuzzle = puzzle;
+
+  trackEvent("puzzle_created", { word_count: words.length });
+
+  renderCreatorPreview(puzzle);
+  createShareLink(puzzle);
+
+  setStatus(
+    "creator-status",
+    "Your crossword was generated successfully!",
+    "success"
+  );
+});
+
+function renderCreatorPreview(puzzle) {
+
+  const grid = buildGrid(puzzle);
+  const element = $("creator-grid");
+
+  const size = puzzle.size || DEFAULT_SIZE;
+
+  element.innerHTML = "";
+  element.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+  element.dataset.size = size;
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+
+      const cell = grid[r][c];
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "cell";
+
+      if (cell.black) {
+        button.classList.add("black");
+        decorateBombCell(button);
+      } else {
+
+        if (cell.number !== null) {
+          const number = document.createElement("span");
+          number.className = "cell-number";
+          number.textContent = cell.number;
+          button.appendChild(number);
+        }
+
+        const letter = document.createElement("span");
+        letter.className = "cell-letter";
+        letter.textContent = cell.letter;
+
+        button.appendChild(letter);
+      }
+
+      element.appendChild(button);
+    }
+  }
+
+  $("creator-preview-info").textContent =
+    `${puzzle.words.length} words · ${size} × ${size} grid`;
+}
+
+/* ------------------------------------------
+   SHAREABLE URL
+   Links always point at shared.html — a dedicated page for solving
+   someone else's puzzle — rather than at this Create page.
+------------------------------------------ */
+
+function createShareLink(puzzle) {
+
+  const encoded = encodePuzzle(puzzle);
+
+  const url = new URL("shared.html", window.location.href);
+  url.hash = "puzzle=" + encoded;
+
+  $("share-url").value = url.href;
+  $("share-box").classList.remove("hidden");
+}
+
+$("copy-link-btn").addEventListener("click", async () => {
+
+  const url = $("share-url").value;
+
+  try {
+    await navigator.clipboard.writeText(url);
+
+    trackEvent("share", { method: "copy_link" });
+
+    setStatus(
+      "creator-status",
+      "Shareable link copied!",
+      "success"
+    );
+
+  } catch (error) {
+
+    $("share-url").select();
+
+    setStatus(
+      "creator-status",
+      "Select and copy the link manually.",
+      "error"
+    );
+  }
+});
+
+$("native-share-btn").addEventListener("click", async () => {
+
+  const url = $("share-url").value;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Crossword Challenge",
+        text: "🧩 Your friend has created and shared a special " +
+          "crossword puzzle with you! It's time to take it down — " +
+          "good luck!",
+        url
+      });
+
+      trackEvent("share", { method: "native_share" });
+
+    } catch (error) {
+      // User cancelled or sharing is unavailable.
+    }
+  } else {
+    $("share-url").select();
+
+    setStatus(
+      "creator-status",
+      "Copy the link and send it to your friend.",
+      "success"
+    );
+  }
+});
+
+$("play-created-btn").addEventListener("click", () => {
+  if (!creatorPuzzle) return;
+
+  const encoded = encodePuzzle(creatorPuzzle);
+  window.location.href = "shared.html#puzzle=" + encoded;
+});
+
+/* ------------------------------------------
+   INITIALIZE
+------------------------------------------ */
+
+renderHeader("create");
+renderFooter();
+resetCreatorForm();
+initAds();
+
+</script>
+
+</body>
+</html>
