@@ -1334,3 +1334,58 @@ a {
     width: 100%;
   }
 }
+
+/* ===== Snakes & Ladders card (inside .games-grid) =====
+   Sizing (padding, gap, width) comes from .game-card, so it matches
+   the Crossword and Word Search cards. Only the look is changed here. */
+.game-card.sl-card {
+  position: relative;
+  text-decoration: none;
+  color: #3a2a1a;
+  background: radial-gradient(ellipse at 50% 35%, #f0e2c1 0%, #e9d7b0 62%, #d9c093 100%);
+  border: 1px solid #cdb283;
+  box-shadow: 0 2px 8px rgba(80, 55, 20, .12);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.game-card.sl-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: calc(var(--radius) - 6px);
+  pointer-events: none;
+  border: 1.5px solid rgba(140, 108, 66, .3);
+}
+.game-card.sl-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(80, 55, 20, .18);
+}
+.game-card.sl-card:focus-visible { outline: 3px solid #f5c02e; outline-offset: 3px; }
+
+.sl-card .sl-art {
+  display: block;
+  width: min(100%, 190px);
+  height: auto;
+  margin-bottom: 4px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 62%, transparent 98%);
+          mask-image: radial-gradient(ellipse at center, #000 62%, transparent 98%);
+}
+.game-card.sl-card h2 { color: #1d2f66; }
+.game-card.sl-card p  { color: #3a2a1a; }
+
+.sl-card .sl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 10px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1b2a5c;
+  background: linear-gradient(180deg, #ffd75a 0%, #f2b51e 55%, #dd9a10 100%);
+  border: 1px solid #a8730c;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5);
+  transition: filter .2s, transform .2s;
+}
+.sl-card:hover .sl-btn { filter: brightness(1.07); transform: translateY(-1px); }
