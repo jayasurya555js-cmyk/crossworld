@@ -569,7 +569,33 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
     return false;
   };
 
-  function createRoom(hostName) {
+  // Phones suspend the page (and drop its connection to the PeerJS signalling
+  // server) when you switch to another app, e.g. to paste the invite link into
+  // WhatsApp. This brings the room back online when you return, instead of
+  // treating the dropped connection as a fatal error.
+  function keepOnline(peer) {
+    let tries = 0, timer = null;
+    const revive = () => {
+      if (net.peer !== peer || peer.destroyed || !peer.disconnected) { tries = 0; return; }
+      try { peer.reconnect(); } catch (e) {}
+      if (++tries < 15) { clearTimeout(timer); timer = setTimeout(revive, 1500); }
+    };
+    const wake = () => { if (document.visibilityState === 'visible') revive(); };
+    document.addEventListener('visibilitychange', wake);
+    window.addEventListener('pageshow', wake);
+    window.addEventListener('online', revive);
+    peer.on('disconnected', () => setTimeout(revive, 300));
+    peer.on('open', () => { tries = 0; });
+    peer.on('close', () => {
+      clearTimeout(timer);
+      document.removeEventListener('visibilitychange', wake);
+      window.removeEventListener('pageshow', wake);
+      window.removeEventListener('online', revive);
+    });
+    return revive;
+  }
+
+  function createRoom(hostName, attempt = 0) {
     if (!needPeer()) return;
     $('startBtn').disabled = true;
     setStartLabel('Creating…');
@@ -578,7 +604,11 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
     myIdx = 0;
     const id = 'cwsl-' + rand();
     const peer = (net.peer = new Peer(id));
+    let opened = false;
+    const revive = keepOnline(peer);
     peer.on('open', () => {
+      if (opened) return; // fired again after a reconnect: the lobby is already showing
+      opened = true;
       net.roomId = id;
       // Use the page's full address (location.origin is "null" for local files)
       const url = `${location.href.split('?')[0].split('#')[0]}?room=${id}`;
@@ -591,7 +621,13 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
       c.on('data', (m) => hostData(c, m));
       c.on('close', () => hostLeft(c));
     });
-    peer.on('error', () => { alert('Could not create a room. Please try again.'); toSetup(); });
+    peer.on('error', (err) => {
+      if (opened) { revive(); return; } // room already exists: a dropped connection is not fatal
+      if (net.peer !== peer) return;
+      closeNet();
+      if (err && err.type === 'unavailable-id' && attempt < 3) return createRoom(hostName, attempt + 1);
+      alert('Could not create a room. Please try again.'); toSetup();
+    });
   }
 
   function hostData(c, m) {
@@ -668,16 +704,17 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
       $('joinMsg').textContent = msg; $('joinBtn').disabled = false; show('join');
     };
     const timer = setTimeout(() => fail('Could not reach the room. Ask your friend for a fresh link.'), 12000);
+    let connected = false;
     const peer = (net.peer = new Peer());
     peer.on('open', () => {
       const c = (net.conn = peer.connect(roomId, { reliable: true }));
-      c.on('open', () => { clearTimeout(timer); c.send({ t: 'join', name: clean(name) || 'Player' }); });
+      c.on('open', () => { connected = true; clearTimeout(timer); c.send({ t: 'join', name: clean(name) || 'Player' }); });
       c.on('data', (m) => guestData(m, fail));
       c.on('close', () => {
         if (net.role === 'guest' && !over) { alert('The host left the game.'); toSetup(); }
       });
     });
-    peer.on('error', () => fail('Could not reach the room. Ask your friend for a fresh link.'));
+    peer.on('error', () => { if (!connected) fail('Could not reach the room. Ask your friend for a fresh link.'); });
   }
 
   function guestData(m, fail) {
