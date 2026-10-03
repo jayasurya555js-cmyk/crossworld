@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9Z5E1VNY1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-J9Z5E1VNY1');
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snakes &amp; Ladders – Play Free Online | Crossworld</title>
@@ -480,26 +489,7 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
   const $ = (id) => document.getElementById(id);
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const SCREENS = ['setup', 'join', 'lobby', 'game'];
-  const LIVE = ['lobby', 'game']; // screens that hold a running session
-  const render = (id) => { document.body.dataset.screen = id; SCREENS.forEach((s) => ($(s).hidden = s !== id)); };
-  const curScreen = () => (history.state && history.state.screen) || 'setup';
-  const baseUrl = () => location.href.split('?')[0].split('#')[0];
-  let skipLeaveConfirm = false;
-  // Show a screen and keep the browser history in sync (back / forward buttons).
-  function show(id) {
-    const cur = curScreen();
-    render(id);
-    if (cur === id) return;
-    const url = id === 'setup' ? baseUrl() : location.href;
-    try {
-      // entering a live screen from setup/join adds a history step; live -> live just replaces it
-      if (LIVE.includes(id) && !LIVE.includes(cur)) history.pushState({ screen: id }, '', url);
-      else if (!LIVE.includes(id) && LIVE.includes(cur)) history.replaceState({ screen: id }, '', url);
-      else if (LIVE.includes(id)) history.replaceState({ screen: id }, '', url);
-      else history.pushState({ screen: id }, '', url);
-    } catch (e) { /* history unavailable: screens still switch */ }
-  }
+  const show = (id) => { document.body.dataset.screen = id; ['setup', 'join', 'lobby', 'game'].forEach((s) => ($(s).hidden = s !== id)); };
   const say = (t) => ($('status').textContent = t);
   const setStartLabel = (t) => ($('startBtn').querySelector('span').textContent = t);
 
@@ -997,57 +987,21 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
   }
 
   // ---------- Navigation ----------
-  // Tear down any running game / room and reset the menu widgets.
-  function resetState() {
+  function toSetup() {
     gid++; over = true; busy = false; pending.length = 0;
     closeNet();
+    history.replaceState(null, '', location.pathname);
     $('winModal').hidden = true;
     $('startBtn').disabled = false;
-    setStartLabel('Start Game');
     $('joinBtn').disabled = false;
     $('joinMsg').textContent = '';
     renderNames();
+    show('setup');
   }
-  function toSetup() {
-    resetState();
-    if (LIVE.includes(curScreen())) {
-      // step back in history (popstate renders the previous screen); fall back if that didn't happen
-      skipLeaveConfirm = true;
-      history.back();
-      setTimeout(() => { if (LIVE.includes(curScreen())) { skipLeaveConfirm = false; show('setup'); } }, 400);
-    } else {
-      show('setup');
-    }
-  }
-
-  // Browser back / forward buttons
-  window.addEventListener('popstate', (e) => {
-    const target = (e.state && e.state.screen) || 'setup';
-    const shown = SCREENS.find((s) => !$(s).hidden);
-    const sessionActive = LIVE.includes(shown) && !skipLeaveConfirm && ((shown === 'game' && !over) || (shown === 'lobby' && net.role));
-    if (sessionActive && !LIVE.includes(target)) {
-      if (!confirm(shown === 'game' ? 'Leave this game?' : 'Leave this room?')) {
-        history.pushState({ screen: shown }, '', location.href); // stay where we are
-        return;
-      }
-    }
-    skipLeaveConfirm = false;
-    if (LIVE.includes(target)) {
-      // forward onto a game/lobby that no longer exists -> back to the menu
-      if (shown !== target) {
-        resetState();
-        try { history.replaceState({ screen: 'setup' }, '', baseUrl()); } catch (err) {}
-        render('setup');
-      }
-      return;
-    }
-    if (LIVE.includes(shown) || net.role) resetState();
-    render(target);
-  });
   $('rollBtn').addEventListener('click', requestRoll);
   $('againBtn').addEventListener('click', () => startGame(players));
   $('menuBtn').addEventListener('click', toSetup);
-  $('quitBtn').addEventListener('click', () => { if (over || confirm('Leave this game?')) toSetup(); });
+  $('quitBtn').addEventListener('click', () => { if (confirm('Leave this game?')) toSetup(); });
   document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && !$('game').hidden && !$('rollBtn').disabled && document.activeElement === document.body) {
       e.preventDefault(); requestRoll();
@@ -1057,9 +1011,8 @@ main { min-height: 100vh; display: grid; place-items: center; padding: 8px; }
   // ---------- Start ----------
   $('setup').dataset.mode = mode;
   renderNames();
-  const first = new URLSearchParams(location.search).get('room') ? 'join' : 'setup';
-  try { history.replaceState({ screen: first }, '', location.href); } catch (e) {}
-  render(first);
+  if (new URLSearchParams(location.search).get('room')) show('join');
+  else show('setup');
 })();
 
 </script>
