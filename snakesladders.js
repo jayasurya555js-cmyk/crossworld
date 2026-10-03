@@ -47,26 +47,7 @@
   const $ = (id) => document.getElementById(id);
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const SCREENS = ['setup', 'join', 'lobby', 'game'];
-  const LIVE = ['lobby', 'game']; // screens that hold a running session
-  const render = (id) => { document.body.dataset.screen = id; SCREENS.forEach((s) => ($(s).hidden = s !== id)); };
-  const curScreen = () => (history.state && history.state.screen) || 'setup';
-  const baseUrl = () => location.href.split('?')[0].split('#')[0];
-  let skipLeaveConfirm = false;
-  // Show a screen and keep the browser history in sync (back / forward buttons).
-  function show(id) {
-    const cur = curScreen();
-    render(id);
-    if (cur === id) return;
-    const url = id === 'setup' ? baseUrl() : location.href;
-    try {
-      // entering a live screen from setup/join adds a history step; live -> live just replaces it
-      if (LIVE.includes(id) && !LIVE.includes(cur)) history.pushState({ screen: id }, '', url);
-      else if (!LIVE.includes(id) && LIVE.includes(cur)) history.replaceState({ screen: id }, '', url);
-      else if (LIVE.includes(id)) history.replaceState({ screen: id }, '', url);
-      else history.pushState({ screen: id }, '', url);
-    } catch (e) { /* history unavailable: screens still switch */ }
-  }
+  const show = (id) => { document.body.dataset.screen = id; ['setup', 'join', 'lobby', 'game'].forEach((s) => ($(s).hidden = s !== id)); };
   const say = (t) => ($('status').textContent = t);
   const setStartLabel = (t) => ($('startBtn').querySelector('span').textContent = t);
 
@@ -146,7 +127,33 @@
     return false;
   };
 
-  function createRoom(hostName) {
+  // Phones suspend the page (and drop its connection to the PeerJS signalling
+  // server) when you switch to another app, e.g. to paste the invite link into
+  // WhatsApp. This brings the room back online when you return, instead of
+  // treating the dropped connection as a fatal error.
+  function keepOnline(peer) {
+    let tries = 0, timer = null;
+    const revive = () => {
+      if (net.peer !== peer || peer.destroyed || !peer.disconnected) { tries = 0; return; }
+      try { peer.reconnect(); } catch (e) {}
+      if (++tries < 15) { clearTimeout(timer); timer = setTimeout(revive, 1500); }
+    };
+    const wake = () => { if (document.visibilityState === 'visible') revive(); };
+    document.addEventListener('visibilitychange', wake);
+    window.addEventListener('pageshow', wake);
+    window.addEventListener('online', revive);
+    peer.on('disconnected', () => setTimeout(revive, 300));
+    peer.on('open', () => { tries = 0; });
+    peer.on('close', () => {
+      clearTimeout(timer);
+      document.removeEventListener('visibilitychange', wake);
+      window.removeEventListener('pageshow', wake);
+      window.removeEventListener('online', revive);
+    });
+    return revive;
+  }
+
+  function createRoom(hostName, attempt = 0) {
     if (!needPeer()) return;
     $('startBtn').disabled = true;
     setStartLabel('Creating…');
@@ -155,7 +162,11 @@
     myIdx = 0;
     const id = 'cwsl-' + rand();
     const peer = (net.peer = new Peer(id));
+    let opened = false;
+    const revive = keepOnline(peer);
     peer.on('open', () => {
+      if (opened) return; // fired again after a reconnect: the lobby is already showing
+      opened = true;
       net.roomId = id;
       // Use the page's full address (location.origin is "null" for local files)
       const url = `${location.href.split('?')[0].split('#')[0]}?room=${id}`;
@@ -168,7 +179,13 @@
       c.on('data', (m) => hostData(c, m));
       c.on('close', () => hostLeft(c));
     });
-    peer.on('error', () => { alert('Could not create a room. Please try again.'); toSetup(); });
+    peer.on('error', (err) => {
+      if (opened) { revive(); return; } // room already exists: a dropped connection is not fatal
+      if (net.peer !== peer) return;
+      closeNet();
+      if (err && err.type === 'unavailable-id' && attempt < 3) return createRoom(hostName, attempt + 1);
+      alert('Could not create a room. Please try again.'); toSetup();
+    });
   }
 
   function hostData(c, m) {
@@ -245,16 +262,17 @@
       $('joinMsg').textContent = msg; $('joinBtn').disabled = false; show('join');
     };
     const timer = setTimeout(() => fail('Could not reach the room. Ask your friend for a fresh link.'), 12000);
+    let connected = false;
     const peer = (net.peer = new Peer());
     peer.on('open', () => {
       const c = (net.conn = peer.connect(roomId, { reliable: true }));
-      c.on('open', () => { clearTimeout(timer); c.send({ t: 'join', name: clean(name) || 'Player' }); });
+      c.on('open', () => { connected = true; clearTimeout(timer); c.send({ t: 'join', name: clean(name) || 'Player' }); });
       c.on('data', (m) => guestData(m, fail));
       c.on('close', () => {
         if (net.role === 'guest' && !over) { alert('The host left the game.'); toSetup(); }
       });
     });
-    peer.on('error', () => fail('Could not reach the room. Ask your friend for a fresh link.'));
+    peer.on('error', () => { if (!connected) fail('Could not reach the room. Ask your friend for a fresh link.'); });
   }
 
   function guestData(m, fail) {
@@ -564,57 +582,21 @@
   }
 
   // ---------- Navigation ----------
-  // Tear down any running game / room and reset the menu widgets.
-  function resetState() {
+  function toSetup() {
     gid++; over = true; busy = false; pending.length = 0;
     closeNet();
+    history.replaceState(null, '', location.pathname);
     $('winModal').hidden = true;
     $('startBtn').disabled = false;
-    setStartLabel('Start Game');
     $('joinBtn').disabled = false;
     $('joinMsg').textContent = '';
     renderNames();
+    show('setup');
   }
-  function toSetup() {
-    resetState();
-    if (LIVE.includes(curScreen())) {
-      // step back in history (popstate renders the previous screen); fall back if that didn't happen
-      skipLeaveConfirm = true;
-      history.back();
-      setTimeout(() => { if (LIVE.includes(curScreen())) { skipLeaveConfirm = false; show('setup'); } }, 400);
-    } else {
-      show('setup');
-    }
-  }
-
-  // Browser back / forward buttons
-  window.addEventListener('popstate', (e) => {
-    const target = (e.state && e.state.screen) || 'setup';
-    const shown = SCREENS.find((s) => !$(s).hidden);
-    const sessionActive = LIVE.includes(shown) && !skipLeaveConfirm && ((shown === 'game' && !over) || (shown === 'lobby' && net.role));
-    if (sessionActive && !LIVE.includes(target)) {
-      if (!confirm(shown === 'game' ? 'Leave this game?' : 'Leave this room?')) {
-        history.pushState({ screen: shown }, '', location.href); // stay where we are
-        return;
-      }
-    }
-    skipLeaveConfirm = false;
-    if (LIVE.includes(target)) {
-      // forward onto a game/lobby that no longer exists -> back to the menu
-      if (shown !== target) {
-        resetState();
-        try { history.replaceState({ screen: 'setup' }, '', baseUrl()); } catch (err) {}
-        render('setup');
-      }
-      return;
-    }
-    if (LIVE.includes(shown) || net.role) resetState();
-    render(target);
-  });
   $('rollBtn').addEventListener('click', requestRoll);
   $('againBtn').addEventListener('click', () => startGame(players));
   $('menuBtn').addEventListener('click', toSetup);
-  $('quitBtn').addEventListener('click', () => { if (over || confirm('Leave this game?')) toSetup(); });
+  $('quitBtn').addEventListener('click', () => { if (confirm('Leave this game?')) toSetup(); });
   document.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && !$('game').hidden && !$('rollBtn').disabled && document.activeElement === document.body) {
       e.preventDefault(); requestRoll();
@@ -624,7 +606,6 @@
   // ---------- Start ----------
   $('setup').dataset.mode = mode;
   renderNames();
-  const first = new URLSearchParams(location.search).get('room') ? 'join' : 'setup';
-  try { history.replaceState({ screen: first }, '', location.href); } catch (e) {}
-  render(first);
+  if (new URLSearchParams(location.search).get('room')) show('join');
+  else show('setup');
 })();
