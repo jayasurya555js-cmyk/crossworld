@@ -66,7 +66,7 @@
   let turn = 0, busy = false, over = false, gid = 0, myIdx = 0;
   const pending = [];      // rolls received from the host, waiting for animations to finish
   let lobby = [];          // [{name, color}] while waiting in a room
-  const net = { role: null, peer: null, conn: null, conns: [], max: 2, roomId: null, started: false };
+  const net = { role: null, link: null, conns: [], max: 2, roomId: null, started: false };
 
   // ---------- Setup screen ----------
   function renderNames() {
@@ -117,50 +117,104 @@
     })));
   });
 
-  // ---------- Online rooms (PeerJS / WebRTC) ----------
+  // ---------- Online rooms (WebSocket room server) ----------
+  // Put the address of your deployed room server here (see snakes-server/README.md).
+  // It can also be set from the page by defining window.SNAKES_SERVER_URL before this script.
+  const SERVER_URL = window.SNAKES_SERVER_URL || 'wss://YOUR-SERVER.onrender.com/ws';
   const rand = () => Math.random().toString(36).slice(2, 8);
   const clean = (s) => String(s || '').trim().slice(0, 14);
   const broadcast = (msg) => net.conns.forEach((c) => c && c.open && c.send(msg));
   const needPeer = () => {
-    if (typeof Peer !== 'undefined') return true;
-    alert('Online play could not load. Check your connection, or choose "Same device".');
+    if (typeof WebSocket !== 'undefined' && !/YOUR-SERVER/.test(SERVER_URL)) return true;
+    alert('Online play is not set up yet. Choose "Same device" instead.');
     return false;
   };
 
-  // STUN finds a direct path between the two phones; TURN relays the game when a
-  // direct path is impossible (mobile networks, strict Wi-Fi).
-  const ICE = { config: { sdpSemantics: 'unified-plan', iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-    { urls: 'stun:global.stun.twilio.com:3478' },
-    { urls: ['turn:eu-0.turn.peerjs.com:3478', 'turn:us-0.turn.peerjs.com:3478'], username: 'peerjs', credential: 'peerjsp' },
-    { urls: ['turn:openrelay.metered.ca:80', 'turn:openrelay.metered.ca:443', 'turn:openrelay.metered.ca:443?transport=tcp'], username: 'openrelayproject', credential: 'openrelayproject' },
-  ] } };
+  // Wake a sleeping free server early, so it is ready by the time a room is created.
+  if (!/YOUR-SERVER/.test(SERVER_URL)) {
+    try { fetch(SERVER_URL.replace(/^ws/, 'http').replace(/\/ws$/, '/health'), { mode: 'no-cors' }); } catch (e) {}
+  }
 
-  // Phones suspend the page (and drop its connection to the PeerJS signalling
-  // server) when you switch to another app, e.g. to paste the invite link into
-  // WhatsApp. This brings the room back online when you return, instead of
-  // treating the dropped connection as a fatal error.
-  function keepOnline(peer) {
-    let tries = 0, timer = null;
-    const revive = () => {
-      if (net.peer !== peer || peer.destroyed || !peer.disconnected) { tries = 0; return; }
-      try { peer.reconnect(); } catch (e) {}
-      if (++tries < 15) { clearTimeout(timer); timer = setTimeout(revive, 1500); }
-    };
-    const wake = () => { if (document.visibilityState === 'visible') revive(); };
-    document.addEventListener('visibilitychange', wake);
-    window.addEventListener('pageshow', wake);
-    window.addEventListener('online', revive);
-    peer.on('disconnected', () => setTimeout(revive, 300));
-    peer.on('open', () => { tries = 0; });
-    peer.on('close', () => {
-      clearTimeout(timer);
-      document.removeEventListener('visibilitychange', wake);
-      window.removeEventListener('pageshow', wake);
-      window.removeEventListener('online', revive);
-    });
-    return revive;
+  // One connection to the room server. It reconnects by itself and resumes the
+  // same seat, so a phone that briefly leaves the page (e.g. to open WhatsApp)
+  // keeps its room instead of losing it.
+  class Link {
+    constructor(role, room, h) {
+      Object.assign(this, { role, room, h, token: rand() + rand() + rand(), ws: null, ready: false, closed: false, tries: 0, queue: [], timer: null, pong: null });
+      this.wake = () => { if (document.visibilityState === 'visible') this.nudge(); };
+      document.addEventListener('visibilitychange', this.wake);
+      window.addEventListener('pageshow', this.wake);
+      window.addEventListener('online', this.wake);
+      this.connect();
+    }
+    connect() {
+      if (this.closed) return;
+      let ws;
+      try { ws = new WebSocket(SERVER_URL); } catch (e) { return this.later(); }
+      this.ws = ws;
+      ws.onopen = () => this.raw(this.ready
+        ? { type: 'resume', room: this.room, token: this.token }
+        : { type: this.role === 'host' ? 'create' : 'join', room: this.room, token: this.token });
+      ws.onmessage = (e) => { let m; try { m = JSON.parse(e.data); } catch (err) { return; } this.on(m); };
+      ws.onclose = () => this.lost(ws);
+      ws.onerror = () => {};
+    }
+    lost(ws) {
+      if (this.ws !== ws) return;
+      this.ws = null;
+      try { ws.onclose = null; ws.close(); } catch (e) {}
+      this.later();
+    }
+    later() {
+      if (this.closed) return;
+      clearTimeout(this.timer);
+      this.tries++;
+      // Not connected yet after ~1 minute of trying: the server is unreachable.
+      if (!this.ready && this.tries > 12) { this.closed = true; return this.h.onFail(); }
+      this.timer = setTimeout(() => this.connect(), Math.min(1000 * this.tries, 5000));
+    }
+    // Called when the page comes back to the front: check the socket is really alive.
+    nudge() {
+      if (this.closed) return;
+      if (!this.ws || this.ws.readyState > 1) { this.tries = 0; clearTimeout(this.timer); this.connect(); return; }
+      if (this.ws.readyState === 1) {
+        const ws = this.ws;
+        this.raw({ type: 'ping' });
+        clearTimeout(this.pong);
+        this.pong = setTimeout(() => this.lost(ws), 4000);
+      }
+    }
+    raw(o) {
+      if (this.ws && this.ws.readyState === 1) { try { this.ws.send(JSON.stringify(o)); return true; } catch (e) {} }
+      return false;
+    }
+    send(to, data) {
+      const o = { type: 'relay', to, data };
+      if (!this.ready || !this.raw(o)) { this.queue.push(o); if (this.queue.length > 200) this.queue.shift(); }
+    }
+    kick(gid) { this.raw({ type: 'kick', gid }); }
+    on(m) {
+      if (m.type === 'created' || m.type === 'joined' || m.type === 'resumed') {
+        this.ready = true; this.tries = 0;
+        if (m.type !== 'resumed') this.h.onReady(m);
+        const q = this.queue; this.queue = []; q.forEach((o) => this.raw(o));
+      } else if (m.type === 'pong') clearTimeout(this.pong);
+      else if (m.type === 'msg') this.h.onMessage(m.from, m.data);
+      else if (m.type === 'guest-joined') this.h.onGuestJoined(m.gid);
+      else if (m.type === 'guest-left') this.h.onGuestLeft(m.gid);
+      else if (m.type === 'host-left') this.h.onHostLeft();
+      else if (m.type === 'error') this.h.onError(m.reason);
+    }
+    close() {
+      this.closed = true;
+      clearTimeout(this.timer); clearTimeout(this.pong);
+      document.removeEventListener('visibilitychange', this.wake);
+      window.removeEventListener('pageshow', this.wake);
+      window.removeEventListener('online', this.wake);
+      this.raw({ type: 'leave' });
+      try { this.ws && this.ws.close(); } catch (e) {}
+      this.ws = null;
+    }
   }
 
   function createRoom(hostName, attempt = 0) {
@@ -171,31 +225,43 @@
     lobby = [{ name: clean(hostName), color: COLORS[0] }];
     myIdx = 0;
     const id = 'cwsl-' + rand();
-    const peer = (net.peer = new Peer(id, ICE));
+    const guests = {}; // gid -> object that looks like a connection to hostData()/hostLeft()
+    const face = (gid) => guests[gid] || (guests[gid] = {
+      gid, open: true,
+      send: (m) => link.send(gid, m),
+      close: () => link.kick(gid),
+    });
     let opened = false;
-    const revive = keepOnline(peer);
-    peer.on('open', () => {
-      if (opened) return; // fired again after a reconnect: the lobby is already showing
-      opened = true;
-      net.roomId = id;
-      // Use the page's full address (location.origin is "null" for local files)
-      const url = `${location.href.split('?')[0].split('#')[0]}?room=${id}`;
-      $('fileWarn').hidden = location.protocol !== 'file:';
-      $('shareLink').value = url;
-      $('waBtn').href = 'https://wa.me/?text=' + encodeURIComponent('Play Snakes & Ladders with me: ' + url);
-      show('lobby'); renderLobby();
-    });
-    peer.on('connection', (c) => {
-      c.on('data', (m) => hostData(c, m));
-      c.on('close', () => hostLeft(c));
-    });
-    peer.on('error', (err) => {
-      if (opened) { revive(); return; } // room already exists: a dropped connection is not fatal
-      if (net.peer !== peer) return;
-      closeNet();
-      if (err && err.type === 'unavailable-id' && attempt < 3) return createRoom(hostName, attempt + 1);
-      alert('Could not create a room. Please try again.'); toSetup();
-    });
+    const link = (net.link = new Link('host', id, {
+      onReady: () => {
+        if (opened) return;
+        opened = true;
+        net.roomId = id;
+        // Use the page's full address (location.origin is "null" for local files)
+        const url = `${location.href.split('?')[0].split('#')[0]}?room=${id}`;
+        $('fileWarn').hidden = location.protocol !== 'file:';
+        $('shareLink').value = url;
+        $('waBtn').href = 'https://wa.me/?text=' + encodeURIComponent('Play Snakes & Ladders with me: ' + url);
+        show('lobby'); renderLobby();
+      },
+      onGuestJoined: (gid) => { face(gid); },
+      onMessage: (gid, m) => hostData(face(gid), m),
+      onGuestLeft: (gid) => { const c = guests[gid]; if (c) { c.open = false; delete guests[gid]; hostLeft(c); } },
+      onHostLeft: () => {},
+      onError: (reason) => {
+        if (net.link !== link) return;
+        closeNet();
+        if (reason === 'taken' && attempt < 3) return createRoom(hostName, attempt + 1);
+        alert(reason === 'expired' ? 'The room closed because you were away for too long.' : 'Could not create a room. Please try again.');
+        toSetup();
+      },
+      onFail: () => {
+        if (net.link !== link) return;
+        closeNet();
+        alert('Could not reach the game server. Check your connection and try again.');
+        toSetup();
+      },
+    }));
   }
 
   function hostData(c, m) {
@@ -266,47 +332,27 @@
     $('joinBtn').disabled = true;
     $('joinMsg').textContent = 'Connecting…';
     net.role = 'guest'; net.roomId = roomId; net.started = false;
-    let connected = false, inFlight = false, tries = 0, lastErr = '', retryTimer = null;
+    let connected = false;
     const fail = (msg) => {
-      clearTimeout(giveUp); clearTimeout(retryTimer);
+      clearTimeout(giveUp);
       closeNet();
       $('joinMsg').textContent = msg; $('joinBtn').disabled = false; show('join');
     };
-    // The host may be in another app (e.g. sending the link on WhatsApp) and
-    // come back online a few seconds later, so keep trying for 90 seconds.
-    const giveUp = setTimeout(() => {
-      if (!connected) fail('Could not reach the room' + (lastErr ? ' (' + lastErr + ')' : '') + '. Make sure your friend has the game open, then try again.');
-    }, 90000);
-    const peer = (net.peer = new Peer(undefined, ICE));
-    const revive = keepOnline(peer);
-    const retry = () => { inFlight = false; clearTimeout(retryTimer); retryTimer = setTimeout(attempt, 2500); };
-    function attempt() {
-      if (connected || inFlight || net.peer !== peer || peer.destroyed) return;
-      if (peer.disconnected) { revive(); clearTimeout(retryTimer); retryTimer = setTimeout(attempt, 1500); return; }
-      inFlight = true;
-      $('joinMsg').textContent = tries ? 'Waiting for the host… (' + tries + ')' : 'Connecting…';
-      tries++;
-      const c = (net.conn = peer.connect(roomId, { reliable: true }));
-      let opened = false;
-      const stall = setTimeout(() => { if (!opened) { try { c.close(); } catch (e) {} retry(); } }, 10000);
-      c.on('open', () => {
-        opened = true; connected = true; clearTimeout(stall); clearTimeout(giveUp);
-        c.send({ t: 'join', name: clean(name) || 'Player' });
-      });
-      c.on('data', (m) => guestData(m, fail));
-      c.on('error', (e) => { lastErr = (e && e.type) || lastErr; });
-      c.on('close', () => {
-        clearTimeout(stall);
-        if (!opened) { if (net.peer === peer) retry(); return; }
-        if (net.role === 'guest' && !over) { alert('The host left the game.'); toSetup(); }
-      });
-    }
-    peer.on('open', attempt);
-    peer.on('error', (err) => {
-      if (connected) return;
-      lastErr = (err && err.type) || lastErr;
-      retry();
-    });
+    const giveUp = setTimeout(() => { if (!connected) fail('Could not reach the room. Ask your friend for a fresh link.'); }, 70000);
+    const link = (net.link = new Link('guest', roomId, {
+      onReady: () => { connected = true; clearTimeout(giveUp); link.send('host', { t: 'join', name: clean(name) || 'Player' }); },
+      onMessage: (from, m) => guestData(m, fail),
+      onGuestJoined: () => {}, onGuestLeft: () => {},
+      onHostLeft: () => { if (net.link === link && !over) { alert('The host left the game.'); toSetup(); } },
+      onError: (reason) => {
+        if (net.link !== link) return;
+        if (!connected) return fail(reason === 'no-room' || reason === 'expired'
+          ? 'This room no longer exists. Ask your friend for a fresh link.'
+          : reason === 'full' ? 'This room is full.' : 'Could not join the room. Please try again.');
+        alert('You were disconnected from the game.'); toSetup();
+      },
+      onFail: () => { if (net.link === link) fail('Could not reach the game server. Check your connection and try again.'); },
+    }));
   }
 
   function guestData(m, fail) {
@@ -325,10 +371,9 @@
   }
 
   function closeNet() {
-    const { peer, conn } = net;
-    net.role = null; net.peer = net.conn = null; net.conns = []; net.started = false; lobby = [];
-    try { conn && conn.close(); } catch (e) {}
-    try { peer && peer.destroy(); } catch (e) {}
+    const { link } = net;
+    net.role = null; net.link = null; net.conns = []; net.started = false; lobby = [];
+    try { link && link.close(); } catch (e) {}
   }
 
   $('copyBtn').addEventListener('click', async () => {
@@ -536,7 +581,7 @@
   function requestRoll() {
     if (busy || over) return;
     if (net.role === 'guest') {
-      net.conn.send({ t: 'rollReq' });
+      net.link.send('host', { t: 'rollReq' });
       $('rollBtn').disabled = true;
       return;
     }
