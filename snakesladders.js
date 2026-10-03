@@ -118,15 +118,16 @@
   });
 
   // ---------- Online rooms (WebSocket room server) ----------
-  // Put the address of your deployed room server here (see snakes-server/README.md).
+  // Optional: address of your own room server (see snakes-server/README.md).
+  // Leave the placeholder to use the free public MQTT broker instead (no server needed).
   // It can also be set from the page by defining window.SNAKES_SERVER_URL before this script.
   const SERVER_URL = window.SNAKES_SERVER_URL || 'wss://YOUR-SERVER.onrender.com/ws';
   const rand = () => Math.random().toString(36).slice(2, 8);
   const clean = (s) => String(s || '').trim().slice(0, 14);
   const broadcast = (msg) => net.conns.forEach((c) => c && c.open && c.send(msg));
   const needPeer = () => {
-    if (typeof WebSocket !== 'undefined' && !/YOUR-SERVER/.test(SERVER_URL)) return true;
-    alert('Online play is not set up yet. Choose "Same device" instead.');
+    if (typeof WebSocket !== 'undefined') return true;
+    alert('Online play is not supported in this browser. Choose "Same device" instead.');
     return false;
   };
 
@@ -138,7 +139,7 @@
   // One connection to the room server. It reconnects by itself and resumes the
   // same seat, so a phone that briefly leaves the page (e.g. to open WhatsApp)
   // keeps its room instead of losing it.
-  class Link {
+  class WsLink {
     constructor(role, room, h) {
       Object.assign(this, { role, room, h, token: rand() + rand() + rand(), ws: null, ready: false, closed: false, tries: 0, queue: [], timer: null, pong: null });
       this.wake = () => { if (document.visibilityState === 'visible') this.nudge(); };
@@ -217,6 +218,158 @@
     }
   }
 
+  // ---------- Serverless option: public MQTT broker ----------
+  // Used when SERVER_URL above is not set. Players exchange the same messages
+  // through a free public MQTT broker (no account, no server of your own).
+  // Room ids are random, so the topic names act as the "password".
+  const MQTT_URL = window.SNAKES_MQTT_URL || 'wss://broker.emqx.io:8084/mqtt';
+  let mqttLoading = null;
+  const loadMqtt = () => mqttLoading || (mqttLoading = new Promise((ok, no) => {
+    if (typeof mqtt !== 'undefined') return ok();
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/mqtt@5/dist/mqtt.min.js';
+    s.onload = ok;
+    s.onerror = () => { mqttLoading = null; no(new Error('mqtt')); };
+    document.head.appendChild(s);
+  }));
+
+  class MqttLink {
+    constructor(role, room, h) {
+      Object.assign(this, {
+        role, room, h, id: rand() + rand() + rand(), base: 'cwsl1/' + room, c: null,
+        ready: false, dead: false, known: {}, grace: {}, hostTimer: null, checkTimer: null,
+        seenHost: false, joinMsg: null, hostGone: false,
+      });
+      this.failTimer = setTimeout(() => { if (!this.ready) this.fail(); }, 40000);
+      this.wake = () => {
+        if (document.visibilityState !== 'visible' || this.dead || !this.c) return;
+        try { if (!this.c.connected && !this.c.reconnecting) this.c.reconnect(); } catch (e) {}
+      };
+      document.addEventListener('visibilitychange', this.wake);
+      window.addEventListener('pageshow', this.wake);
+      window.addEventListener('online', this.wake);
+      loadMqtt().then(() => this.connect(), () => this.fail());
+    }
+    fail() { if (this.dead) return; this.close(); this.h.onFail(); }
+    connect() {
+      if (this.dead) return;
+      const host = this.role === 'host';
+      const will = host
+        ? { topic: this.base + '/host', payload: JSON.stringify({ up: false }), qos: 1, retain: true }
+        : { topic: this.base + '/h', payload: JSON.stringify({ from: this.id, bye: 1 }), qos: 1, retain: false };
+      const c = (this.c = mqtt.connect(MQTT_URL, {
+        clientId: 'cwsl_' + this.id, clean: true, keepalive: 20, reconnectPeriod: 2000, connectTimeout: 15000, will,
+      }));
+      c.on('connect', () => this.onConnect());
+      c.on('message', (topic, buf) => this.onMsg(topic, String(buf)));
+      c.on('error', () => {});
+    }
+    onConnect() {
+      if (this.dead) return;
+      const c = this.c, b = this.base;
+      if (this.role === 'host') {
+        c.subscribe([b + '/h', b + '/j/+'], { qos: 1 });
+        c.publish(b + '/host', JSON.stringify({ up: true }), { qos: 1, retain: true });
+        if (!this.ready) { this.ready = true; clearTimeout(this.failTimer); this.h.onReady(); }
+      } else {
+        c.subscribe([b + '/host', b + '/g/' + this.id], { qos: 1 });
+        if (!this.ready && !this.checkTimer) {
+          // No host status at all means this room does not exist.
+          this.checkTimer = setTimeout(() => {
+            if (!this.seenHost && !this.dead) { this.close(); this.h.onError('no-room'); }
+          }, MqttLink.CHECK_MS);
+        }
+      }
+    }
+    onMsg(topic, text) {
+      if (this.dead || !text) return;
+      let m; try { m = JSON.parse(text); } catch (e) { return; }
+      const b = this.base;
+      if (this.role === 'host') {
+        if (topic.indexOf(b + '/j/') === 0) this.c.publish(topic, '', { qos: 1, retain: true }); // mailbox read: clear it
+        if (topic === b + '/h' || topic.indexOf(b + '/j/') === 0) this.fromGuest(m);
+      } else if (topic === b + '/host') this.hostStatus(m);
+      else if (topic === b + '/g/' + this.id && m.data !== undefined) this.h.onMessage('host', m.data);
+    }
+    fromGuest(m) {
+      const from = m && m.from;
+      if (!from) return;
+      if (m.bye) { // connection dropped: give the player time to come back
+        clearTimeout(this.grace[from]);
+        this.grace[from] = setTimeout(() => this.gone(from), MqttLink.GUEST_GRACE_MS);
+        return;
+      }
+      if (m.leave) return this.gone(from);
+      clearTimeout(this.grace[from]); delete this.grace[from];
+      const d = m.data;
+      if (!this.known[from]) {
+        if (!(d && d.t === 'join')) return;
+        this.known[from] = true;
+        this.h.onGuestJoined(from);
+      } else if (d && d.t === 'join') {
+        if (this.h.onRejoin) this.h.onRejoin(from);
+        return;
+      }
+      this.h.onMessage(from, d);
+    }
+    gone(from) {
+      clearTimeout(this.grace[from]); delete this.grace[from];
+      if (this.known[from]) { delete this.known[from]; this.h.onGuestLeft(from); }
+    }
+    hostStatus(m) {
+      this.seenHost = true;
+      clearTimeout(this.checkTimer);
+      if (m.left) {
+        if (this.hostGone) return;
+        this.hostGone = true;
+        return this.ready ? this.h.onHostLeft() : (this.close(), this.h.onError('no-room'));
+      }
+      if (!this.ready) { this.ready = true; clearTimeout(this.failTimer); this.h.onReady(); }
+      else if (m.up && this.joinMsg) this.publishJoin(); // host came back: say hello again
+      if (m.up) { clearTimeout(this.hostTimer); this.hostTimer = null; }
+      else if (!this.hostTimer) {
+        this.hostTimer = setTimeout(() => { if (!this.dead) this.h.onHostLeft(); }, MqttLink.HOST_GRACE_MS);
+      }
+    }
+    publishJoin() {
+      if (this.c && this.joinMsg) this.c.publish(this.base + '/j/' + this.id, JSON.stringify(this.joinMsg), { qos: 1, retain: true });
+    }
+    send(to, data) {
+      if (!this.c || this.dead) return;
+      if (this.role === 'host') this.c.publish(this.base + '/g/' + to, JSON.stringify({ data }), { qos: 1 });
+      else if (data && data.t === 'join') { this.joinMsg = { from: this.id, data }; this.publishJoin(); }
+      else this.c.publish(this.base + '/h', JSON.stringify({ from: this.id, data }), { qos: 1 });
+    }
+    kick(gid) { delete this.known[gid]; }
+    close() {
+      if (this.dead) return;
+      this.dead = true;
+      clearTimeout(this.failTimer); clearTimeout(this.checkTimer); clearTimeout(this.hostTimer);
+      Object.keys(this.grace).forEach((k) => clearTimeout(this.grace[k]));
+      document.removeEventListener('visibilitychange', this.wake);
+      window.removeEventListener('pageshow', this.wake);
+      window.removeEventListener('online', this.wake);
+      const c = this.c, b = this.base;
+      this.c = null;
+      if (!c) return;
+      try {
+        if (this.role === 'host') c.publish(b + '/host', JSON.stringify({ up: false, left: true }), { qos: 1, retain: true });
+        else {
+          c.publish(b + '/h', JSON.stringify({ from: this.id, leave: 1 }), { qos: 1 });
+          c.publish(b + '/j/' + this.id, '', { qos: 1, retain: true });
+        }
+      } catch (e) {}
+      setTimeout(() => { try { c.end(false); } catch (e) {} }, 400);
+    }
+  }
+  MqttLink.CHECK_MS = 10000;        // wait this long for a room to show up
+  MqttLink.GUEST_GRACE_MS = 45000;  // a guest may be away this long
+  MqttLink.HOST_GRACE_MS = 90000;   // the host may be away this long
+
+  const USE_SERVER = !/YOUR-SERVER/.test(SERVER_URL);
+  const Link = USE_SERVER ? WsLink : MqttLink;
+  if (!USE_SERVER) loadMqtt().catch(() => {});
+
   function createRoom(hostName, attempt = 0) {
     if (!needPeer()) return;
     $('startBtn').disabled = true;
@@ -245,6 +398,7 @@
         show('lobby'); renderLobby();
       },
       onGuestJoined: (gid) => { face(gid); },
+      onRejoin: () => { if (!net.started) broadcastLobby(); },
       onMessage: (gid, m) => hostData(face(gid), m),
       onGuestLeft: (gid) => { const c = guests[gid]; if (c) { c.open = false; delete guests[gid]; hostLeft(c); } },
       onHostLeft: () => {},
