@@ -1739,6 +1739,18 @@ const GAMES = [
     previewId: "home-ws-preview",
     previewClass: "ws-mini-preview",
     renderPreview: renderWordSearchPreview
+  },
+  {
+    id: "snakesladders-single",
+    href: "snakesladders-single.html",
+    footerLabel: "Snakes &amp; Ladders",
+    badge: "Snakes & Ladders",
+    heading: "Classic Snakes &amp; Ladders.",
+    description: "Ascend to the top and avoid the serpent's bite in this classic race of luck and strategy. New board every day!",
+    buttonLabel: "Start Climbing →",
+    cardClass: "sl-card",
+    image: "assets/snakes-card-art.webp",
+    renderPreview: () => {}
   }
 ];
 
@@ -1817,6 +1829,7 @@ function renderHeader(activeId) {
         <nav class="nav-links" aria-label="Main navigation">
           <a href="create.html"${navClass("create", "nav-create")}>Create Crossword</a>
           <a href="wordsearch.html"${navClass("wordsearch", "nav-secondary")}>Play Word Search</a>
+          <a href="snakesladders-single.html"${navClass("snakesladders-single", "nav-secondary")}>Snakes &amp; Ladders</a>
         </nav>
       </div>
     </header>
@@ -1859,7 +1872,22 @@ function renderGameCards(containerId) {
   const container = $(containerId);
   if (!container) return;
 
-  container.innerHTML = GAMES.map(game => `
+  container.innerHTML = GAMES.map(game => {
+    // Games with an `image` (e.g. Snakes & Ladders) get an illustrated
+    // card; the others get the usual live preview grid.
+    if (game.image) {
+      return `
+    <a href="${game.href}" class="card game-card ${game.cardClass || ""}"
+       aria-label="Play ${game.badge}">
+      <img class="sl-art" src="${game.image}" alt="${game.badge} artwork"
+           width="380" height="370" loading="lazy">
+      <h2>${game.heading}</h2>
+      <p>${game.description}</p>
+      <span class="sl-btn">${game.buttonLabel}</span>
+    </a>`;
+    }
+
+    return `
     <div class="card game-card">
       <div class="preview-grid ${game.previewClass}" id="${game.previewId}"
            aria-label="Preview of ${game.badge}"></div>
@@ -1871,8 +1899,8 @@ function renderGameCards(containerId) {
       <a href="${game.href}" class="btn btn-primary">
         ${game.buttonLabel}
       </a>
-    </div>
-  `).join("\n");
+    </div>`;
+  }).join("\n");
 
   GAMES.forEach(game => game.renderPreview());
 }
