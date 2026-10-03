@@ -127,6 +127,16 @@
     return false;
   };
 
+  // STUN finds a direct path between the two phones; TURN relays the game when a
+  // direct path is impossible (mobile networks, strict Wi-Fi).
+  const ICE = { config: { sdpSemantics: 'unified-plan', iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:global.stun.twilio.com:3478' },
+    { urls: ['turn:eu-0.turn.peerjs.com:3478', 'turn:us-0.turn.peerjs.com:3478'], username: 'peerjs', credential: 'peerjsp' },
+    { urls: ['turn:openrelay.metered.ca:80', 'turn:openrelay.metered.ca:443', 'turn:openrelay.metered.ca:443?transport=tcp'], username: 'openrelayproject', credential: 'openrelayproject' },
+  ] } };
+
   // Phones suspend the page (and drop its connection to the PeerJS signalling
   // server) when you switch to another app, e.g. to paste the invite link into
   // WhatsApp. This brings the room back online when you return, instead of
@@ -161,7 +171,7 @@
     lobby = [{ name: clean(hostName), color: COLORS[0] }];
     myIdx = 0;
     const id = 'cwsl-' + rand();
-    const peer = (net.peer = new Peer(id));
+    const peer = (net.peer = new Peer(id, ICE));
     let opened = false;
     const revive = keepOnline(peer);
     peer.on('open', () => {
@@ -256,23 +266,47 @@
     $('joinBtn').disabled = true;
     $('joinMsg').textContent = 'Connecting…';
     net.role = 'guest'; net.roomId = roomId; net.started = false;
+    let connected = false, inFlight = false, tries = 0, lastErr = '', retryTimer = null;
     const fail = (msg) => {
-      clearTimeout(timer);
+      clearTimeout(giveUp); clearTimeout(retryTimer);
       closeNet();
       $('joinMsg').textContent = msg; $('joinBtn').disabled = false; show('join');
     };
-    const timer = setTimeout(() => fail('Could not reach the room. Ask your friend for a fresh link.'), 12000);
-    let connected = false;
-    const peer = (net.peer = new Peer());
-    peer.on('open', () => {
+    // The host may be in another app (e.g. sending the link on WhatsApp) and
+    // come back online a few seconds later, so keep trying for 90 seconds.
+    const giveUp = setTimeout(() => {
+      if (!connected) fail('Could not reach the room' + (lastErr ? ' (' + lastErr + ')' : '') + '. Make sure your friend has the game open, then try again.');
+    }, 90000);
+    const peer = (net.peer = new Peer(undefined, ICE));
+    const revive = keepOnline(peer);
+    const retry = () => { inFlight = false; clearTimeout(retryTimer); retryTimer = setTimeout(attempt, 2500); };
+    function attempt() {
+      if (connected || inFlight || net.peer !== peer || peer.destroyed) return;
+      if (peer.disconnected) { revive(); clearTimeout(retryTimer); retryTimer = setTimeout(attempt, 1500); return; }
+      inFlight = true;
+      $('joinMsg').textContent = tries ? 'Waiting for the host… (' + tries + ')' : 'Connecting…';
+      tries++;
       const c = (net.conn = peer.connect(roomId, { reliable: true }));
-      c.on('open', () => { connected = true; clearTimeout(timer); c.send({ t: 'join', name: clean(name) || 'Player' }); });
+      let opened = false;
+      const stall = setTimeout(() => { if (!opened) { try { c.close(); } catch (e) {} retry(); } }, 10000);
+      c.on('open', () => {
+        opened = true; connected = true; clearTimeout(stall); clearTimeout(giveUp);
+        c.send({ t: 'join', name: clean(name) || 'Player' });
+      });
       c.on('data', (m) => guestData(m, fail));
+      c.on('error', (e) => { lastErr = (e && e.type) || lastErr; });
       c.on('close', () => {
+        clearTimeout(stall);
+        if (!opened) { if (net.peer === peer) retry(); return; }
         if (net.role === 'guest' && !over) { alert('The host left the game.'); toSetup(); }
       });
+    }
+    peer.on('open', attempt);
+    peer.on('error', (err) => {
+      if (connected) return;
+      lastErr = (err && err.type) || lastErr;
+      retry();
     });
-    peer.on('error', () => { if (!connected) fail('Could not reach the room. Ask your friend for a fresh link.'); });
   }
 
   function guestData(m, fail) {
