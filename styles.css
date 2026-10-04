@@ -1389,3 +1389,37 @@ a {
   transition: filter .2s, transform .2s;
 }
 .sl-card:hover .sl-btn { filter: brightness(1.07); transform: translateY(-1px); }
+
+
+/* ===== Slice game card (inside .games-grid) =====
+   sx- prefix keeps it separate from the Snakes & Ladders card (sl-).
+   Font: Fredoka, linked in index.html. */
+.sx-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:24px 24px 28px;border-radius:24px;text-decoration:none;color:#fff;font-family:'Fredoka',system-ui,sans-serif;background:radial-gradient(circle at 18% 8%,rgba(255,210,63,.35),transparent 40%),radial-gradient(circle at 92% 92%,rgba(34,211,238,.28),transparent 45%),linear-gradient(160deg,#3a0ca3,#7b2ff7 50%,#f107a3);border:2px solid #b78cff;box-shadow:0 10px 24px rgba(58,12,163,.35);transition:transform .2s,box-shadow .2s}
+.sx-card::before{content:"";position:absolute;inset:10px;border:2px solid rgba(255,255,255,.3);border-radius:16px;pointer-events:none}
+.sx-card:hover{transform:translateY(-4px);box-shadow:0 16px 30px rgba(58,12,163,.45)}
+.sx-card:focus-visible{outline:3px solid #ffd23f;outline-offset:4px}
+.sx-logo{font-size:2.8rem;font-weight:700;line-height:1;margin-top:2px;filter:drop-shadow(0 4px 0 #0a0616)}
+.sx-logo span{display:inline-block;text-shadow:-3px -3px 0 #1b1033,3px -3px 0 #1b1033,-3px 3px 0 #1b1033,3px 3px 0 #1b1033,0 -4px 0 #1b1033,0 4px 0 #1b1033,-4px 0 0 #1b1033,4px 0 0 #1b1033}
+.sx-logo span:nth-child(1){color:#ffc21a;transform:rotate(-6deg)}
+.sx-logo span:nth-child(2){color:#7ed321;transform:rotate(3deg)}
+.sx-logo span:nth-child(3){color:#22b8ff;transform:rotate(-3deg)}
+.sx-logo span:nth-child(4){color:#ff8a1f;transform:rotate(4deg)}
+.sx-logo span:nth-child(5){color:#ff4d8d;transform:rotate(-4deg)}
+.sx-art{position:relative;width:100%;max-width:310px;height:190px}
+.sx-art::before{content:"";position:absolute;inset:6px 14px;border-radius:18px;border:4px solid #262b36;box-shadow:inset 0 0 30px rgba(30,12,0,.5),0 5px 0 #0b0e15;background:repeating-linear-gradient(90deg,rgba(60,28,8,.12) 0 2px,transparent 2px 11px),radial-gradient(ellipse at 50% 15%,#d99b5b,#b06a2f 55%,#7a4219)}
+.sx-f{position:absolute;font-size:44px;line-height:1;filter:drop-shadow(0 4px 3px rgba(0,0,0,.35));animation:sx-bob 3s ease-in-out infinite}
+.sx-f.a{left:12%;top:14%;rotate:-14deg}
+.sx-f.b{right:12%;top:12%;rotate:16deg;animation-delay:-1s}
+.sx-f.c{left:14%;bottom:12%;rotate:10deg;animation-delay:-2s}
+.sx-f.d{right:14%;bottom:14%;rotate:-8deg;animation-delay:-.5s}
+.sx-wm{position:absolute;left:50%;top:50%;display:block;width:1.25em;height:1.1em;line-height:1.1;text-align:center;font-size:92px;filter:drop-shadow(0 5px 3px rgba(0,0,0,.35))}
+.sx-wm.h1{clip-path:polygon(0 0,100% 0,0 100%);transform:translate(-50%,-50%) translate(-8px,-8px) rotate(-6deg)}
+.sx-wm.h2{clip-path:polygon(100% 0,100% 100%,0 100%);transform:translate(-50%,-50%) translate(8px,8px) rotate(6deg)}
+.sx-slash{position:absolute;left:50%;top:50%;width:240px;height:7px;margin:-3px 0 0 -120px;transform:rotate(-42deg);border-radius:99px;background:linear-gradient(90deg,transparent,#cfe8ff 25%,#fff 70%,transparent);box-shadow:0 0 14px #9fd4ff}
+.sx-d{position:absolute;border-radius:50%;background:#ff3d6e;opacity:.85}
+.sx-tag{padding:5px 18px;border-radius:12px;font-weight:700;font-size:.95rem;letter-spacing:.05em;color:#ffd84a;background:linear-gradient(180deg,#667184,#363d4b 20%,#222733);border:2px solid #0b0e15;box-shadow:inset 0 2px 0 rgba(255,255,255,.3),0 3px 0 #070a10}
+.sx-title{font-size:1.75rem;font-weight:700;margin-top:4px;text-shadow:0 3px 0 rgba(43,16,85,.5)}
+.sx-desc{font-size:1rem;line-height:1.45;max-width:38ch;color:#f6ecff}
+.sx-btn{margin-top:6px;padding:12px 28px;border-radius:8px;border:1px solid #b87400;font-size:1.1rem;font-weight:700;color:#2b1055;background:linear-gradient(180deg,#ffe066,#f5a800);box-shadow:0 3px 0 #a86a00}
+@keyframes sx-bob{50%{translate:0 -6px}}
+@media(prefers-reduced-motion:reduce){.sx-f{animation:none}.sx-card{transition:none}.sx-card:hover{transform:none}}
