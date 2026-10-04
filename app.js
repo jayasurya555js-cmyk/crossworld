@@ -1751,6 +1751,31 @@ const GAMES = [
     cardClass: "sl-card",
     image: "assets/snakes-card-art.webp",
     renderPreview: () => {}
+  },
+  {
+    id: "slice",
+    href: "slice.html",
+    footerLabel: "Slice",
+    badge: "Slice",
+    // Fully custom card markup (styled by .sx-* rules in styles.css)
+    cardHtml: `
+    <a class="sx-card" href="slice.html" aria-label="Play Slice, the fruit slicing game">
+  <div class="sx-logo" aria-hidden="true"><span>S</span><span>l</span><span>i</span><span>c</span><span>e</span></div>
+  <div class="sx-art" aria-hidden="true">
+    <span class="sx-f a">🍊</span><span class="sx-f b">🥕</span><span class="sx-f c">🍓</span><span class="sx-f d">💣</span>
+    <span class="sx-wm h1">🍉</span><span class="sx-wm h2">🍉</span>
+    <span class="sx-slash"></span>
+    <span class="sx-d" style="width:10px;height:10px;left:44%;top:30%"></span>
+    <span class="sx-d" style="width:7px;height:7px;left:58%;top:64%"></span>
+    <span class="sx-d" style="width:12px;height:12px;left:36%;top:58%"></span>
+    <span class="sx-d" style="width:6px;height:6px;left:64%;top:36%"></span>
+  </div>
+  <span class="sx-tag">Arcade Game</span>
+  <h3 class="sx-title">Swipe. Slice. Splash!</h3>
+  <p class="sx-desc">Slice juicy fruits and veggies, dodge the bombs and grab power-ups. Three game modes and new blades to unlock.</p>
+  <span class="sx-btn">Start Slicing →</span>
+</a>`,
+    renderPreview: () => {}
   }
 ];
 
@@ -1873,6 +1898,9 @@ function renderGameCards(containerId) {
   if (!container) return;
 
   container.innerHTML = GAMES.map(game => {
+    // Games with their own hand-built card markup (e.g. Slice).
+    if (game.cardHtml) return game.cardHtml;
+
     // Games with an `image` (e.g. Snakes & Ladders) get an illustrated
     // card; the others get the usual live preview grid.
     if (game.image) {
