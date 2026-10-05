@@ -10,7 +10,6 @@
 <meta property="og:description" content="Swipe to slice juicy fruits and veggies, dodge the bombs and chase a high score.">
 <meta property="og:url" content="https://cross-world.in/slice.html">
 <meta property="og:type" content="website">
-</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-J9Z5E1VNY1"></script>
 <script>
@@ -118,12 +117,12 @@ var ITEMS=[['🍉','#ff3d6e'],['🍎','#ff4040'],['🍊','#ff9a1f'],['🍋','#ff
 var PW={freeze:['❄️','#7fe3ff'],dbl:['⭐','#ffd23f'],life:['❤️','#ff3d81'],rain:['🎉','#b6f500'],slow:['🐌','#c9a8ff'],mag:['🧲','#ff7a7a'],clear:['💨','#9ad0ff']};
 var cf=document.getElementById('cf'),cx=cf.getContext('2d');
 var freezeT,dblT,lastPower,firstPow,fruits,halves,parts,pops,trail,splats,slashes,pend,curLvl,score,lives,running,spawnT,elapsed,last,flash,best=0;
-var mode='classic',slowT=0,magT=0,csT=0,shake=0,skin='kunai',tleft=0,limit=0,lastSec=0,mp=null,conf=[],muted=false,AC=null;
+var graceT=0,DPR=1,needSize=false,mode='classic',slowT=0,magT=0,csT=0,shake=0,skin='kunai',tleft=0,limit=0,lastSec=0,mp=null,conf=[],muted=false,AC=null;
 var bests={classic:0,zen:0,frenzy:0},THR={kunai:0,katana:60,neon:150},LIM={classic:0,zen:60000,frenzy:45000};
 function bkey(m){return m==='classic'?'slice_best':'slice_best_'+m}
 try{for(var mm in bests)bests[mm]=+localStorage.getItem(bkey(mm))||0;skin=localStorage.getItem('slice_skin')||'kunai';muted=localStorage.getItem('slice_mute')==='1'}catch(e){}
 function maxBest(){return Math.max(bests.classic,bests.zen,bests.frenzy)}
-if(maxBest()<THR[skin])skin='kunai';
+if(!THR.hasOwnProperty(skin)||maxBest()<THR[skin])skin='kunai';
 best=bests[mode];$('best').textContent=best;
 
 function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'})}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
@@ -146,13 +145,17 @@ function playSlice(c){
 
 function resize(){
   var r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;
-  W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);cf.width=cv.width;cf.height=cv.height;cx.setTransform(d,0,0,d,0,0);
+  if(r.width<50||r.height<50){needSize=true;return}
+  needSize=false;DPR=d;
+  W=r.width;H=r.height;cv.width=Math.round(W*d);cv.height=Math.round(H*d);ctx.setTransform(d,0,0,d,0,0);cf.width=cv.width;cf.height=cv.height;cx.setTransform(d,0,0,d,0,0);
   R=Math.max(26,Math.min(46,Math.min(W,H)*.075));G=H*.00055;
 }
-window.addEventListener('resize',resize);resize();
+window.addEventListener('resize',resize);window.addEventListener('orientationchange',resize);window.addEventListener('pageshow',resize);
+if(window.ResizeObserver)new ResizeObserver(resize).observe(stage);
+resize();
 
 function rnd(a,b){return a+Math.random()*(b-a)}
-function reset(){fruits=[];halves=[];splats=[];slashes=[];pend=[];curLvl=0;freezeT=0;dblT=0;lastPower=0;firstPow=true;parts=[];pops=[];trail=[];score=0;lives=3;spawnT=700;elapsed=0;flash=0;slowT=0;magT=0;csT=0;shake=0;best=bests[mode];limit=LIM[mode];tleft=limit;lastSec=0;$('best').textContent=best;hud()}
+function reset(){fruits=[];halves=[];splats=[];slashes=[];pend=[];curLvl=0;freezeT=0;dblT=0;lastPower=0;firstPow=true;parts=[];pops=[];trail=[];score=0;lives=3;spawnT=700;elapsed=0;flash=0;graceT=0;slowT=0;magT=0;csT=0;shake=0;best=bests[mode];limit=LIM[mode];tleft=limit;lastSec=0;$('best').textContent=best;hud()}
 function hud(){$('score').textContent=score;
   if(limit){$('lbl').textContent='Time';$('lives').textContent=Math.max(0,Math.ceil(tleft/1000))+'s'}
   else{$('lbl').textContent='Lives';var h='',m=Math.max(3,lives);for(var i=0;i<m;i++)h+='<span class="hh'+(i<lives?'':' off')+'">♥</span>';$('lives').innerHTML=h}
@@ -222,7 +225,7 @@ function end(why){
   setTimeout(function(){$('over').classList.remove('hide')},flash?500:0);
 }
 
-function start(){ac();loadSlice();reset();conf=[];running=true;$('start').classList.add('hide');$('over').classList.add('hide');last=performance.now()}
+function start(){resize();ac();loadSlice();reset();conf=[];running=true;$('start').classList.add('hide');$('over').classList.add('hide');last=performance.now()}
 
 var lp=null;
 function pt(e){var r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top,t:performance.now()}}
@@ -247,19 +250,24 @@ function drawEmoji(e,x,y,rot,half,cut,k){
   ctx.restore();
 }
 
-function frame(now){
-  var dt=Math.min(2.5,(now-last)/16.67),rdt=dt;last=now;if(slowT>0||csT>0)dt*=.45;
+function tick(now){
+  if(needSize||Math.abs(cv.clientWidth-W)>1||Math.abs(cv.clientHeight-H)>1)resize();
+  var tn=performance.now(),dt=(tn-last)/16.67;last=tn;if(!(dt>0))dt=0;if(dt>2.5)dt=2.5;
+  var rdt=dt;if(slowT>0||csT>0)dt*=.45;
+  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.globalAlpha=1;ctx.shadowBlur=0;
   ctx.clearRect(0,0,W,H);ctx.save();if(shake>0){ctx.translate(rnd(-shake,shake),rnd(-shake,shake));shake=Math.max(0,shake-1.2*dt)}
   splats.forEach(function(s){s.l-=.006*dt;ctx.save();ctx.globalAlpha=Math.max(0,s.l)*.55;ctx.translate(s.x,s.y);ctx.rotate(s.a);ctx.fillStyle=s.c;ctx.beginPath();ctx.ellipse(0,0,s.w,s.h,0,0,6.28);ctx.fill();ctx.restore()});
   splats=splats.filter(function(s){return s.l>0});
   if(running){
-    if(slowT>0)slowT-=rdt*16.67;if(csT>0)csT-=rdt*16.67;if(magT>0)magT-=rdt*16.67;
+    if(slowT>0)slowT-=rdt*16.67;if(csT>0)csT-=rdt*16.67;if(magT>0)magT-=rdt*16.67;if(graceT>0)graceT-=rdt*16.67;
+    if(!isFinite(elapsed))elapsed=0;if(!isFinite(spawnT)||spawnT>4000)spawnT=1000;
+    if(!fruits.length&&!pend.length&&spawnT>2200)spawnT=0;
     if(limit&&freezeT<=0){tleft-=rdt*16.67;var ls=Math.ceil(tleft/1000);if(ls!==lastSec){lastSec=ls;hud()}if(tleft<=0)end('Time up!')}
     if(freezeT>0)freezeT=Math.max(0,freezeT-dt*16.67);
     else{
       elapsed+=dt*16.67;spawnT-=dt*16.67;
       for(var q=pend.length-1;q>=0;q--){pend[q].d-=dt*16.67;if(pend[q].d<=0){spawn(pend[q].b,pend[q].p,pend[q].sp);pend.splice(q,1)}}
-      if(spawnT<=0){
+      if(spawnT<=0&&W>=50&&H>=50){
         var sec=elapsed/1000,c,pb,gap;
         if(mode==='frenzy'){c=4+Math.floor(Math.random()*3);pb=0;gap=900}
         else if(sec<10){c=1;pb=0;gap=1800}
@@ -289,7 +297,7 @@ function frame(now){
       drawEmoji(f.e,f.x,f.y,f.rot,0,0,f.k);
     }
     if(f.y>H+R*2&&f.vy>0){
-      if(!f.done&&!f.bomb&&!f.pw&&!f.sp&&mode==='classic'&&running){lives--;hud();flash=.5;if(lives<=0)end('Out of lives')}
+      if(!f.done&&!f.bomb&&!f.pw&&!f.sp&&mode==='classic'&&running&&graceT<=0){lives--;hud();flash=.5;if(lives<=0)end('Out of lives')}
       f.done=true;f.gone=true;
     }
   });
@@ -367,6 +375,12 @@ function frame(now){
   cx.clearRect(0,0,W,H);
   conf.forEach(function(p){p.x+=p.vx*rdt;p.y+=p.vy*rdt;p.vy+=.06*rdt;p.r+=p.vr*rdt;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()});
   conf=conf.filter(function(p){return p.y<H+20});
+}
+function frame(now){
+  try{tick(now)}catch(e){
+    try{cv.width=cv.width;ctx.setTransform(DPR,0,0,DPR,0,0)}catch(x){}
+    if(window.console)console.error('Slice frame error',e);
+  }
   requestAnimationFrame(frame);
 }
 reset();last=performance.now();requestAnimationFrame(frame);
@@ -382,6 +396,8 @@ function shareMsg(){return 'I scored '+score+' in Slice ('+mode+' mode) 🍉🔪
 $('share').addEventListener('click',function(){var b=$('share'),m=shareMsg();if(navigator.share){navigator.share({text:m}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(m).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Share'},1500)})}});
 $('menu').addEventListener('click',function(){$('over').classList.add('hide');$('start').classList.remove('hide');buildSkins()});
 muteUI();buildSkins();$('mdesc').textContent=MD[mode];
+document.addEventListener('visibilitychange',function(){if(document.hidden)return;resize();last=performance.now();if(running)graceT=1500});
+window.addEventListener('focus',function(){resize();last=performance.now()});
 })();
 </script>
 </body>
