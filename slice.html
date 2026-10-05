@@ -246,6 +246,7 @@ function drawEmoji(e,x,y,rot,half,cut,k){
   k=k||1;var q=R*1.5*k;
   ctx.save();ctx.translate(x,y);
   if(half){ctx.rotate(rot+cut);ctx.beginPath();ctx.rect(-q,half<0?-q:0,q*2,q);ctx.clip();ctx.rotate(-cut)}else ctx.rotate(rot);
+  ctx.globalAlpha=1;ctx.fillStyle='#000';
   ctx.font=(R*1.9*k)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(e,0,0);
   ctx.restore();
 }
@@ -254,7 +255,7 @@ function tick(now){
   if(needSize||Math.abs(cv.clientWidth-W)>1||Math.abs(cv.clientHeight-H)>1)resize();
   var tn=performance.now(),dt=(tn-last)/16.67;last=tn;if(!(dt>0))dt=0;if(dt>2.5)dt=2.5;
   var rdt=dt;if(slowT>0||csT>0)dt*=.45;
-  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.globalAlpha=1;ctx.shadowBlur=0;
+  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.globalAlpha=1;ctx.shadowBlur=0;ctx.fillStyle='#000';ctx.strokeStyle='#000';ctx.setLineDash([]);
   ctx.clearRect(0,0,W,H);ctx.save();if(shake>0){ctx.translate(rnd(-shake,shake),rnd(-shake,shake));shake=Math.max(0,shake-1.2*dt)}
   splats.forEach(function(s){s.l-=.006*dt;ctx.save();ctx.globalAlpha=Math.max(0,s.l)*.55;ctx.translate(s.x,s.y);ctx.rotate(s.a);ctx.fillStyle=s.c;ctx.beginPath();ctx.ellipse(0,0,s.w,s.h,0,0,6.28);ctx.fill();ctx.restore()});
   splats=splats.filter(function(s){return s.l>0});
