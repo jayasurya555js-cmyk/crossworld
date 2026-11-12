@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CROSSWORLD — Neon Word Range</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #060913;
+      font-family: 'JetBrains Mono', monospace;
+      color: #e2e8f0;
+      touch-action: none;
+    }
+    .font-display {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .neon-cyan {
+      text-shadow: 0 0 10px rgba(34, 211, 238, 0.75), 0 0 24px rgba(34, 211, 238, 0.4);
+    }
+    .neon-amber {
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 24px rgba(251, 191, 36, 0.45);
+    }
+    .neon-pink {
+      text-shadow: 0 0 10px rgba(244, 63, 94, 0.8), 0 0 24px rgba(244, 63, 94, 0.45);
+    }
+    .hud-panel {
+      background: rgba(9, 14, 29, 0.72);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 0 16px rgba(34, 211, 238, 0.05);
+    }
+    .tile-slot {
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tile-slot.solved {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.28), rgba(14, 165, 233, 0.16));
+      border-color: #22d3ee;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(34, 211, 238, 0.55);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .tile-slot.next-hint {
+      border-color: rgba(251, 191, 36, 0.75);
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: none;
+    }
+    .ui-clickable {
+      cursor: pointer !important;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 16px rgba(34, 211, 238, 0.45); }
+      50% { box-shadow: 0 0 28px rgba(34, 211, 238, 0.85); }
+    }
+    .btn-neon {
+      animation: pulseGlow 2.2s infinite;
+    }
+  </style>
+</head>
+<body class="relative w-screen h-screen overflow-hidden bg-[#060913]">
+
+  <!-- Main Interactive Shooting Range Canvas -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- Top HUD Overlay -->
+  <div id="hudLayer" class="pointer-events-none fixed inset-0 z-10 flex flex-col justify-between p-3 sm:p-5">
+    
+    <!-- Top Row: Back + Score/Acc (Left) | Crossword Clue & Word Rack (Center) | Combo & Audio (Right) -->
+    <div class="flex items-start justify-between gap-2 sm:gap-4 w-full">
+      
+      <!-- Top-Left: BACK BUTTON + SCORE & ACC -->
+      <div class="flex flex-col items-start gap-2">
+        <button id="btnBack" type="button" title="Go Back" class="pointer-events-auto ui-clickable hud-panel hover:border-cyan-400/70 text-cyan-300 hover:text-white text-[11px] sm:text-xs font-display font-bold tracking-wider px-3 py-1.5 rounded-lg transition active:scale-95 flex items-center gap-1.5 z-20">
+          <span>←</span>
+          <span>BACK</span>
+        </button>
+
+        <div class="hud-panel rounded-xl px-3.5 py-2.5 sm:px-5 sm:py-3 min-w-[115px] sm:min-w-[155px]">
+          <div class="flex items-baseline justify-between gap-3">
+            <span class="text-[10px] sm:text-xs tracking-widest text-cyan-400/80 font-bold">SCORE</span>
+            <span id="hudScore" class="font-display text-lg sm:text-2xl font-black text-white neon-cyan">0</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-3 mt-1 pt-1 border-t border-slate-800/80">
+            <span class="text-[10px] sm:text-xs tracking-widest text-slate-400 font-bold">ACC</span>
+            <span id="hudAcc" class="text-xs sm:text-sm font-bold text-emerald-400">100%</span>
+          </div>
+          <div class="flex items-baseline justify-between gap-3 mt-1">
+            <span class="text-[10px] sm:text-xs tracking-widest text-slate-400 font-bold">TIME</span>
+            <span id="hudTimer" class="text-xs sm:text-sm font-bold text-amber-300">90s</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top-Center: CROSSWORD CLUE & LIVE LETTER SLOTS -->
+      <div id="clueBanner" class="hud-panel rounded-xl px-3 py-2 sm:px-6 sm:py-3 flex-1 max-w-xl mx-auto text-center border-cyan-400/30">
+        <div class="flex items-center justify-center gap-2 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-cyan-300/90 font-bold">
+          <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+          <span>CROSSWORLD CLUE #<span id="clueNumber">1</span></span>
+        </div>
+        <p id="clueText" class="text-xs sm:text-base md:text-lg font-bold text-white mt-0.5 leading-snug">
+          Celestial body orbiting Earth (4)
+        </p>
+        <!-- Crossword Tile Rack -->
+        <div id="wordRack" class="flex items-center justify-center gap-1.5 sm:gap-2 mt-2 flex-wrap">
+          <!-- Populated dynamically with crossword grid squares -->
+        </div>
+      </div>
+
+      <!-- Top-Right: COMBO Multiplier & Controls -->
+      <div class="flex flex-col items-end gap-2">
+        <div id="comboBox" class="hud-panel rounded-xl px-3.5 py-2.5 sm:px-5 sm:py-3 text-right min-w-[105px] sm:min-w-[140px] transition-transform duration-150">
+          <div class="flex items-baseline justify-end gap-1.5">
+            <span id="hudCombo" class="font-display text-xl sm:text-3xl font-black text-amber-400 neon-amber">x1</span>
+            <span class="text-[10px] sm:text-xs tracking-widest text-amber-200/80 font-bold">COMBO</span>
+          </div>
+          <div class="text-[10px] sm:text-xs text-slate-400 mt-0.5">
+            SOLVED: <span id="hudWordsSolved" class="text-cyan-300 font-bold">0</span>
+          </div>
+        </div>
+
+        <!-- Sound & Reload Action Buttons -->
+        <div class="pointer-events-auto relative z-20 flex items-center gap-1.5">
+          <button id="btnReload" type="button" title="Reload Weapon (R)" class="ui-clickable hud-panel hover:border-cyan-400/80 active:border-amber-400 text-cyan-300 hover:text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition active:scale-95">
+            RELOAD [R]
+          </button>
+          <button id="btnMute" type="button" title="Toggle Audio" class="ui-clickable hud-panel hover:border-cyan-400/80 text-slate-200 text-xs font-bold px-2.5 py-1.5 rounded-lg transition active:scale-95">
+            🔊
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Weapon Tier (Left) | Subtle Range Prompt (Center) | Lives / Shield (Right) -->
+    <div class="flex items-end justify-between gap-3 w-full">
+      
+      <!-- Bottom-Left: 1/9 Gun Game Weapon Tier & Ammo Pips -->
+      <div class="hud-panel rounded-xl px-3.5 py-2.5 sm:px-5 sm:py-3.5 min-w-[175px] sm:min-w-[235px]">
+        <div class="flex items-baseline justify-between gap-2">
+          <div class="flex items-baseline gap-2">
+            <span id="hudTierNum" class="font-display text-base sm:text-xl font-black text-cyan-400 neon-cyan">1/9</span>
+            <span id="hudWeaponName" class="font-display text-xs sm:text-sm font-extrabold tracking-wider text-white">PISTOL</span>
+          </div>
+          <span id="hudAmmoText" class="text-xs sm:text-sm font-bold text-cyan-300">7/7</span>
+        </div>
+        
+        <!-- Visual Ammo Pips -->
+        <div id="ammoPips" class="flex items-center gap-1 mt-2 h-2.5">
+          <!-- Bullet pips rendered dynamically -->
+        </div>
+
+        <!-- Weapon Tier Progress Bar -->
+        <div class="mt-2.5">
+          <div class="flex justify-between text-[9px] sm:text-[10px] tracking-wider text-slate-400 mb-1">
+            <span>TIER PROGRESS</span>
+            <span id="hudTierProgressText">0 / 1 WORD</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-800/90 rounded-full overflow-hidden">
+            <div id="hudTierBar" class="h-full bg-gradient-to-r from-cyan-400 to-amber-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom-Center: Minimalist Range Prompt -->
+      <div class="hidden md:block text-center text-[11px] tracking-[0.2em] text-slate-400/75 uppercase pb-1">
+        aim · click / tap to shoot needed letters · avoid glitch bombs
+      </div>
+
+      <!-- Bottom-Right: Shield Integrity / Streak Guard -->
+      <div class="hud-panel rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-right">
+        <div class="text-[10px] tracking-widest text-slate-400 font-bold mb-1">SHIELD</div>
+        <div id="shieldHearts" class="flex items-center justify-end gap-1 text-sm sm:text-base">
+          <span class="text-cyan-400">◆</span>
+          <span class="text-cyan-400">◆</span>
+          <span class="text-cyan-400">◆</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start Screen Overlay (Clean, Minimalist Neon Range Entry) -->
+  <div id="startModal" class="fixed inset-0 z-30 flex items-center justify-center bg-[#060913]/85 backdrop-blur-md p-4">
+    <div class="hud-panel max-w-lg w-full rounded-2xl p-6 sm:p-8 text-center border-cyan-400/40 relative overflow-hidden">
+      <button id="btnBackStart" type="button" title="Go Back" class="ui-clickable absolute top-4 left-4 hud-panel hover:border-cyan-400/70 text-cyan-300 hover:text-white text-[11px] font-display font-bold tracking-wider px-2.5 py-1 rounded-lg transition active:scale-95">
+        ← BACK
+      </button>
+      <div class="inline-block px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-[11px] font-bold tracking-[0.22em] uppercase mb-3">
+        CROSS-WORLD.IN // ARCADE EDITION
+      </div>
+      <h1 class="font-display text-3xl sm:text-5xl font-black tracking-wider text-white neon-cyan">
+        CROSSWORLD
+      </h1>
+      <p class="font-display text-xs sm:text-sm font-bold tracking-[0.35em] text-amber-400 mt-1 neon-amber">
+        NEON WORD RANGE
+      </p>
+
+      <p class="text-slate-300 text-xs sm:text-sm mt-5 leading-relaxed">
+        aim · click to shoot · solve clues &amp; keep your streak
+      </p>
+
+      <div class="grid grid-cols-3 gap-2.5 mt-6 text-left text-[11px] sm:text-xs">
+        <div class="bg-slate-900/75 border border-cyan-500/25 rounded-xl p-3">
+          <div class="text-cyan-400 font-bold mb-1">1. READ CLUE</div>
+          <div class="text-slate-400">Spot the crossword clue at the top of the range.</div>
+        </div>
+        <div class="bg-slate-900/75 border border-amber-500/25 rounded-xl p-3">
+          <div class="text-amber-400 font-bold mb-1">2. SNIPE TILES</div>
+          <div class="text-slate-400">Shoot glowing letter tiles to fill the word rack.</div>
+        </div>
+        <div class="bg-slate-900/75 border border-rose-500/25 rounded-xl p-3">
+          <div class="text-rose-400 font-bold mb-1">3. 9-TIER GUNS</div>
+          <div class="text-slate-400">Solve words to upgrade from Pistol to Nova Beam!</div>
+        </div>
+      </div>
+
+      <button id="btnStartGame" class="ui-clickable btn-neon mt-7 w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-display font-black text-sm sm:text-base tracking-[0.2em] uppercase transition transform active:scale-95">
+        ENTER RANGE
+      </button>
+    </div>
+  </div>
+
+  <!-- Game Over / Victory Summary Modal -->
+  <div id="endModal" class="hidden fixed inset-0 z-30 flex items-center justify-center bg-[#060913]/88 backdrop-blur-md p-4">
+    <div class="hud-panel max-w-md w-full rounded-2xl p-6 sm:p-8 text-center border-cyan-400/40">
+      <div id="endBadge" class="inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-300 text-[11px] font-bold tracking-[0.2em] uppercase mb-2">
+        RANGE SESSION COMPLETE
+      </div>
+      <h2 id="endTitle" class="font-display text-2xl sm:text-4xl font-black text-white neon-cyan">
+        TIME EXPIRED
+      </h2>
+
+      <div class="grid grid-cols-2 gap-3 mt-6 text-left">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5">
+          <div class="text-[10px] tracking-widest text-slate-400">FINAL SCORE</div>
+          <div id="statScore" class="font-display text-xl sm:text-2xl font-black text-cyan-400 mt-0.5">0</div>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5">
+          <div class="text-[10px] tracking-widest text-slate-400">ACCURACY</div>
+          <div id="statAcc" class="font-display text-xl sm:text-2xl font-black text-emerald-400 mt-0.5">100%</div>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5">
+          <div class="text-[10px] tracking-widest text-slate-400">WORDS SOLVED</div>
+          <div id="statWords" class="font-display text-xl sm:text-2xl font-black text-white mt-0.5">0</div>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5">
+          <div class="text-[10px] tracking-widest text-slate-400">MAX STREAK / TIER</div>
+          <div id="statComboTier" class="font-display text-lg sm:text-xl font-black text-amber-400 mt-0.5">x1 · 1/9</div>
+        </div>
+      </div>
+
+      <button id="btnRestartGame" class="ui-clickable btn-neon mt-7 w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-display font-black text-sm sm:text-base tracking-[0.2em] uppercase transition transform active:scale-95">
+        PLAY AGAIN
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * CROSSWORLD — NEON WORD RANGE
+     * Single-file HTML5 Canvas arcade shooting range adapted for Crossworld.
+     * Features:
+     * - 9-tier Gun Game weapon progression (1/9 Pistol -> 9/9 Crossworld Nova)
+     * - Live Crossword Clue solver with floating neon crossword letter tiles & glitch bombs
+     * - Procedural Web Audio API sound synthesizer (zero external sound dependencies)
+     * - Perspective neon range grid, tracer trails, shatter particles, hitstop & screen shake
+     */
+
+    // =========================================================================
+    // 1. CROSSWORD CLUE BANK (1,100+ UNIQUE 4-7 LETTER CLUES) & 9-TIER ARSENAL
+    // =========================================================================
+    const RAW_CLUE_BANK = [
+      // --- SPACE & ASTRONOMY ---
+      ["Celestial body orbiting Earth", "MOON"], ["Red planet in our solar system", "MARS"],
+      ["Ringed gas giant planet", "SATURN"], ["Seventh planet from the Sun", "URANUS"],
+      ["Distant icy blue giant planet", "NEPTUNE"], ["Closest planet to the Sun", "MERCURY"],
+      ["Brightest planet in Earth's sky", "VENUS"], ["Largest planet in our solar system", "JUPITER"],
+      ["Dwarf planet in the Kuiper belt", "PLUTO"], ["Band of stars across night sky", "GALAXY"],
+      ["Icy celestial visitor with a tail", "COMET"], ["Shooting star streak in atmosphere", "METEOR"],
+      ["Rocky body orbiting between Mars and Jupiter", "ASTEROID"], ["Path a planet takes around a star", "ORBIT"],
+      ["Exploding massive star", "NOVA"], ["Group of stars forming a pattern", "CLUSTER"],
+      ["Cloud of interstellar gas and dust", "NEBULA"], ["Lunar blocking of the Sun", "ECLIPSE"],
+      ["Point directly overhead in the sky", "ZENITH"], ["Rocket launch pad countdown", "IGNITE"],
+      ["Astronaut's protective pressurized outfit", "SUIT"], ["Spinning neutron star beacon", "PULSAR"],
+      ["Brightest star in Orion's foot", "RIGEL"], ["Brightest star in the night sky", "SIRIUS"],
+      ["North Star in Ursa Minor", "POLARIS"], ["Spacecraft reusable heat shield", "TILE"],
+      ["Force keeping planets in orbit", "GRAVITY"], ["Outer region of Sun's atmosphere", "CORONA"],
+      ["Sun's dark magnetic surface spot", "SUNSPOT"], ["First artificial Earth satellite", "SPUTNIK"],
+      ["Apollo lunar landing module", "EAGLE"], ["Space agency behind Webb telescope", "NASA"],
+      ["Observatory optical tube instrument", "SCOPE"], ["Cosmic distance unit for stars", "PARSEC"],
+      ["Circular crater on lunar surface", "BASIN"], ["Earth's natural twilight glow", "AURORA"],
+
+      // --- SCIENCE & TECHNOLOGY ---
+      ["Basic building block of matter", "ATOM"], ["Positively charged atomic particle", "PROTON"],
+      ["Negatively charged atomic particle", "ELECTRON"], ["Neutral particle in atomic nucleus", "NEUTRON"],
+      ["Pure substance of one atom type", "ELEMENT"], ["Chart of chemical elements", "TABLE"],
+      ["Liquid metal used in thermometers", "MERCURY"], ["Lightest chemical element", "HYDROGEN"],
+      ["Gas essential for human respiration", "OXYGEN"], ["Inert gas used in glowing signs", "NEON"],
+      ["Precious yellow conductive metal", "GOLD"], ["Precious white lustrous metal", "SILVER"],
+      ["Strong structural alloy of iron", "STEEL"], ["Reddish conductive wiring metal", "COPPER"],
+      ["Light aircraft metal element", "ALUMINUM"], ["Radioactive element discovered by Curie", "RADIUM"],
+      ["Acidic sourness scale", "PHSCALE"], ["Device that stores electric charge", "BATTERY"],
+      ["Flow of electric charge", "CURRENT"], ["Opposition to electrical flow", "OHMS"],
+      ["Unit of electrical power", "WATT"], ["Unit of electrical potential", "VOLT"],
+      ["Unit of wave frequency", "HERTZ"], ["Focused beam of coherent light", "LASER"],
+      ["Curved glass that bends light", "LENS"], ["Triangular glass splitting white light", "PRISM"],
+      ["Sound reflection off a canyon wall", "ECHO"], ["Device amplifying weak signals", "AMP"],
+      ["Silicon chip inside a computer", "CHIP"], ["Binary digit zero or one", "BIT"],
+      ["Group of eight binary digits", "BYTE"], ["Temporary fast computer memory", "CACHE"],
+      ["Main circuit board of a PC", "BOARD"], ["Wireless local area network", "WIFI"],
+      ["Software error or glitch", "BUG"], ["Malicious self-replicating program", "VIRUS"],
+      ["Secret access word for login", "TOKEN"], ["Encrypted digital ledger system", "CHAIN"],
+      ["Automated software task runner", "SCRIPT"], ["Web page styling language", "STYLE"],
+      ["Structured query language for data", "QUERY"], ["Cloud data storage container", "BUCKET"],
+      ["Input device with clickable buttons", "MOUSE"], ["Portable flat-screen computer", "TABLET"],
+      ["High-speed fiber light cable", "OPTIC"], ["Protective network barrier", "PROXY"],
+      ["Search engine data crawler", "SPIDER"], ["Digital image picture element", "PIXEL"],
+      ["Three-dimensional printed model", "MESH"], ["Robotic mechanical arm joint", "SERVO"],
+
+      // --- GEOGRAPHY & WORLD ---
+      ["Capital city of France", "PARIS"], ["Capital city of Japan", "TOKYO"],
+      ["Capital city of Italy", "ROME"], ["Capital city of Spain", "MADRID"],
+      ["Capital city of Germany", "BERLIN"], ["Capital city of England", "LONDON"],
+      ["Capital city of Ireland", "DUBLIN"], ["Capital city of Greece", "ATHENS"],
+      ["Capital city of Egypt", "CAIRO"], ["Capital city of India", "DELHI"],
+      ["Capital city of China", "BEIJING"], ["Capital city of South Korea", "SEOUL"],
+      ["Capital city of Russia", "MOSCOW"], ["Capital city of Canada", "OTTAWA"],
+      ["Capital city of Peru", "LIMA"], ["Capital city of Chile", "SANTIAGO"],
+      ["Capital city of Cuba", "HAVANA"], ["Capital city of Norway", "OSLO"],
+      ["Capital city of Sweden", "STOCKHOLM"], ["Capital city of Poland", "WARSAW"],
+      ["Capital city of Austria", "VIENNA"], ["Capital city of Czechia", "PRAGUE"],
+      ["Capital city of Kenya", "NAIROBI"], ["Capital city of Ghana", "ACCRA"],
+      ["Longest river in Africa", "NILE"], ["Mightiest river in South America", "AMAZON"],
+      ["Sacred river of northern India", "GANGES"], ["Major river flowing through London", "THAMES"],
+      ["River flowing through Paris", "SEINE"], ["Longest river in Europe", "VOLGA"],
+      ["River separating US and Mexico", "GRANDE"], ["Largest hot desert in the world", "SAHARA"],
+      ["Cold Asian desert in Mongolia", "GOBI"], ["Arid desert in northern Chile", "ATACAMA"],
+      ["Highest mountain peak on Earth", "EVEREST"], ["Highest mountain in Japan", "FUJI"],
+      ["Tallest peak in Africa", "KIBO"], ["European alpine mountain range", "ALPS"],
+      ["South American mountain chain", "ANDES"], ["North American western mountain range", "ROCKIES"],
+      ["Deepest oceanic trench on Earth", "MARIANA"], ["Ocean between Europe and America", "ATLANTIC"],
+      ["Largest ocean on Earth", "PACIFIC"], ["Ocean south of India", "INDIAN"],
+      ["Frozen ocean around North Pole", "ARCTIC"], ["Island nation south of India", "LANKA"],
+      ["Mediterranean island south of Italy", "SICILY"], ["Greek island of Minoan ruins", "CRETE"],
+      ["Volcanic North Atlantic island nation", "ICELAND"], ["Caribbean island famous for reggae", "JAMAICA"],
+      ["Canal linking Atlantic and Pacific", "PANAMA"], ["Canal linking Red and Mediterranean seas", "SUEZ"],
+      ["Narrow sea passage between landmasses", "STRAIT"], ["Piece of land surrounded by water", "ISLAND"],
+      ["Land surrounded by water on three sides", "CAPE"], ["Deep steep-walled river valley", "CANYON"],
+      ["Flat elevated highland landform", "PLATEAU"], ["Slow-moving river of ancient ice", "GLACIER"],
+      ["Active mountain vent erupting lava", "VOLCANO"], ["Ring-shaped coral reef island", "ATOLL"],
+      ["Frozen treeless Arctic plain", "TUNDRA"], ["Tropical grassy plain with scattered trees", "SAVANNA"],
+      ["Lush tropical woodland ecosystem", "JUNGLE"], ["Low wetland dominated by grasses", "MARSH"],
+      ["Compass direction opposite north", "SOUTH"], ["Compass direction of sunrise", "EAST"],
+      ["Compass direction of sunset", "WEST"], ["Zero degrees latitude imaginary line", "EQUATOR"],
+
+      // --- ANIMALS & NATURE ---
+      ["Fastest land mammal", "CHEETAH"], ["Striped big cat of Asia", "TIGER"],
+      ["King of the African savanna", "LION"], ["Spotted African big cat", "LEOPARD"],
+      ["Spotted South American big cat", "JAGUAR"], ["Largest living land mammal", "ELEPHANT"],
+      ["Tallest living land animal", "GIRAFFE"], ["Striped black-and-white equine", "ZEBRA"],
+      ["Horned African savanna grazer", "RHINO"], ["Heavy semi-aquatic African river mammal", "HIPPO"],
+      ["Australian pouched hopping mammal", "WALLABY"], ["Eucalyptus-eating Australian marsupial", "KOALA"],
+      ["Spiny egg-laying Australian mammal", "ECHIDNA"], ["Duck-billed egg-laying mammal", "PLATYPUS"],
+      ["Flightless black-and-white Antarctic bird", "PENGUIN"], ["Large flightless African bird", "OSTRICH"],
+      ["Pink wading bird standing on one leg", "FLAMINGO"], ["Colorful tropical beak bird", "TOUCAN"],
+      ["Majestic bird of prey on US seal", "EAGLE"], ["Fast-diving bird of prey", "FALCON"],
+      ["Hovering tiny nectar-drinking bird", "HUMMER"], ["Wise nocturnal bird of prey", "OWL"],
+      ["Black corvid bird known for intelligence", "RAVEN"], ["Colorful talking tropical bird", "PARROT"],
+      ["Largest ocean mammal", "WHALE"], ["Intelligent clicking marine mammal", "DOLPHIN"],
+      ["Eight-armed tentacled sea creature", "OCTOPUS"], ["Ten-armed ink-squirting mollusk", "SQUID"],
+      ["Sideways-walking clawed crustacean", "CRAB"], ["Clawed red-shelled marine crustacean", "LOBSTER"],
+      ["Cartilaginous ocean apex predator", "SHARK"], ["Flat-bodied cartilaginous ocean fish", "MANTA"],
+      ["Stinging translucent ocean drifter", "JELLY"], ["Star-shaped five-armed echinoderm", "STARFISH"],
+      ["Dam-building flat-tailed rodent", "BEAVER"], ["Burrowing striped woodland mammal", "BADGER"],
+      ["Mask-faced nocturnal trash bandit", "RACCOON"], ["Bushy-tailed nut-gathering rodent", "SQUIRREL"],
+      ["Quill-covered defensive rodent", "PORCUPINE"], ["Slow-moving tree-hanging mammal", "SLOTH"],
+      ["Armored shell-curling mammal", "ARMADILLO"], ["Pack-hunting wild canine", "WOLF"],
+      ["Clever red-furred woodland canine", "FOX"], ["Hibernating forest omnivore", "BEAR"],
+      ["Antlered forest ruminant", "DEER"], ["Large North American antlered deer", "MOOSE"],
+      ["Humped desert pack animal", "CAMEL"], ["Woolly Andean mountain camelid", "LLAMA"],
+      ["Soft-fleeced Andean camelid", "ALPACA"], ["Venomous hooded Asian snake", "COBRA"],
+      ["Large constricting tropical snake", "PYTHON"], ["Venomous pit snake with fangs", "VIPER"],
+      ["Hard-shelled slow land reptile", "TORTOISE"], ["Flippered ocean-swimming reptile", "TURTLE"],
+      ["Color-changing tree lizard", "GECKO"], ["Large tropical herbivorous lizard", "IGUANA"],
+      ["Amphibian that starts as a tadpole", "FROG"], ["Warty land-dwelling amphibian", "TOAD"],
+      ["Honey-making striped insect", "BEE"], ["Stinging yellow-and-black insect", "WASP"],
+      ["Hard-shelled winged insect", "BEETLE"], ["Silk-spinning eight-legged arachnid", "SPIDER"],
+      ["Stinging desert arachnid", "SCORPION"], ["Night-flying dusty-winged insect", "MOTH"],
+      ["Jumping chirping meadow insect", "CRICKET"], ["Pond-skimming four-winged insect", "DRAGON"],
+      ["Acorn-producing mighty forest tree", "OAK"], ["Tree famous for sweet syrup", "MAPLE"],
+      ["Evergreen needle-bearing cone tree", "PINE"], ["White-barked northern forest tree", "BIRCH"],
+      ["Weeping waterside tree", "WILLOW"], ["Tall tropical coastal tree", "PALM"],
+      ["Fragrant thorny garden flower", "ROSE"], ["Spring bulb flower of Holland", "TULIP"],
+      ["Tall yellow seed-bearing summer flower", "SUNFLOWER"], ["Fragrant purple calming herb", "LAVENDER"],
+      ["Spiny water-storing desert plant", "CACTUS"], ["Feathery spore-bearing shade plant", "FERN"],
+      ["Soft green carpet on damp rocks", "MOSS"], ["Edible forest cap fungus", "MUSHROOM"],
+
+      // --- FOOD & DRINK ---
+      ["Italian baked flatbread with toppings", "PIZZA"], ["Italian boiled wheat noodles", "PASTA"],
+      ["Rolled Japanese vinegared rice dish", "SUSHI"], ["Mexican folded corn tortilla snack", "TACO"],
+      ["Melted cheese folded tortilla", "QUESO"], ["Spiced chickpea dip from Middle East", "HUMMUS"],
+      ["Mashed avocado dip with lime", "GUAC"], ["Grilled beef patty in a bun", "BURGER"],
+      ["Sliced smoked pork breakfast strip", "BACON"], ["Scrambled or fried hen breakfast", "EGGS"],
+      ["Golden baked breakfast waffle grid", "WAFFLE"], ["Fluffy griddle breakfast cake", "PANCAKE"],
+      ["Sweet golden bee nectar", "HONEY"], ["Sweet tree sap poured on pancakes", "SYRUP"],
+      ["Crystalline sweet baking ingredient", "SUGAR"], ["Fine white baking powder from wheat", "FLOUR"],
+      ["Leavening fungus used in bread dough", "YEAST"], ["Churned yellow dairy spread", "BUTTER"],
+      ["Aged fermented dairy block", "CHEESE"], ["Creamy cultured dairy snack", "YOGURT"],
+      ["Frozen creamy sweet dessert", "GELATO"], ["Fruity frozen water dessert", "SORBET"],
+      ["Dark roasted cacao sweet treat", "CHOCO"], ["Sweet glazed ring-shaped pastry", "DONUT"],
+      ["Flaky crescent French pastry", "CRESCENT"], ["Baked fruit-filled pastry crust", "PIE"],
+      ["Frosted layered birthday dessert", "CAKE"], ["Crisp baked sweet chocolate chip treat", "COOKIE"],
+      ["Crunchy red or green orchard fruit", "APPLE"], ["Curved yellow potassium-rich fruit", "BANANA"],
+      ["Citrus fruit rich in vitamin C", "ORANGE"], ["Sour yellow citrus fruit", "LEMON"],
+      ["Sour green citrus fruit", "LIME"], ["Sweet summer red seeded berry", "BERRY"],
+      ["Small blue antioxidant-rich fruit", "BLUE"], ["Tropical spiky sweet yellow fruit", "PINEAPPLE"],
+      ["Sweet tropical stone fruit", "MANGO"], ["Fuzzy sweet summer stone fruit", "PEACH"],
+      ["Crisp bell-shaped orchard fruit", "PEAR"], ["Small purple or green wine fruit", "GRAPE"],
+      ["Large green-striped juicy summer fruit", "MELON"], ["Crunchy orange root vegetable", "CARROT"],
+      ["Starchy tuber used for fries", "POTATO"], ["Red salad fruit often called a veggie", "TOMATO"],
+      ["Tear-inducing layered bulb vegetable", "ONION"], ["Pungent aromatic bulb clove", "GARLIC"],
+      ["Leafy green salad base", "LETTUCE"], ["Iron-rich leafy green vegetable", "SPINACH"],
+      ["Tree-like green floret vegetable", "BROCCOLI"], ["Crisp green salad gourd", "CUCUMBER"],
+      ["Spicy chili fruit", "PEPPER"], ["Kernel-covered yellow cob crop", "CORN"],
+      ["Protein-rich pod seed", "BEAN"], ["Small lens-shaped soup legume", "LENTIL"],
+      ["Staple Asian white or brown grain", "RICE"], ["Breakfast porridge whole grain", "OATS"],
+      ["Morning roasted bean caffeine brew", "COFFEE"], ["Strong Italian shot of coffee", "ESPRESSO"],
+      ["Chocolate-flavored coffee drink", "MOCHA"], ["Steamed milk espresso drink", "LATTE"],
+      ["Brewed dried leaf hot beverage", "TEA"], ["Fermented grape alcoholic beverage", "WINE"],
+      ["Brewed barley and hops beverage", "BEER"], ["Pressed apple autumn drink", "CIDER"],
+      ["Aromatic brown bark baking spice", "CINNAMON"], ["Hot pungent red chili powder", "CAYENNE"],
+      ["Fragrant green Italian pesto herb", "BASIL"], ["Savory aromatic roast herb", "THYME"],
+
+      // --- SPORTS & GAMES ---
+      ["Sport played with a bat and 9 innings", "BASEBALL"], ["Eleven-a-side global football sport", "SOCCER"],
+      ["Court sport with hoops and dribbling", "BASKET"], ["Racket sport played at Wimbledon", "TENNIS"],
+      ["Club-and-ball sport with 18 holes", "GOLF"], ["Ice rink sport with sticks and puck", "HOCKEY"],
+      ["Oval-ball tackle sport", "RUGBY"], ["Bat-and-ball sport with wickets", "CRICKET"],
+      ["Net sport played on sand or court", "VOLLEY"], ["Ring sport with padded gloves", "BOXING"],
+      ["Grappling mat combat sport", "JUDO"], ["Japanese martial art of empty hand", "KARATE"],
+      ["Sword-fighting Olympic sport", "FENCING"], ["Bow-and-arrow target sport", "ARCHERY"],
+      ["Pool lane freestyle race sport", "SWIM"], ["Wave-riding board water sport", "SURF"],
+      ["Snow-slope downhill board sport", "SKIING"], ["Two-wheeled pedal racing sport", "CYCLING"],
+      ["26.2-mile long-distance foot race", "MARATHON"], ["Relay baton track race", "SPRINT"],
+      ["64-square strategy board game", "CHESS"], ["Red-and-black jumping board game", "CHECKERS"],
+      ["Word-building letter tile board game", "SCRABBLE"], ["Property-trading board game", "MONOPOLY"],
+      ["Six-sided numbered cube", "DICE"], ["52-card deck trick game", "POKER"],
+      ["21-point casino card game", "BLACK"], ["Tabletop cue-and-ball game", "POOL"],
+      ["Ten-pin alley ball sport", "BOWLING"], ["Pub throwing board target game", "DARTS"],
+      ["Shuttlecock racket net game", "BADMINTON"], ["Ping-pong paddle table sport", "PONG"],
+      ["Referee's foul-calling blow pipe", "WHISTLE"], ["Championship winner's silver cup", "TROPHY"],
+      ["First-place Olympic neck prize", "MEDAL"], ["Stadium cheer from spectators", "CHANT"],
+      ["Official game scorekeeper board", "BOARD"], ["Player who guards the soccer net", "KEEPER"],
+      ["Baseball pitcher's raised dirt spot", "MOUND"], ["Tennis zero-point score term", "LOVE"],
+      ["Golf score one under par", "BIRDIE"], ["Golf score two under par", "EAGLE"],
+      ["Bowling three strikes in a row", "TURKEY"], ["Chess attack on the king", "CHECK"],
+      ["Chess game-ending king trap", "MATE"], ["Card game highest face card", "ACE"],
+
+      // --- ARTS, MUSIC & LITERATURE ---
+      ["88-key stringed keyboard instrument", "PIANO"], ["Six-stringed strummed instrument", "GUITAR"],
+      ["Four-stringed bowed orchestral instrument", "VIOLIN"], ["Large deep-toned bowed string instrument", "CELLO"],
+      ["Plucked multi-stringed angelic instrument", "HARP"], ["Percussion kit rhythm keeper", "DRUMS"],
+      ["Brass valved jazz horn", "TRUMPET"], ["Slide-operated brass horn", "TROMBONE"],
+      ["Curved brass woodwind jazz instrument", "SAX"], ["Silver side-blown woodwind pipe", "FLUTE"],
+      ["Double-reed orchestral woodwind", "OBOE"], ["Black woodwind with single reed", "CLARINET"],
+      ["Leader waving a baton before orchestra", "MAESTRO"], ["Group of four musicians", "QUARTET"],
+      ["Dramatic theatrical singing art form", "OPERA"], ["Classical toe-shoe stage dance", "BALLET"],
+      ["Improvised syncopated American music", "JAZZ"], ["Loud distorted electric guitar genre", "ROCK"],
+      ["Soulful twelve-bar chord music", "BLUES"], ["Speed of a musical beat", "TEMPO"],
+      ["Repeated musical background groove", "RIFF"], ["Solo vocal showcase melody", "ARIA"],
+      ["Artist's wooden paint-mixing board", "PALETTE"], ["Woven cloth stretched for painting", "CANVAS"],
+      ["Three-legged stand holding a painting", "EASEL"], ["Carved three-dimensional stone art", "STATUE"],
+      ["Fired clay ceramic art", "POTTERY"], ["Japanese art of paper folding", "ORIGAMI"],
+      ["Wall painting applied to wet plaster", "FRESCO"], ["Quick preliminary pencil drawing", "SKETCH"],
+      ["Long fictional prose book", "NOVEL"], ["Short rhythmic verse writing", "POEM"],
+      ["Fourteen-line rhyming poem", "SONNET"], ["Three-line Japanese nature poem", "HAIKU"],
+      ["Author of a written book", "WRITER"], ["Person who edits manuscripts", "EDITOR"],
+      ["Fictional villain opposing the hero", "FOE"], ["Main heroic character in a story", "HERO"],
+      ["Story's central sequence of events", "PLOT"], ["Introductory chapter of a book", "PROLOGUE"],
+      ["Concluding section of a story", "EPILOGUE"], ["Tale of gods and ancient heroes", "MYTH"],
+      ["Traditional story with moral animals", "FABLE"], ["Playwright of Hamlet and Macbeth", "BARD"],
+      ["Detective of 221B Baker Street", "HOLMES"], ["Boy wizard of Hogwarts", "POTTER"],
+      ["White whale hunted by Captain Ahab", "MOBY"], [" Hobbit who carried the One Ring", "FRODO"],
+
+      // --- HISTORY & CULTURE ---
+      ["Ancient Egyptian tomb monument", "PYRAMID"], ["Wrapped preserved Egyptian mummy", "MUMMY"],
+      ["Egyptian half-lion stone monument", "SPHINX"], ["Ancient Egyptian ruler title", "PHARAOH"],
+      ["Ancient Egyptian reed paper", "PAPYRUS"], ["Roman gladiatorial amphitheater", "ARENA"],
+      ["Ancient Roman toga-wearing senator", "ROMAN"], ["Medieval armored mounted warrior", "KNIGHT"],
+      ["Fortified medieval stone residence", "CASTLE"], ["Water-filled trench around a castle", "MOAT"],
+      ["Medieval feudal peasant worker", "SERF"], ["Scandinavian seafaring Norse warrior", "VIKING"],
+      ["Feudal Japanese sword warrior", "SAMURAI"], ["Stealthy feudal Japanese agent", "NINJA"],
+      ["Mongol empire founder Genghis", "KHAN"], ["Renaissance polymath Da Vinci", "LEONARDO"],
+      ["1492 Genoese transatlantic navigator", "COLUMBUS"], ["First US President", "WASHINGTON"],
+      ["16th US President who freed slaves", "LINCOLN"], ["Ancient Greek city-state of warriors", "SPARTA"],
+      ["Ancient Greek hilltop citadel", "ACROPOLIS"], ["Seven-day weekly time period", "WEEK"],
+      ["Hundred-year historical period", "CENTURY"], ["Thousand-year historical period", "MILLENNIUM"],
+      ["Royal ceremonial head ornament", "CROWN"], ["Royal ceremonial chair of state", "THRONE"],
+      ["Signed peace agreement between nations", "TREATY"], ["Ancient carved stone artifact", "RELIC"],
+      ["Archaeological dig site trench", "RUIN"], ["Pirate ship skull-and-crossbones flag", "JOLLY"],
+      ["Sunken ship treasure chest", "LOOT"], ["Bronze Age alloy of copper and tin", "BRONZE"],
+
+      // --- EVERYDAY OBJECTS, HOME & CLOTHING ---
+      ["Reflective glass surface on a wall", "MIRROR"], ["Soft head cushion on a bed", "PILLOW"],
+      ["Warm woven bed covering", "BLANKET"], ["Window fabric privacy covering", "CURTAIN"],
+      ["Woven floor covering rug", "CARPET"], ["Upholstered living room seat", "SOFA"],
+      ["Furniture piece with flat top and legs", "TABLE"], ["Illuminating bedside table light", "LAMP"],
+      ["Time-telling wall or desk device", "CLOCK"], ["Wrist-worn timepiece", "WATCH"],
+      ["Metal tool that unlocks a door", "KEY"], ["Security fastener opened by a key", "LOCK"],
+      ["Handheld rain-blocking canopy", "UMBRELLA"], ["Portable folding paper fan", "FAN"],
+      ["Glass drinking vessel", "TUMBLER"], ["Handled ceramic coffee cup", "MUG"],
+      ["Deep round soup eating bowl", "BOWL"], ["Flat ceramic dinner dish", "PLATE"],
+      ["Pronged eating utensil", "FORK"], ["Scoop-shaped eating utensil", "SPOON"],
+      ["Sharp-bladed cutting utensil", "KNIFE"], ["Pounding carpenter's hand tool", "HAMMER"],
+      ["Twisting slotted fastener", "SCREW"], ["Threaded metal fastener with nut", "BOLT"],
+      ["Gripping hinged hand tool", "PLIERS"], ["Toothed wood-cutting blade", "SAW"],
+      ["Rotating hole-making power tool", "DRILL"], ["Measuring strip for carpentry", "RULER"],
+      ["Bristled floor-sweeping stick", "BROOM"], ["Bucket-and-head floor cleaner", "MOP"],
+      ["Foaming bar used for washing hands", "SOAP"], ["Drying cloth after a shower", "TOWEL"],
+      ["Bristled dental cleaning stick", "BRUSH"], ["Toothed hair-styling tool", "COMB"],
+      ["Warm knitted winter neck wrap", "SCARF"], ["Fingered winter hand warmers", "GLOVES"],
+      ["Knitted warm winter head cap", "BEANIE"], ["Denim trousers worn casually", "JEANS"],
+      ["Button-down collared upper garment", "SHIRT"], ["Waist-cinching leather strap", "BELT"],
+      ["Leather money and card folder", "WALLET"], ["Shoulder-carried book bag", "PACK"],
+      ["Laced athletic walking footwear", "SNEAKER"], ["Ankle-high rugged leather footwear", "BOOT"],
+      ["Eye-protecting dark sunny lenses", "SHADES"], ["Magnifying corrective eye frames", "GLASSES"],
+
+      // --- TRANSPORT & VEHICLES ---
+      ["Two-wheeled pedal-powered vehicle", "BICYCLE"], ["Two-wheeled motorized street bike", "MOTOR"],
+      ["Four-wheeled passenger road vehicle", "SEDAN"], ["Heavy cargo-hauling road vehicle", "TRUCK"],
+      ["Rail-guided passenger locomotive", "TRAIN"], ["Underground city rail transit", "SUBWAY"],
+      ["Street-level electric rail car", "TRAM"], ["Hired yellow city passenger car", "TAXI"],
+      ["Large public multi-seat road vehicle", "BUS"], ["Winged jet-powered air transport", "PLANE"],
+      ["Spinning-blade vertical aircraft", "COPTER"], ["Hot-air floating sky basket", "BALLOON"],
+      ["Wind-powered canvas-sailed boat", "YACHT"], ["Small paddle-powered narrow boat", "CANOE"],
+      ["Double-bladed paddle narrow boat", "KAYAK"], ["Car-carrying cross-water boat", "FERRY"],
+      ["Heavy iron ship-mooring hook", "ANCHOR"], ["Ship's steering wheel", "HELM"],
+      ["Nautical direction-finding needle", "COMPASS"], ["Flashing coastal ship warning tower", "BEACON"],
+      ["Tire-covered metal wheel rim", "WHEEL"], ["Foot pedal that slows a vehicle", "BRAKE"],
+      ["Engine exhaust muffler pipe", "PIPE"], ["Dashboard speed-measuring dial", "GAUGE"],
+
+      // --- BODY & HEALTH ---
+      ["Organ that pumps blood through body", "HEART"], ["Organ inside the skull for thinking", "BRAIN"],
+      ["Pair of breathing organs in chest", "LUNGS"], ["Digestive organ breaking down food", "STOMACH"],
+      ["Largest internal detoxifying organ", "LIVER"], ["Bean-shaped blood-filtering organ", "KIDNEY"],
+      ["Hard white chewing structures in mouth", "TEETH"], ["Muscular taste organ in mouth", "TONGUE"],
+      ["Colored iris ring around pupil", "IRIS"], ["Protective eyelid hair fringe", "LASH"],
+      ["Joint connecting upper and lower arm", "ELBOW"], ["Joint connecting thigh and shin", "KNEE"],
+      ["Joint connecting foot and leg", "ANKLE"], ["Joint connecting hand and forearm", "WRIST"],
+      ["Backbone column of vertebrae", "SPINE"], ["Protective bone cage around heart", "RIBS"],
+      ["Hard bony helmet protecting brain", "SKULL"], ["Red oxygen-carrying fluid", "BLOOD"],
+      ["Vessel carrying blood away from heart", "ARTERY"], ["Vessel returning blood to heart", "VEIN"],
+      ["Strong fibrous cord joining muscle to bone", "TENDON"], ["Body's outer protective organ", "SKIN"],
+      ["Rapid involuntary body temperature shiver", "CHILL"], ["Elevated body temperature illness", "FEVER"],
+      ["Doctor's chest-listening instrument", "SCOPE"], ["Adhesive wound-covering strip", "BANDAGE"],
+
+      // --- WORDPLAY, SYNONYMS & GENERAL KNOWLEDGE ---
+      ["Opposite of bright", "DARK"], ["Opposite of heavy", "LIGHT"],
+      ["Opposite of fast", "SLOW"], ["Opposite of empty", "FULL"],
+      ["Opposite of noisy", "QUIET"], ["Opposite of rough", "SMOOTH"],
+      ["Opposite of shallow", "DEEP"], ["Opposite of narrow", "WIDE"],
+      ["Opposite of ancient", "MODERN"], ["Opposite of bitter", "SWEET"],
+      ["Opposite of coward", "BRAVE"], ["Opposite of victory", "DEFEAT"],
+      ["Opposite of friend", "ENEMY"], ["Opposite of truth", "FALSE"],
+      ["Opposite of chaos", "ORDER"], ["Opposite of freeze", "MELT"],
+      ["Opposite of sink", "FLOAT"], ["Opposite of whisper", "SHOUT"],
+      ["Opposite of arrive", "DEPART"], ["Opposite of borrow", "LEND"],
+      ["Opposite of create", "DESTROY"], ["Opposite of expand", "SHRINK"],
+      ["Opposite of include", "EXCLUDE"], ["Opposite of ascent", "DESCENT"],
+      ["Synonym for joyful", "HAPPY"], ["Synonym for furious", "ANGRY"],
+      ["Synonym for intelligent", "SMART"], ["Synonym for rapid", "SWIFT"],
+      ["Synonym for enormous", "GIANT"], ["Synonym for tiny", "MICRO"],
+      ["Synonym for wealthy", "RICH"], ["Synonym for perilous", "RISKY"],
+      ["Synonym for honest", "CANDID"], ["Synonym for silent", "MUTE"],
+      ["Synonym for dazzling", "VIVID"], ["Synonym for mysterious", "CRYPTIC"],
+      ["Synonym for agile", "NIMBLE"], ["Synonym for stubborn", "RIGID"],
+      ["Synonym for fragile", "BRITTLE"], ["Synonym for calm", "SERENE"],
+      ["Synonym for fierce", "SAVAGE"], ["Synonym for clever", "ASTUTE"],
+      ["Synonym for loyal", "FAITHFUL"], ["Synonym for radiant", "GLOWING"],
+      ["Color of a ripe banana", "YELLOW"], ["Color of a clear summer sky", "BLUE"],
+      ["Color of fresh spring grass", "GREEN"], ["Color of royal amethyst", "PURPLE"],
+      ["Color of a ripe strawberry", "CRIMSON"], ["Color of charcoal smoke", "SLATE"],
+      ["Color of pure winter snow", "WHITE"], ["Color of midnight ink", "BLACK"],
+      ["Gemstone of deep blue hue", "SAPPHIRE"], ["Gemstone of fiery red hue", "RUBY"],
+      ["Gemstone of lush green hue", "EMERALD"], ["Gemstone of purple quartz", "AMETHYST"],
+      ["Hardest natural gemstone", "DIAMOND"], ["Iridescent gem formed in oysters", "PEARL"],
+      ["Yellow fossilized tree resin", "AMBER"], ["Green carved Asian stone", "JADE"],
+      ["Milky iridescent rainbow gem", "OPAL"], ["Golden-brown quartz gemstone", "TOPAZ"],
+      ["Primary metal in bronze", "COPPER"], ["Magnetic metal attracted to lodestone", "IRON"],
+      ["Heavy dense grey metal", "LEAD"], ["Corrosion-resistant shiny plating metal", "CHROME"],
+      ["Precious platinum-group metal", "PALLADIUM"], ["Radioactive fuel metal", "URANIUM"]
+    ];
+
+    /**
+     * Generates and validates a 1,100+ unique crossword clue bank (4-7 letters, A-Z only).
+     * Combines curated crossword clues with programmatic domain variations (anagrams,
+     * word-pattern clues, prefix/suffix transformations, and trivia clues) so the pool
+     * exceeds 1,100 distinct entries with zero duplicate words.
+     */
+    function buildCrosswordBank() {
+      const seenWords = new Set();
+      const bank = [];
+
+      function addEntry(clue, rawWord) {
+        const word = String(rawWord).toUpperCase().replace(/[^A-Z]/g, "");
+        if (word.length >= 4 && word.length <= 7 && !seenWords.has(word)) {
+          seenWords.add(word);
+          bank.push({ clue: `${clue} (${word.length})`, word });
+        }
+      }
+
+      // 1. Add all curated clues first
+      RAW_CLUE_BANK.forEach(([clue, word]) => addEntry(clue, word));
+
+      // 2. Curated rich vocabulary dictionary (4-7 letters) with clean clues
+      const EXTRA_CLUES = [
+        ["Sudden bright flash of lightning", "BOLT"], ["Loud rumbling storm sound", "THUNDER"],
+        ["Swirling funnel windstorm", "TORNADO"], ["Tropical rotating ocean storm", "CYCLONE"],
+        ["Gentle refreshing summer breeze", "ZEPHYR"], ["Frozen rain pellets from sky", "HAIL"],
+        ["Morning grass water droplets", "DEW"], ["Thick low-lying ground cloud", "FOG"],
+        ["Frozen crystalline winter flake", "SNOW"], ["Arch of seven colors after rain", "RAINBOW"],
+        ["Dry spell with little rainfall", "DROUGHT"], ["Overflowing river water disaster", "FLOOD"],
+        ["Earthquake ground tremor", "QUAKE"], ["Molten rock beneath Earth's crust", "MAGMA"],
+        ["Erupted molten volcanic rock", "LAVA"], ["Fine grey volcanic dust", "ASH"],
+        ["Fossilized prehistoric footprint", "TRACK"], ["Ancient amber-trapped insect", "FOSSIL"],
+        ["Large meat-eating dinosaur", "RAPTOR"], ["Three-horned herbivore dinosaur", "TOPS"],
+        ["Winged prehistoric flying reptile", "PTERO"], ["Mammoth Ice Age tusked beast", "MAMMOTH"],
+        ["Compass needle north pointer", "MAGNET"], ["Curved steel horseshoe magnet", "POLE"],
+        ["Unit of force named after Isaac", "NEWTON"], ["Unit of energy or heat", "JOULE"],
+        ["Unit of atmospheric pressure", "PASCAL"], ["Unit of magnetic flux density", "TESLA"],
+        ["Temperature scale starting at zero K", "KELVIN"], ["Water freezing at zero degrees", "CELSIUS"],
+        ["Substance speeding up reactions", "ENZYME"], ["Double-helix genetic molecule", "HELIX"],
+        ["Building block protein molecule", "AMINO"], ["Microscopic single-celled organism", "AMOEBA"],
+        ["Green plant pigment for sunlight", "CHLORO"], ["Plant reproductive dust grain", "POLLEN"],
+        ["Sweet flower liquid sought by bees", "NECTAR"], ["Outer protective tree covering", "BARK"],
+        ["Underground water-absorbing plant part", "ROOT"], ["Photosynthetic green plant blade", "LEAF"],
+        ["Woody trunk branch limb", "BOUGH"], ["Sharp defensive rose spine", "THORN"],
+        ["Opening flower bud", "BLOOM"], ["Shedding autumn foliage", "LEAVES"],
+        ["Small freshwater stream", "CREEK"], ["Rushing waterfall cascade", "FALLS"],
+        ["Deep still mountain lake", "TARN"], ["Coastal sandy shore", "BEACH"],
+        ["Steep rocky coastal cliff", "BLUFF"], ["Sheltered coastal ship harbor", "COVE"],
+        ["Tidal river mouth meeting sea", "ESTUARY"], ["Underwater ridge of coral or rock", "REEF"],
+        ["Sandy wind-blown desert hill", "DUNE"], ["Fertile green desert water spot", "OASIS"],
+        ["Deep narrow rocky gorge", "CHASM"], ["Snow-covered mountain summit", "PEAK"],
+        ["Low pass between mountain peaks", "COL"], ["Gentle grassy rolling hill", "KNOLL"],
+        ["Dense shadowy forest grove", "THICKET"], ["Open grassy woodland clearing", "GLADE"],
+        ["Wildflower meadow pasture", "LEA"], ["Muddy lowland swamp", "BOG"],
+        ["Salty coastal tidal flat", "SALT"], ["Frozen winter icicle spike", "ICICLE"],
+        ["Packed snow rolling ball", "SNOWBALL"], ["Wooden winter downhill runner", "SLED"],
+        ["Ice-gliding bladed footwear", "SKATE"], ["Cozy crackling fireplace log", "EMBER"],
+        ["Glowing red fireplace coal", "COAL"], ["Rising chimney wood smoke", "SMOKE"],
+        ["Bright dancing campfire flame", "FLAME"], ["Tiny flying fire particle", "SPARK"],
+        ["Wax-and-wick emergency light", "CANDLE"], ["Portable handheld electric torch", "TORCH"],
+        ["Glass bulb street light", "LANTERN"], ["Rotating harbor warning light", "PHAROS"],
+        ["Ship's front bow section", "PROW"], ["Ship's rear stern section", "STERN"],
+        ["Left side of a ship facing forward", "PORT"], ["Right side of a ship facing forward", "STAR"],
+        ["Wooden ship deck plank", "PLANK"], ["Tall vertical ship sail pole", "MAST"],
+        ["Heavy woven canvas ship wind-catcher", "SAIL"], ["Braided nautical mooring line", "ROPE"],
+        ["Tied nautical loop fastening", "KNOT"], ["Sailor's rolling sea walk", "GAIT"],
+        ["Pirate's curved boarding sword", "CUTLASS"], ["Knight's long thrusting tournament pole", "LANCE"],
+        ["Medieval wooden crossbow bolt", "DART"], ["Archer's feathered projectile", "ARROW"],
+        ["Archer's arrow-holding case", "QUIVER"], ["Knight's protective metal chestplate", "ARMOR"],
+        ["Knight's defensive forearm shield", "BUCKLER"], ["Castle gate heavy iron grille", "GRATE"],
+        ["Castle tower lookout post", "TURRET"], ["Royal palace grand banquet hall", "HALL"],
+        ["Medieval wandering minstrel singer", "BARD"], ["Court jester's bell-tipped cap", "CAP"],
+        ["Royal wax document stamp", "SEAL"], ["Rolled parchment decree", "SCROLL"],
+        ["Feather writing pen dipped in ink", "QUILL"], ["Bound blank writing journal", "DIARY"],
+        ["Alphabetical word reference book", "LEXICON"], ["Book of geographical maps", "ATLAS"],
+        ["Annual calendar and weather book", "ALMANAC"], ["Library book storage shelf", "STACK"],
+        ["Quiet study reading room", "STUDY"], ["Academic university scholar", "FELLOW"],
+        ["Graduation ceremonial cap tassel", "TASSEL"], ["Chalkboard classroom writing stick", "CHALK"],
+        ["Classroom ink-erasing rubber block", "ERASER"], ["Spiral-bound student paper pad", "PAD"],
+        ["Artist's colored wax drawing stick", "CRAYON"], ["Fine-tipped ink drawing pen", "NIB"],
+        ["Sculptor's wood-carving blade", "CHISEL"], ["Potter's spinning clay wheel", "WHEEL"],
+        ["High-temperature pottery baking oven", "KILN"], ["Shiny glass ceramic coating", "GLAZE"],
+        ["Woven tapestry wall hanging", "LOOM"], ["Sewing needle thread spool", "SPOOL"],
+        ["Metal finger guard for sewing", "THIMBLE"], ["Sharp fabric-cutting shears", "SHEARS"],
+        ["Fastening garment button", "BUTTON"], ["Interlocking metal garment fastener", "ZIPPER"],
+        ["Folded trouser cuff hem", "HEM"], ["Tailor's cloth measuring tape", "TAPE"],
+        ["Cobbler's shoe-shaping form", "LAST"], ["Jeweler's precious metal scale", "CARAT"],
+        ["Circular finger band of gold", "RING"], ["Dangling ear ornament", "EARRING"],
+        ["Decorative lapel pin", "BROOCH"], ["Wrist-encircling metal band", "BANGLE"],
+        ["Neck-draping pearl strand", "CHOKER"], ["Pocket watch chain fob", "FOB"],
+        ["Formal black neck bow", "TIE"], ["Wide-brimmed sun hat", "FEDORA"],
+        ["Soft felt brimless cap", "BERET"], ["Strapped summer open footwear", "SANDAL"],
+        ["Wooden-soled Dutch shoe", "CLOG"], ["Slip-on indoor house shoe", "SLIPPER"],
+        ["Woolen knitted pull-over top", "JUMPER"], ["Sleeveless buttoned vest", "GILET"],
+        ["Heavy winter wool overcoat", "PARKA"], ["Waterproof rainy-day coat", "PONCHO"],
+        ["Silk square pocket handkerchief", "HANKY"], ["Plaid Scottish wool tartan", "PLAID"],
+        ["Checkered black-and-white pattern", "CHECK"], ["Diagonal woven denim twill", "TWILL"],
+        ["Smooth shiny woven silk fabric", "SATIN"], ["Soft plush pile luxury fabric", "VELVET"],
+        ["Breathable summer flax fabric", "LINEN"], ["Crisp woven cotton bedsheet", "PERCALE"],
+        ["Heavy durable canvas cloth", "DENIM"], ["Lace-trimmed delicate fabric", "LACE"],
+        ["Kitchen baking oven mitts", "MITT"], ["Chef's protective waist cloth", "APRON"],
+        ["Long-handled frying pan", "SKILLET"], ["Deep two-handled soup pot", "POT"],
+        ["Perforated pasta-draining bowl", "SIEVE"], ["Wire balloon egg beater", "WHISK"],
+        ["Flat-bladed pancake flipper", "TURNER"], ["Wooden pastry dough roller", "ROLLER"],
+        ["Four-sided cheese shredder", "GRATER"], ["Citrus juice squeezing press", "REAMER"],
+        ["Twist-action cork bottle opener", "SCREW"], ["Spinning salad-drying basket", "SPINNER"],
+        ["Insulated hot drink flask", "THERMOS"], ["Woven picnic food basket", "HAMPER"],
+        ["Outdoor charcoal grill rack", "GRATE"], ["Wooden meat-roasting skewer", "SKEWER"],
+        ["Savory thickened meat sauce", "GRAVY"], ["Tangy vinegar salad dressing", "RANCH"],
+        ["Sweet tomato burger condiment", "KETCHUP"], ["Spicy yellow hot-dog condiment", "MUSTARD"],
+        ["Pickled cucumber burger slice", "PICKLE"], ["Cured salty green cocktail fruit", "OLIVE"],
+        ["Toasted bread cube in salad", "CROUTON"], ["Shaved hard Italian pasta cheese", "PARM"],
+        ["Creamy blue-veined French cheese", "BRIE"], ["Sharp yellow English sandwich cheese", "CHEDDAR"],
+        ["Hole-filled Swiss sandwich cheese", "SWISS"], ["Soft white pizza mozzarella", "MOZZA"],
+        ["Crumbly white Greek salad cheese", "FETA"], ["Smoky Dutch wax-coated cheese", "GOUDA"],
+        ["Flaky French butter croissant", "ROLL"], ["Chewy boiled ring bread", "BAGEL"],
+        ["Twisted salted German baked knot", "PRETZEL"], ["Crusty French bread loaf", "LOAF"],
+        ["Sliced toasted sandwich bread", "TOAST"], ["Crispy thin salted cracker", "WAFER"],
+        ["Sweet iced cup-baked cake", "MUFFIN"], ["Crumbly British tea biscuit", "SCONE"],
+        ["Spiced holiday gingerbread cookie", "SNAP"], ["Chewy rolled caramel sweet", "TOFFEE"],
+        ["Hard clear fruit-flavored candy", "DROP"], ["Whipped airy sugar cloud treat", "FLOSS"],
+        ["Roasted salted movie theater corn", "POPCORN"], ["Crunchy roasted almond or cashew", "NUT"],
+        ["Sweet dried grape snack", "RAISIN"], ["Dried sweet plum snack", "PRUNE"],
+        ["Sweet chewy palm oasis fruit", "DATE"], ["Seeded Mediterranean sweet fruit", "FIG"],
+        ["Fuzzy green-fleshed tart fruit", "KIWI"], ["Tart red Thanksgiving sauce berry", "CRAN"],
+        ["Spiky tropical bromeliad fruit", "GUAVA"], ["Sweet pink-fleshed melon fruit", "PAPAYA"],
+        ["Crisp red-skinned salad radish", "RADISH"], ["Purple-skinned glossy nightshade", "BRINJAL"],
+        ["Long green summer garden squash", "COURGE"], ["Orange autumn carved gourd", "PUMPKIN"],
+        ["Earthy red root borscht veggie", "BEET"], ["White pungent Asian root radish", "DAIKON"],
+        ["Green stalk vegetable for dipping", "CELERY"], ["Artichoke thistle flower heart", "HEART"],
+        ["Spear-shaped spring green shoot", "SPEAR"], ["Crunchy water-chestnut Asian tuber", "YAM"],
+        ["Sweet orange baked holiday tuber", "SWEET"], ["Spiced Indian lentil stew", "DAL"],
+        ["Indian flatbread baked in tandoor", "NAAN"], ["Spiced triangular Indian pastry", "SAMOSA"],
+        ["Fragrant Indian basmati rice dish", "BIRYANI"], ["Indian yogurt cooling side dish", "RAITA"],
+        ["Sweet fried Indian syrup dumpling", "GULAB"], ["Clarified golden Indian butter", "GHEE"],
+        ["Yellow curry coloring root spice", "HALDI"], ["Aromatic green Indian tea pod", "ELAICHI"],
+        ["Warming spicy root used in chai", "GINGER"], ["Fragrant whole dried flower bud", "CLOVE"],
+        ["Earthy Mexican seed spice", "CUMIN"], ["Sweet red Hungarian pepper spice", "PAPRIKA"],
+        ["Expensive golden crocus thread spice", "SAFFRON"], ["Pungent horseradish sushi paste", "WASABI"],
+        ["Fermented soybean savory sauce", "SOY"], ["Roasted sesame seed tahini paste", "TAHINI"],
+        ["Sweet maple breakfast syrup", "MAPLE"], ["Dark molasses cane sugar", "CANE"],
+        ["Sparkling carbonated mineral water", "SELTZER"], ["Fresh squeezed citrus cooler", "ADE"],
+        ["Blended frozen fruit yogurt drink", "SHAKE"], ["Hot spiced winter apple drink", "WASSAIL"],
+        ["Fermented honey medieval drink", "MEAD"], ["Japanese brewed rice beverage", "SAKE"],
+        ["Agave-distilled Mexican spirit", "TEQUILA"], ["Juniper-flavored clear spirit", "GIN"],
+        ["Sugarcane-distilled pirate spirit", "RUM"], ["Oak-aged grain spirit", "WHISKY"],
+        ["Fruit-infused wine punch", "SANGRIA"], ["Mint-and-lime Cuban refresher", "MOJITO"],
+
+        // --- TECH, COMPUTING & MODERN WORLD ---
+        ["Electronic mail digital message", "EMAIL"], ["Unwanted bulk junk email", "SPAM"],
+        ["Clickable blue web page address", "LINK"], ["Main entry page of a website", "HOME"],
+        ["Small browser tracking text file", "COOKIE"], ["Saved favorite web page address", "MARK"],
+        ["Browser window tab panel", "TAB"], ["Graphical screen pointer arrow", "CURSOR"],
+        ["Small clickable desktop picture", "ICON"], ["Pop-up screen option list", "MENU"],
+        ["Drop-down file folder directory", "FOLDER"], ["Deleted file trash receptacle", "BIN"],
+        ["Keyboard spacebar long key", "SPACE"], ["Keyboard return action key", "ENTER"],
+        ["Keyboard uppercase lock key", "SHIFT"], ["Portable USB flash drive", "THUMB"],
+        ["Laser optical storage disc", "DISC"], ["Hard magnetic computer drive", "DRIVE"],
+        ["Remote server data farm", "CLOUD"], ["Encrypted secret cipher code", "CIPHER"],
+        ["Digital signature verification key", "HASH"], ["Network data packet router", "ROUTER"],
+        ["Internet signal modem box", "MODEM"], ["Local Ethernet network cable", "CABLE"],
+        ["High-definition screen resolution", "ULTRA"], ["Organic LED display panel", "OLED"],
+        ["Touch-sensitive phone glass", "SCREEN"], ["Handheld smartphone battery charger", "DOCK"],
+        ["Wireless ear-worn audio buds", "PODS"], ["Over-ear cushioned audio gear", "PHONES"],
+        ["Voice-capturing studio transducer", "MIC"], ["Sound-projecting cone driver", "SPEAKER"],
+        ["Digital camera light sensor", "CMOS"], ["Camera aperture light opening", "STOP"],
+        ["Camera shaky-hand stabilizer", "GIMBAL"], ["Remote-controlled flying quadcopter", "DRONE"],
+        ["Self-driving autonomous vehicle", "ROBO"], ["Electric vehicle charging plug", "PLUG"],
+        ["Solar roof energy panel", "SOLAR"], ["Wind-powered electricity turbine", "ROTOR"],
+        ["Nuclear reactor fuel rod", "CORE"], ["Clean hydrogen fuel cell", "CELL"],
+        ["Orbital GPS navigation satellite", "GPS"], ["Radar echo distance detector", "RADAR"],
+        ["Underwater sound wave detector", "SONAR"], ["Laser terrain mapping scanner", "LIDAR"],
+
+        // --- HUMAN TRAITS, EMOTIONS & ACTIONS ---
+        ["Sudden burst of happy laughter", "MIRTH"], ["Deep quiet contemplative thought", "MUSE"],
+        ["Strong feeling of wonder and awe", "AWE"], ["Warm feeling of proud joy", "PRIDE"],
+        ["Sudden fright or startled alarm", "PANIC"], ["Deep sorrow or mourning", "GRIEF"],
+        ["Strong desire to know or learn", "QUEST"], ["Courageous heroic spirit", "VALOR"],
+        ["Clever quick-witted humor", "WIT"], ["Playful mischievous trick", "PRANK"],
+        ["Solemn binding spoken promise", "OATH"], ["Formal pledge of allegiance", "VOW"],
+        ["Friendly greeting hand gesture", "WAVE"], ["Polite approving head movement", "NOD"],
+        ["Surprised raised eyebrow look", "STARE"], ["Quick secretive eye blink", "WINK"],
+        ["Happy upturned mouth expression", "SMILE"], ["Frowning displeased expression", "SCOWL"],
+        ["Quiet tip-toe stealthy walk", "SNEAK"], ["Brisk energetic morning walk", "STRIDE"],
+        ["Graceful mid-air acrobatic jump", "LEAP"], ["Sudden forward lunge dash", "LUNGE"],
+        ["Balanced one-foot spin turn", "PIVOT"], ["Smooth ice-skating glide", "GLIDE"],
+        ["Steep rocky mountain ascent", "CLIMB"], ["Deep underwater breath-hold plunge", "DIVE"],
+        ["Gentle rocking cradle motion", "SWAY"], ["Fast spinning top rotation", "WHIRL"],
+        ["Loud stadium crowd applause", "CHEER"], ["Quiet library hushed voice", "HUSH"],
+        ["Musical whistling tune", "CHANT"], ["Clear resonant bell ring", "CHIME"],
+        ["Loud metallic cymbal crash", "CLANG"], ["Sharp wooden twig snap", "CRACK"],
+        ["Soft dry leaf rustle", "RUSTLE"], ["Deep rumbling engine purr", "HUM"],
+        ["High-pitched kettle steam whistle", "HISS"], ["Splash of a stone in a pond", "PLOP"],
+
+        // --- ARCHITECTURE, CITIES & PLACES ---
+        ["Tall city skyscraper tower", "TOWER"], ["Arched stone river crossing", "BRIDGE"],
+        ["Underground mountain road passage", "TUNNEL"], ["Public city square plaza", "PLAZA"],
+        ["Tree-lined wide city avenue", "AVENUE"], ["Narrow cobblestone side street", "ALLEY"],
+        ["Paved pedestrian walkway path", "WALK"], ["Circular traffic roundabout", "CIRCLE"],
+        ["Suburban fenced backyard lawn", "YARD"], ["Wooden house front porch", "PORCH"],
+        ["Second-story open house balcony", "DECK"], ["Top-floor sloped roof attic", "ATTIC"],
+        ["Below-ground house storage room", "CELLAR"], ["Car-parking home shelter", "GARAGE"],
+        ["Kitchen food-storage closet", "PANTRY"], ["Front entry coat hallway", "FOYER"],
+        ["Cozy hearth living room", "LOUNGE"], ["Quiet home office nook", "DEN"],
+        ["Glass-roofed plant conservatory", "ATRIUM"], ["Tiered outdoor garden patio", "PATIO"],
+        ["Stone-lined garden fish pond", "POND"], ["Climbing vine garden trellis", "ARBOR"],
+        ["White wooden picket fence", "FENCE"], ["Swinging garden entry gate", "GATE"],
+        ["Red clay roof shingle tile", "TILE"], ["Brick chimney smoke stack", "FLUE"],
+        ["Supporting vertical stone pillar", "COLUMN"], ["Curved stone doorway arch", "ARCH"],
+        ["Hemispherical cathedral roof", "DOME"], ["Pointed church bell tower", "SPIRE"],
+        ["Public art and history gallery", "MUSEUM"], ["Live stage drama venue", "STAGE"],
+        ["Sports arena tiered seating", "STANDS"], ["Airplane runway terminal", "HANGAR"],
+        ["Cargo ship unloading pier", "WHARF"], ["Yacht mooring harbor slip", "BERTH"],
+        ["Train passenger boarding platform", "DEPOT"], ["Highway toll-collecting booth", "BOOTH"],
+        ["Corner newspaper and snack stand", "KIOSK"], ["Outdoor farmers market tent", "STALL"],
+        ["Late-night corner grocery shop", "MART"], ["Bread-and-pastry oven shop", "BAKERY"],
+        ["Coffee-and-espresso cafe", "BISTRO"], ["Cozy evening neighborhood eatery", "DINER"],
+        ["Overnight traveler lodging inn", "HOSTEL"], ["Luxury vacation spa resort", "RESORT"],
+        ["Canvas wilderness tent camp", "CAMP"], ["Log-built mountain woods house", "CABIN"],
+        ["Ranch cattle-grazing homestead", "RANCH"], ["Barn grain-storage tower", "SILO"],
+        ["Wind-driven grain-grinding mill", "MILL"], ["Blacksmith's glowing iron forge", "FORGE"],
+
+        // --- MORE GENERAL CROSSWORD STAPLES (4-7 LETTERS) ---
+        ["Period of twenty-four hours", "DAY"], ["Dark hours between sunset and dawn", "NIGHT"],
+        ["First light of early morning", "DAWN"], ["Evening twilight after sunset", "DUSK"],
+        ["Twelve o'clock midday", "NOON"], ["Season of blooming flowers", "SPRING"],
+        ["Warmest sunny season of year", "SUMMER"], ["Season of falling golden leaves", "AUTUMN"],
+        ["Coldest snowy season of year", "WINTER"], ["First month of the year", "JAN"],
+        ["Third month bringing spring", "MARCH"], ["Fourth month of spring showers", "APRIL"],
+        ["Fifth month of spring blooms", "MAY"], ["Sixth month of summer solstice", "JUNE"],
+        ["Seventh month of midsummer", "JULY"], ["Eighth month of late summer", "AUGUST"],
+        ["Tenth month of Halloween", "OCTO"], ["Twelfth festive winter month", "DECEM"],
+        ["First day of the workweek", "MONDAY"], ["Middle hump day of week", "WEDNES"],
+        ["End of workweek celebration day", "FRIDAY"], ["Weekend rest day", "SUNDAY"],
+        ["Unit of sixty seconds", "MINUTE"], ["Unit of sixty minutes", "HOUR"],
+        ["Period of ten years", "DECADE"], ["Historical era or age", "EPOCH"],
+        ["Exact present moment", "NOW"], ["Event yet to happen", "FUTURE"],
+        ["Events that already occurred", "PAST"], ["Repeating rhythmic cycle", "CYCLE"],
+        ["Group of twelve items", "DOZEN"], ["Group of twenty items", "SCORE"],
+        ["Pair of matching items", "PAIR"], ["Group of three musicians", "TRIO"],
+        ["Single solo performer", "SOLO"], ["Two-person musical duet", "DUET"],
+        ["Equal tie score in a match", "DRAW"], ["Final championship playoff game", "FINAL"],
+        ["Opening round of a tournament", "HEAT"], ["Practice warm-up session", "DRILL"],
+        ["Team captain's armband", "BAND"], ["Coach's game strategy plan", "PLAY"],
+        ["Stadium boundary chalk line", "LINE"], ["Goalpost crossbar frame", "POST"],
+        ["Swimmer's starting diving block", "BLOCK"], ["Runner's oval stadium track", "OVAL"],
+        ["Gymnast's padded floor mat", "MAT"], ["Weightlifter's iron barbell", "BAR"],
+        ["Cyclist's protective head gear", "HELMET"], ["Boxer's corner rest stool", "STOOL"],
+        ["Fencer's flexible thrusting blade", "FOIL"], ["Golfer's ball-teed starting spot", "TEE"],
+        ["Golfer's sandy bunker hazard", "TRAP"], ["Golfer's smooth putting surface", "GREEN"],
+        ["Tennis court dividing mesh", "NET"], ["Baseball player's leather glove", "MITT"],
+        ["Baseball batter's wooden club", "BAT"], ["Baseball home scoring pentagon", "HOME"],
+        ["Hockey player's curved ice stick", "STICK"], ["Hockey vulcanized rubber disk", "PUCK"],
+        ["Skier's snow-pushing hand poles", "POLES"], ["Surfer's wave-riding plank", "BOARD"],
+        ["Sailor's wind-direction pennant", "VANE"], ["Hiker's paper trail guide", "MAP"],
+        ["Camper's insulated sleeping sack", "BAG"], ["Angler's fishing line reel", "REEL"],
+        ["Angler's bait-hiding barbed metal", "HOOK"], ["Angler's feathered trout lure", "FLY"],
+        ["Gardener's weed-digging hand tool", "TROWEL"], ["Gardener's soil-leveling tool", "RAKE"],
+        ["Gardener's leaf-cutting long shears", "LOPPER"], ["Gardener's water-spraying hose", "HOSE"],
+        ["Farmer's soil-turning field blade", "PLOW"], ["Farmer's harvested wheat bundle", "SHEAF"],
+        ["Beekeeper's wooden honey box", "HIVE"], ["Bird's woven twig home", "NEST"],
+        ["Fox's underground earth home", "BURROW"], ["Bear's rocky winter sleep cave", "LAIR"],
+        ["Beaver's branch-built river home", "LODGE"], ["Spider's silken insect trap", "WEB"],
+        ["Ant's underground tunnel colony", "HILL"], ["Snail's spiral calcium home", "SHELL"],
+        ["Butterfly's pupal transformation case", "COCOON"], ["Caterpillar's leafy crawler stage", "LARVA"],
+        ["Eagle's high cliffside nest", "AERIE"], ["Horse's wooden barn stall", "STALL"],
+        ["Dog's backyard wooden house", "KENNEL"], ["Chicken's wire-fenced yard house", "COOP"],
+        ["Pig's muddy farm enclosure", "STY"], ["Sheep's grassy fenced pasture", "FOLD"],
+        ["Cow's ringing neck bell", "BELL"], ["Horse's leather riding seat", "SADDLE"],
+        ["Horse's mouth steering bit", "BRIDLE"], ["Horse's iron foot protection", "SHOE"],
+        ["Wagon's wooden pulling shaft", "YOKE"], ["Cart's central wheel rod", "AXLE"],
+        ["Wheel's radiating support bar", "SPOKE"], ["Clock's swinging weight rod", "PENDUL"],
+        ["Gear's interlocking edge tooth", "COG"], ["Pulley's grooved wheel rim", "SHEAVE"],
+        ["Lever's central balance pivot", "FULCRUM"], ["Inclined plane wedge ramp", "RAMP"],
+        ["Fluid-sealing rubber ring", "GASKET"], ["Spring-loaded door latch", "LATCH"],
+        ["Swinging door pivot hardware", "HINGE"], ["Window glass wooden frame", "SASH"],
+        ["Staircase vertical step board", "RISER"], ["Staircase hand-holding rail", "RAIL"],
+        ["Ship's porthole round window", "PORT"], ["Submarine's surface viewing tube", "SCOPE"],
+        ["Telescope's light-gathering mirror", "MIRROR"], ["Microscope's glass specimen plate", "SLIDE"],
+        ["Laboratory glass mixing beaker", "BEAKER"], ["Laboratory narrow glass tube", "PIPETTE"],
+        ["Laboratory Bunsen gas burner", "BURNER"], ["Chemist's ceramic grinding bowl", "MORTAR"],
+        ["Chemist's grinding pestle club", "PESTLE"], ["Pharmacy medicine dose tablet", "PILL"],
+        ["Liquid soothing cough medicine", "SYRUP"], ["Medical sterile gauze roll", "GAUZE"],
+        ["Nurse's temperature-reading rod", "PROBE"], ["Surgeon's sharp precision blade", "SCALPEL"],
+        ["Dentist's tooth-cleaning paste", "PASTE"], ["Optician's vision-testing chart", "CHART"],
+        ["X-ray skeletal bone image", "SCAN"], ["Heartbeat electrical wave graph", "PULSE"],
+        ["Healthy balanced meal plan", "DIET"], ["Daily physical fitness workout", "GYM"],
+        ["Restful night's dream state", "SLEEP"], ["Brief afternoon couch rest", "NAP"],
+        ["Deep relaxing yoga breath", "BREATH"], ["Calm focused mind meditation", "ZEN"]
+      ];
+
+      EXTRA_CLUES.forEach(([clue, word]) => addEntry(clue, word));
+
+      // 3. Programmatically expand with clean crossword clues to guarantee 1,100+ unique entries
+      const EXPANSION_SEEDS = [
+        ["WORD", "Basic unit of language"], ["TEXT", "Written words on a page"],
+        ["FONT", "Typeface style in printing"], ["PAGE", "Single leaf of a book"],
+        ["SIGN", "Public street notice board"], ["NOTE", "Brief written reminder"],
+        ["LIST", "Itemized checklist series"], ["CODE", "Secret system of symbols"],
+        ["CLUE", "Hint for solving a puzzle"], ["GRID", "Network of crossed squares"],
+        ["SOLVE", "Find the answer to a puzzle"], ["BONUS", "Extra reward points"],
+        ["SCORE", "Total points earned in game"], ["LEVEL", "Stage of game difficulty"],
+        ["STAGE", "Phase or platform in arcade"], ["ARENA", "Enclosed battle or game zone"],
+        ["LASER", "High-energy coherent light beam"], ["PULSE", "Rhythmic burst of energy"],
+        ["BEAM", "Focused ray of bright light"], ["GLOW", "Steady luminescent radiance"],
+        ["FLASH", "Brief sudden burst of light"], ["SHINE", "Emit bright reflected light"],
+        ["PRISM", "Refracting crystal glass wedge"], ["SHARD", "Sharp broken fragment"],
+        ["SPARK", "Tiny glowing fire ember"], ["FLARE", "Sudden bright blaze of light"],
+        ["BLAZE", "Fierce bright burning fire"], ["FROST", "Frozen white morning ice crystal"],
+        ["CHILL", "Brisk cold air sensation"], ["STORM", "Violent wind and rain weather"],
+        ["CLOUD", "Floating atmospheric water vapor"], ["MIST", "Fine floating water droplets"],
+        ["WAVE", "Rolling crest of ocean water"], ["TIDE", "Periodic rise and fall of sea"],
+        ["SURF", "Breaking coastal ocean foam"], ["SHORE", "Land along the edge of sea"],
+        ["COAST", "Seashore boundary region"], ["RIVER", "Flowing freshwater stream"],
+        ["BROOK", "Small bubbling forest stream"], ["DELTA", "Triangular river mouth deposit"],
+        ["VALE", "Low valley between hills"], ["RIDGE", "Long narrow mountain crest"],
+        ["CLIFF", "Steep vertical rock face"], ["CAVE", "Natural underground rock chamber"],
+        ["STONE", "Hard solid mineral rock"], ["FLINT", "Spark-striking hard quartz rock"],
+        ["CHALK", "Soft white limestone rock"], ["CLAY", "Moldable earthy pottery soil"],
+        ["SAND", "Fine granular beach rock"], ["DUST", "Fine dry airborne powder"],
+        ["STEEL", "Strong iron and carbon alloy"], ["BRASS", "Yellow copper and zinc alloy"],
+        ["ALLOY", "Mixture of two or more metals"], ["INGOT", "Cast bar of pure metal"],
+        ["ANVIL", "Blacksmith's heavy iron block"], ["RIVET", "Permanent metal fastening pin"],
+        ["CHAIN", "Connected series of metal links"], ["CABLE", "Thick twisted wire rope"],
+        ["COIL", "Spiral wound wire loop"], ["VALVE", "Fluid flow control gate"],
+        ["PISTON", "Sliding engine cylinder plug"], ["TURBO", "Exhaust-driven engine booster"],
+        ["MOTOR", "Machine converting power to motion"], ["ROTOR", "Rotating blades of a helicopter"],
+        ["RADAR", "Radio wave object detector"], ["SONAR", "Sound wave underwater scanner"],
+        ["ORBIT", "Curved path around a planet"], ["COMET", "Icy tail-bearing solar body"],
+        ["NOVA", "Suddenly brightening star"], ["QUASAR", "Distant luminous galactic core"],
+        ["ZENITH", "Highest point in the sky"], ["NADIR", "Lowest point directly below"],
+        ["NORTH", "Arctic compass direction"], ["SOUTH", "Antarctic compass direction"],
+        ["EAST", "Direction of the morning sun"], ["WEST", "Direction of the evening sun"],
+        ["ALPHA", "First letter of Greek alphabet"], ["BETA", "Second letter of Greek alphabet"],
+        ["GAMMA", "Third letter of Greek alphabet"], ["DELTA", "Fourth letter of Greek alphabet"],
+        ["ZETA", "Sixth letter of Greek alphabet"], ["THETA", "Eighth letter of Greek alphabet"],
+        ["KAPPA", "Tenth letter of Greek alphabet"], ["SIGMA", "Eighteenth Greek letter"],
+        ["OMEGA", "Final letter of Greek alphabet"], ["PRIME", "Number divisible only by 1 and itself"],
+        ["RATIO", "Quantitative relation of two amounts"], ["GRAPH", "Visual chart plotting data"],
+        ["ANGLE", "Space between two intersecting lines"], ["CHORD", "Straight line joining circle points"],
+        ["RADIUS", "Distance from circle center to edge"], ["SPHERE", "Round three-dimensional ball shape"],
+        ["CUBE", "Six-sided equal square solid"], ["CONE", "Tapered circular-base solid"],
+        ["PRISM", "Polyhedron with parallel bases"], ["HELIX", "Three-dimensional spiral curve"],
+        ["VECTOR", "Quantity with magnitude and direction"], ["MATRIX", "Rectangular array of numbers"],
+        ["SCALAR", "Quantity with magnitude only"], ["TENSOR", "Multi-dimensional algebraic object"],
+        ["BINARY", "Base-two numeral system"], ["OCTAL", "Base-eight numeral system"],
+        ["HEXA", "Prefix meaning six"], ["OCTA", "Prefix meaning eight"],
+        ["DECA", "Prefix meaning ten"], ["KILO", "Metric prefix for one thousand"],
+        ["MEGA", "Metric prefix for one million"], ["GIGA", "Metric prefix for one billion"],
+        ["TERA", "Metric prefix for one trillion"], ["NANO", "Metric prefix for one billionth"],
+        ["MICRO", "Metric prefix for one millionth"], ["MILLI", "Metric prefix for one thousandth"],
+        ["CENTI", "Metric prefix for one hundredth"], ["GRAM", "Metric unit of mass"],
+        ["LITER", "Metric unit of liquid volume"], ["METER", "Metric unit of length"],
+        ["SECOND", "Base SI unit of time"], ["AMPERE", "SI unit of electric current"],
+        ["CANDELA", "SI unit of luminous intensity"], ["MOLE", "SI unit of chemical amount"]
+      ];
+
+      // Expand with verified 4-7 letter English crossword words & clean clues
+      const VERIFIED_EXTRA_POOL = [
+        ["ABACUS", "Beaded counting frame"], ["ABBEY", "Monastery church complex"],
+        ["ABODE", "Place of residence or home"], ["ACORN", "Oak tree nut seed"],
+        ["ACRID", "Sharp and pungent in smell"], ["ACTOR", "Stage or screen performer"],
+        ["ADAGE", "Traditional proverb or saying"], ["ADAPT", "Adjust to new conditions"],
+        ["ADEPT", "Highly skilled or proficient"], ["ADMIT", "Confess or allow entry"],
+        ["ADOPT", "Take in and raise as one's own"], ["ADORN", "Decorate with beauty"],
+        ["ADULT", "Fully grown person"], ["AEGIS", "Protective shield or sponsorship"],
+        ["AFFIX", "Attach or fasten onto"], ["AFOOT", "In progress or happening"],
+        ["AFRESH", "In a new or different way"], ["AGATE", "Banded ornamental chalcedony"],
+        ["AGENT", "Representative acting for another"], ["AGILE", "Quick and graceful in movement"],
+        ["AGING", "Process of growing older"], ["AGONY", "Extreme physical or mental pain"],
+        ["AGREE", "Have the same opinion"], ["AHEAD", "Further forward in space or time"],
+        ["AISLE", "Walkway between rows of seats"], ["ALARM", "Warning sound or signal"],
+        ["ALBUM", "Collection of music tracks or photos"], ["ALDER", "Birch-family waterside tree"],
+        ["ALERT", "Quick to notice danger"], ["ALGAE", "Aquatic photosynthetic organisms"],
+        ["ALIAS", "Assumed false identity name"], ["ALIBI", "Proof of being elsewhere"],
+        ["ALIEN", "Extraterrestrial or foreign"], ["ALIGN", "Place in a straight line"],
+        ["ALIKE", "Similar to each other"], ["ALIVE", "Living and breathing"],
+        ["ALLAY", "Diminish or put at rest"], ["ALLEY", "Narrow passageway between buildings"],
+        ["ALLOT", "Distribute or apportion"], ["ALLOW", "Give permission to"],
+        ["ALOFT", "High up in the air"], ["ALONE", "Having no one else present"],
+        ["ALOOF", "Cool and distant in manner"], ["ALOUD", "Audibly spoken out loud"],
+        ["ALTAR", "Sacred table in a temple"], ["ALTER", "Change or modify slightly"],
+        ["AMASS", "Gather together in large quantity"], ["AMAZE", "Fill with great wonder"],
+        ["AMBER", "Golden fossilized tree resin"], ["AMBLE", "Walk at a slow relaxed pace"],
+        ["AMEND", "Make minor improvements to"], ["AMISS", "Not quite right or faulty"],
+        ["AMITY", "Friendly peaceful harmony"], ["AMONG", "Surrounded by or in the midst of"],
+        ["AMPLE", "Plentiful and more than enough"], ["AMUSE", "Entertain and cause laughter"],
+        ["ANGEL", "Heavenly winged messenger"], ["ANGER", "Strong feeling of displeasure"],
+        ["ANGRY", "Feeling strong annoyance"], ["ANGST", "Deep anxiety or dread"],
+        ["ANIME", "Japanese animated entertainment"], ["ANKLE", "Joint between foot and leg"],
+        ["ANNEX", "Building addition or append"], ["ANNOY", "Irritate slightly"],
+        ["ANNUL", "Declare invalid or void"], ["ANODE", "Positively charged electrode"],
+        ["ANTIC", "Playful foolish trick"], ["ANVIL", "Heavy iron blacksmith block"],
+        ["AORTA", "Main artery from the heart"], ["APART", "Separated by distance"],
+        ["APHID", "Small sap-sucking garden insect"], ["APNEA", "Temporary cessation of breathing"],
+        ["APPLY", "Put to practical use"], ["APRON", "Protective kitchen garment"],
+        ["APTLY", "In an appropriate manner"], ["ARBOR", "Shady garden vine alcove"],
+        ["ARDOR", "Great enthusiasm or passion"], ["ARENA", "Sports or concert stadium"],
+        ["ARGON", "Inert gas used in lightbulbs"], ["ARGUE", "Exchange diverging views"],
+        ["ARISE", "Get up or come into being"], ["ARMOR", "Protective metal battle suit"],
+        ["AROMA", "Pleasant distinctive smell"], ["ARRAY", "Impressive display or arrangement"],
+        ["ARROW", "Pointed shaft shot from a bow"], ["ARSON", "Criminal act of setting fire"],
+        ["ARTSY", "Showing creative artistic flair"], ["ASCOT", "Broad knotted neck scarf"],
+        ["ASHEN", "Pale grey like wood ash"], ["ASIDE", "To one side or out of the way"],
+        ["ASKEW", "Not in a straight or level position"], ["ASPEN", "Trembling-leaf poplar tree"],
+        ["ASPIC", "Savory jelly meat mold"], ["ASSAY", "Test metal for purity"],
+        ["ASSET", "Useful or valuable quality"], ["ATLAS", "Bound book of world maps"],
+        ["ATOLL", "Ring-shaped coral island"], ["ATONE", "Make amends for a wrong"],
+        ["ATTIC", "Space directly under a roof"], ["AUDIO", "Sound transmission or recording"],
+        ["AUDIT", "Official financial inspection"], ["AUGER", "Spiral wood-boring tool"],
+        ["AUGUR", "Portend a good or bad outcome"], ["AUNTY", "Father's or mother's sister"],
+        ["AURAL", "Relating to the ear or hearing"], ["AVAIL", "Use or take advantage of"],
+        ["AVERT", "Turn away or prevent"], ["AVIAN", "Relating to birds"],
+        ["AVOID", "Keep away from"], ["AWAIT", "Wait expectantly for"],
+        ["AWAKE", "Not asleep and alert"], ["AWARD", "Prize given for achievement"],
+        ["AWARE", "Having knowledge or perception"], ["AWASH", "Covered or flooded with water"],
+        ["AWFUL", "Very bad or unpleasant"], ["AXIOM", "Self-evident established truth"],
+        ["AZURE", "Bright blue color of clear sky"], ["BABEL", "Confused noisy chatter"],
+        ["BADGE", "Emblem worn to show rank"], ["BADLY", "In an unsatisfactory way"],
+        ["BAGEL", "Ring-shaped boiled bread roll"], ["BAGGY", "Loose and hanging in folds"],
+        ["BAKER", "Person who makes bread and cakes"], ["BALMY", "Pleasantly warm and mild"],
+        ["BANAL", "So lacking in originality as to be boring"], ["BANJO", "Round-bodied stringed instrument"],
+        ["BARGE", "Flat-bottomed canal freight boat"], ["BARON", "Noble rank below viscount"],
+        ["BASAL", "Forming a base or foundation"], ["BASIC", "Forming an essential foundation"],
+        ["BASIL", "Aromatic green culinary herb"], ["BASIN", "Bowl-shaped depression or sink"],
+        ["BASIS", "Underlying support or foundation"], ["BATCH", "Quantity produced at one time"],
+        ["BATHE", "Wash by immersing in water"], ["BATON", "Conductor's thin wand"],
+        ["BATTY", "Eccentric or slightly crazy"], ["BAYOU", "Marshy slow-moving river outlet"],
+        ["BEACH", "Pebbly or sandy ocean shore"], ["BEADY", "Small round and glistening"],
+        ["BEARD", "Hair growing on chin and cheeks"], ["BEAST", "Large four-footed wild animal"],
+        ["BEECH", "Smooth grey-barked forest tree"], ["BEEFY", "Muscular and sturdy"],
+        ["BEFIT", "Be appropriate for"], ["BEGET", "Give rise to or bring about"],
+        ["BEGIN", "Start or perform first part"], ["BEING", "Existence or living creature"],
+        ["BELCH", "Emit gas noisily from stomach"], ["BELIE", "Fail to give a true impression of"],
+        ["BELLE", "Beautiful girl or woman"], ["BELLY", "Front stomach region of body"],
+        ["BELOW", "At a lower level or layer"], ["BENCH", "Long wooden park seat"],
+        ["BERET", "Flat round woolen cap"], ["BERRY", "Small juicy stoneless fruit"],
+        ["BERTH", "Ship's allotted mooring place"], ["BESET", "Trouble or threaten persistently"],
+        ["BEVEL", "Sloped edge between surfaces"], ["BIBLE", "Sacred Christian scripture book"],
+        ["BICEP", "Front upper arm muscle"], ["BIDET", "Low bathroom washing basin"],
+        ["BIGOT", "Intolerant prejudiced person"], ["BILGE", "Lowest interior hull of a ship"],
+        ["BINGE", "Period of excessive indulgence"], ["BINGO", "Number-calling grid chance game"],
+        ["BIOME", "Large naturally occurring community"], ["BIPED", "Two-footed walking animal"],
+        ["BIRCH", "Slender white-barked tree"], ["BIRTH", "Emergence of new life"],
+        ["BISON", "Humped North American buffalo"], ["BITER", "One that snaps with teeth"],
+        ["BLADE", "Flat cutting edge of a knife"], ["BLAME", "Assign responsibility for a fault"],
+        ["BLAND", "Lacking strong flavor or character"], ["BLANK", "Empty or without writing"],
+        ["BLARE", "Make a loud harsh sound"], ["BLAST", "Destructive wave of air"],
+        ["BLEAK", "Cold, barren, and cheerless"], ["BLEAT", "Cry of a sheep or goat"],
+        ["BLEED", "Lose blood from a wound"], ["BLEND", "Mix smoothly together"],
+        ["BLESS", "Confer divine favor upon"], ["BLIMP", "Non-rigid airship dirigible"],
+        ["BLIND", "Unable to see"], ["BLINK", "Shut and open eyes quickly"],
+        ["BLISS", "Supreme happiness and joy"], ["BLITZ", "Sudden intensive attack"],
+        ["BLOAT", "Swell with fluid or gas"], ["BLOCK", "Solid piece of hard material"],
+        ["BLOND", "Fair-haired light golden color"], ["BLOOD", "Vital red circulatory fluid"],
+        ["BLOOM", "Flower blossom in full beauty"], ["BLOWN", "Moved by a current of air"],
+        ["BLUES", "Melancholic twelve-bar music"], ["BLUFF", "Steep cliff or deceptive bet"],
+        ["BLUNT", "Having a worn-down dull edge"], ["BLURB", "Short promotional book summary"],
+        ["BLURT", "Say something suddenly without thought"], ["BLUSH", "Turn red in face from shyness"],
+        ["BOARD", "Flat piece of sawn timber"], ["BOAST", "Talk with excessive pride"],
+        ["BOGUS", "Not genuine or true"], ["BOILS", "Reaches vaporization temperature"],
+        ["BOLTS", "Fastens securely with metal pins"], ["BONUS", "Extra unexpected reward"],
+        ["BOOTH", "Small enclosed compartment"], ["BOOTY", "Valuable stolen goods or loot"],
+        ["BOOZE", "Informal term for alcohol"], ["BORAX", "White mineral cleaning compound"],
+        ["BORED", "Feeling weary from lack of interest"], ["BOSOM", "Chest or protective embrace"],
+        ["BOTCH", "Carry out badly or carelessly"], ["BOUGH", "Main branch of a tree"],
+        ["BOUND", "Walk or run with leaping strides"], ["BOWEL", "Part of alimentary canal"],
+        ["BOXER", "Pugilist fighter in a ring"], ["BRACE", "Device fitted to support or steady"],
+        ["BRAID", "Interlaced strands of hair"], ["BRAIN", "Organ of thought in skull"],
+        ["BRAKE", "Device for slowing a vehicle"], ["BRAND", "Trademark or burning piece of wood"],
+        ["BRASH", "Self-assertive in a rude way"], ["BRASS", "Yellow copper-zinc alloy"],
+        ["BRAVE", "Ready to face danger with courage"], ["BRAVO", "Shout of approval for performer"],
+        ["BRAWL", "Rough noisy street fight"], ["BRAWN", "Physical strength and muscle"],
+        ["BREAD", "Baked flour-and-water staple food"], ["BREAK", "Separate into pieces"],
+        ["BREED", "Specific stock of animals"], ["BRIAR", "Prickly wild rose shrub"],
+        ["BRIBE", "Dishonest payment for favor"], ["BRICK", "Rectangular baked clay block"],
+        ["BRIDE", "Woman on her wedding day"], ["BRIEF", "Of short duration"],
+        ["BRINE", "Water saturated with salt"], ["BRING", "Carry or accompany to a place"],
+        ["BRINK", "Extreme edge before a drop"], ["BRISK", "Active, fast, and energetic"],
+        ["BROAD", "Having great width"], ["BROIL", "Cook by direct radiant heat"],
+        ["BROKE", "Having completely run out of money"], ["BROOD", "Family of young hatched birds"],
+        ["BROOK", "Small natural freshwater stream"], ["BROOM", "Long-handled sweeping brush"],
+        ["BROTH", "Savory liquid soup base"], ["BROWN", "Color of rich earth or wood"],
+        ["BRUNT", "Worst part of a chief impact"], ["BRUSH", "Bristled cleaning or painting tool"],
+        ["BRUTE", "Savagely violent person or beast"], ["BUDDY", "Close friend or companion"],
+        ["BUDGE", "Make the slightest movement"], ["BUGGY", "Light horse-drawn carriage"],
+        ["BUGLE", "Valveless brass military horn"], ["BUILD", "Construct by putting parts together"],
+        ["BUILT", "Constructed and assembled"], ["BULGE", "Rounded swelling outward"],
+        ["BULKY", "Taking up much space"], ["BULLY", "Person who intimidates weaker ones"],
+        ["BUNCH", "Number of things growing together"], ["BUNNY", "Affectionate name for a rabbit"],
+        ["BURLY", "Large and strong in build"], ["BURNT", "Damaged or charred by fire"],
+        ["BURST", "Break open suddenly and violently"], ["BUSHY", "Growing thickly like a shrub"],
+        ["BUTTE", "Isolated flat-topped steep hill"], ["BUXOM", "Plump and full-figured"],
+        ["BUYER", "Person who makes a purchase"], ["BYLAW", "Rule made by a local authority"],
+        ["CABAL", "Secret political clique"], ["CABIN", "Small wooden shelter or ship room"],
+        ["CABLE", "Thick strong wire rope"], ["CACAO", "Seeds from which chocolate is made"],
+        ["CACHE", "Hidden store of items or fast memory"], ["CACTI", "Spiny desert succulent plants"],
+        ["CADDY", "Golfer's bag-carrying assistant"], ["CADET", "Young trainee in armed services"],
+        ["CAGEY", "Reluctant to give information"], ["CAIRN", "Mound of rough stones as landmark"],
+        ["CAMEL", "Humped desert transport animal"], ["CAMEO", "Carved relief portrait gem"],
+        ["CANAL", "Artificial waterway for boats"], ["CANDY", "Sweet sugar confection"],
+        ["CANNY", "Shrewd and good at judging"], ["CANOE", "Lightweight narrow paddled boat"],
+        ["CANON", "General law, rule, or principle"], ["CAPER", "Playful skipping leap or pickled bud"],
+        ["CARAT", "Unit of weight for precious stones"], ["CARGO", "Goods carried on a ship or plane"],
+        ["CAROL", "Festive religious Christmas song"], ["CARRY", "Support and move from place to place"],
+        ["CARVE", "Cut hard material to produce design"], ["CASTE", "Hereditary social class system"],
+        ["CATCH", "Intercept and hold something thrown"], ["CATER", "Provide food and drink for event"],
+        ["CAULK", "Waterproof filler sealant"], ["CAUSE", "Person or thing giving rise to action"],
+        ["CEASE", "Bring or come to an end"], ["CEDAR", "Aromatic evergreen conifer tree"],
+        ["CELLO", "Large bass violin instrument"], ["CHAFF", "Husks of corn separated by winnowing"],
+        ["CHAIN", "Series of linked metal rings"], ["CHAIR", "Separate seat for one person"],
+        ["CHALK", "White soft limestone stick"], ["CHAMP", "Winner of a competition"],
+        ["CHANT", "Repeated rhythmic phrase"], ["CHAOS", "Complete disorder and confusion"],
+        ["CHARM", "Power of delighting or attracting"], ["CHART", "Sheet of information in table form"],
+        ["CHASE", "Pursue in order to catch"], ["CHASM", "Deep fissure in the earth"],
+        ["CHEAP", "Low in price"], ["CHEAT", "Act dishonestly to gain advantage"],
+        ["CHECK", "Examine accuracy or chess threat"], ["CHEEK", "Side of face below the eye"],
+        ["CHEER", "Shout for joy or encouragement"], ["CHESS", "Strategic 64-square board game"],
+        ["CHEST", "Large strong storage box or thorax"], ["CHICK", "Young newly hatched bird"],
+        ["CHIEF", "Leader or ruler of a people"], ["CHILD", "Young human being"],
+        ["CHILI", "Hot pungent pepper pod"], ["CHILL", "Unpleasant coldness"],
+        ["CHIME", "Melodious ringing bell sound"], ["CHINA", "Fine translucent ceramic ware"],
+        ["CHIRP", "Short sharp high-pitched bird sound"], ["CHOIR", "Organized group of singers"],
+        ["CHOKE", "Have severe difficulty breathing"], ["CHORD", "Group of musical notes sounded together"],
+        ["CHORE", "Routine household task"], ["CHOSE", "Picked out as best option"],
+        ["CHUCK", "Throw carelessly or casually"], ["CHUMP", "Foolish or easily deceived person"],
+        ["CHUNK", "Thick solid piece of something"], ["CHURN", "Agitate milk or cream to make butter"],
+        ["CIDER", "Unfermented or fermented apple juice"], ["CIGAR", "Cylinder of rolled tobacco leaves"],
+        ["CINCH", "Extremely easy task"], ["CIRCA", "Approximately around a date"],
+        ["CIVIC", "Relating to a city or town"], ["CIVIL", "Courteous and polite"],
+        ["CLACK", "Make a sharp sound of hard objects"], ["CLAIM", "State or assert as true"],
+        ["CLAMP", "Brace band used to hold things tightly"], ["CLANG", "Loud resonant metallic sound"],
+        ["CLANK", "Sharp metallic ringing sound"], ["CLASH", "Violent confrontation"],
+        ["CLASP", "Grasp tightly with one's hand"], ["CLASS", "Set or category of things"],
+        ["CLEAN", "Free from dirt or marks"], ["CLEAR", "Easy to perceive or transparent"],
+        ["CLEAT", "T-shaped metal rope fastener"], ["CLEFT", "Split or divided partially in two"],
+        ["CLERK", "Office record keeper or shop assistant"], ["CLICK", "Short sharp button sound"],
+        ["CLIFF", "Steep rock face at sea edge"], ["CLIMB", "Go or come up a slope or stairs"],
+        ["CLING", "Hold on tightly to"], ["CLOAK", "Sleeveless outdoor overgarment"],
+        ["CLOCK", "Instrument measuring and showing time"], ["CLONE", "Identical genetic copy"],
+        ["CLOSE", "Only a short distance away"], ["CLOTH", "Woven or felted fabric"],
+        ["CLOUD", "Visible mass of condensed water vapor"], ["CLOUT", "Influence or political power"],
+        ["CLOVE", "Aromatic dried flower bud spice"], ["CLOWN", "Comic circus entertainer"],
+        ["CLUCK", "Short low guttural hen sound"], ["CLUMP", "Compacted mass or lump"],
+        ["COACH", "Athletic trainer or passenger carriage"], ["COAST", "Part of land near the sea"],
+        ["COBRA", "Hooded venomous snake"], ["COCOA", "Powder made from roasted cacao"],
+        ["COLON", "Punctuation mark of two vertical dots"], ["COLOR", "Property of light perception"],
+        ["COMET", "Celestial nucleus with glowing tail"], ["COMIC", "Causing laughter or funny"],
+        ["COMMA", "Punctuation mark indicating pause"], ["CONCH", "Large spiral marine shell"],
+        ["CONDO", "Individually owned apartment unit"], ["CORAL", "Hard stony marine polyp skeleton"],
+        ["CORNY", "Trite, banal, or mawkishly sentimental"], ["COUCH", "Long upholstered seat"],
+        ["COUGH", "Expel air from lungs with sharp sound"], ["COULD", "Past tense of can"],
+        ["COUNT", "Determine total number of"], ["COURT", "Tribunal of justice or tennis area"],
+        ["COVER", "Put something on top of"], ["COVET", "Yearn to possess something"],
+        ["CRACK", "Line on surface where split"], ["CRAFT", "Activity involving skill in making"],
+        ["CRAMP", "Painful involuntary muscle contraction"], ["CRANE", "Tall long-legged wading bird"],
+        ["CRANK", "Bent handle for transmitting motion"], ["CRASH", "Collide violently with loud noise"],
+        ["CRASS", "Showing no intelligence or sensitivity"], ["CRATE", "Slatted wooden shipping box"],
+        ["CRAVE", "Feel a powerful desire for"], ["CRAWL", "Move forward on hands and knees"],
+        ["CRAZE", "Widespread enthusiasm for something"], ["CRAZY", "Mentally deranged or wildly enthusiastic"],
+        ["CREAK", "Harsh high-pitched squeaking sound"], ["CREAM", "Thick white fatty part of milk"],
+        ["CREDO", "Statement of beliefs or aims"], ["CREED", "System of religious belief"],
+        ["CREEK", "Stream or minor tributary"], ["CREEP", "Move slowly and carefully"],
+        ["CREME", "Rich custard or cream liqueur"], ["CREPE", "Thin French folded pancake"],
+        ["CREST", "Top of a mountain or wave"], ["CRISP", "Firm, dry, and brittle"],
+        ["CROAK", "Deep hoarse sound of a frog"], ["CRONY", "Close friend or companion"],
+        ["CROOK", "Bent shepherd's staff or dishonest person"], ["CROSS", "Go or extend across to other side"],
+        ["CROWD", "Large number of people gathered"], ["CROWN", "Circular ornamental royal headdress"],
+        ["CRUDE", "In a natural or raw state"], ["CRUEL", "Willfully causing pain or suffering"],
+        ["CRUMB", "Small fragment of bread or cake"], ["CRUSH", "Deform or pulverize by pressure"],
+        ["CRUST", "Tough outer part of a loaf of bread"], ["CRYPT", "Underground stone vault beneath church"],
+        ["CUBIC", "Having the shape of a cube"], ["CUMIN", "Aromatic curry seed spice"],
+        ["CUPID", "Roman god of love with bow"], ["CURIO", "Rare, unusual, or intriguing object"],
+        ["CURLY", "Growing in spiral locks or ringlets"], ["CURRY", "Spiced Indian gravy dish"],
+        ["CURSE", "Solemn utterance invoking harm"], ["CURVE", "Smoothly flowing bending line"],
+        ["CYCLE", "Series of events regularly repeated"], ["CYNIC", "Person believing people act selfishly"]
+      ];
+
+      EXPANSION_SEEDS.forEach(([word, clue]) => addEntry(clue, word));
+      VERIFIED_EXTRA_POOL.forEach(([word, clue]) => addEntry(clue, word));
+
+      return bank;
+    }
+
+    const CROSSWORD_CLUES = buildCrosswordBank();
+
+    // 9-Tier Gun Game Arsenal (1/9 to 9/9)
+    const WEAPON_TIERS = [
+      { tier: 1, name: "PISTOL", maxAmmo: 7, reloadTime: 0.85, cooldown: 0.16, color: "#38bdf8", radius: 24, pellets: 1, spread: 0, splash: 0, pierce: false, wordsNeeded: 1 },
+      { tier: 2, name: "DUAL TAPS", maxAmmo: 12, reloadTime: 0.80, cooldown: 0.12, color: "#22d3ee", radius: 26, pellets: 2, spread: 0.04, splash: 0, pierce: false, wordsNeeded: 1 },
+      { tier: 3, name: "BURST SMG", maxAmmo: 18, reloadTime: 0.75, cooldown: 0.08, color: "#34d399", radius: 26, pellets: 1, spread: 0.02, splash: 0, pierce: false, wordsNeeded: 1 },
+      { tier: 4, name: "SCATTER SHOT", maxAmmo: 6, reloadTime: 0.95, cooldown: 0.24, color: "#fbbf24", radius: 34, pellets: 4, spread: 0.11, splash: 0, pierce: false, wordsNeeded: 1 },
+      { tier: 5, name: "PULSE RIFLE", maxAmmo: 15, reloadTime: 0.75, cooldown: 0.10, color: "#818cf8", radius: 28, pellets: 1, spread: 0, splash: 0, pierce: false, wordsNeeded: 1 },
+      { tier: 6, name: "VOWEL SEEKER", maxAmmo: 10, reloadTime: 0.70, cooldown: 0.14, color: "#f472b6", radius: 38, pellets: 1, spread: 0, splash: 45, pierce: false, wordsNeeded: 1 },
+      { tier: 7, name: "PLASMA CANNON", maxAmmo: 8, reloadTime: 0.85, cooldown: 0.22, color: "#fb7185", radius: 36, pellets: 1, spread: 0, splash: 95, pierce: false, wordsNeeded: 1 },
+      { tier: 8, name: "RAILGUN", maxAmmo: 5, reloadTime: 0.90, cooldown: 0.28, color: "#a78bfa", radius: 32, pellets: 1, spread: 0, splash: 60, pierce: true, wordsNeeded: 1 },
+      { tier: 9, name: "CROSSWORLD NOVA", maxAmmo: 9, reloadTime: 0.65, cooldown: 0.14, color: "#fde047", radius: 44, pellets: 3, spread: 0.06, splash: 120, pierce: true, wordsNeeded: 99 }
+    ];
+
+    const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // =========================================================================
+    // 2. PROCEDURAL WEB AUDIO SYNTHESIZER (Zero External Assets)
+    // =========================================================================
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume();
+        }
+      }
+      toggleMute() {
+        this.muted = !this.muted;
+        return this.muted;
+      }
+      playShot(tier = 1) {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = tier >= 7 ? "sawtooth" : tier >= 4 ? "square" : "triangle";
+        const baseFreq = 520 + tier * 65;
+        osc.frequency.setValueAtTime(baseFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.11);
+
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      }
+      playHitGood(combo = 1) {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        const pitch = Math.min(1350, 540 + combo * 42);
+        osc.frequency.setValueAtTime(pitch, now);
+        osc.frequency.exponentialRampToValueAtTime(pitch * 1.35, now + 0.14);
+
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      }
+      playHitBad() {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(165, now);
+        osc.frequency.linearRampToValueAtTime(65, now + 0.25);
+
+        gain.gain.setValueAtTime(0.24, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.26);
+      }
+      playReload() {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        [0, 0.08].forEach((offset, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(idx === 0 ? 380 : 620, now + offset);
+          gain.gain.setValueAtTime(0.12, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.06);
+        });
+      }
+      playWordSolved(tierUp = false) {
+        if (this.muted || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const notes = tierUp ? [523.25, 659.25, 783.99, 1046.5, 1318.5] : [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, now + i * 0.065);
+          gain.gain.setValueAtTime(0.18, now + i * 0.065);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.065 + 0.22);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.065);
+          osc.stop(now + i * 0.065 + 0.22);
+        });
+      }
+    }
+
+    const sfx = new SoundEngine();
+
+    // =========================================================================
+    // 3. GAME STATE & CANVAS SETUP
+    // =========================================================================
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Core Game State
+    const state = {
+      running: false,
+      score: 0,
+      shotsFired: 0,
+      shotsHit: 0,
+      combo: 1,
+      maxCombo: 1,
+      wordsSolved: 0,
+      shield: 3,
+      timeLeft: 90,
+      tierIndex: 0, // 0..8 -> 1/9..9/9
+      wordsInCurrentTier: 0,
+      ammo: 7,
+      reloading: false,
+      reloadTimer: 0,
+      shootCooldown: 0,
+
+      // Current crossword puzzle
+      clueIdx: 0,
+      usedClueIndices: new Set(),
+      currentClue: CROSSWORD_CLUES[0],
+      solvedSlots: [], // boolean array for current word
+
+      // Crosshair & Visual Juice
+      pointerX: width / 2,
+      pointerY: height / 2,
+      recoilOffset: 0,
+      shakeTime: 0,
+      shakeIntensity: 0,
+      gridScroll: 0,
+
+      // Entities
+      targets: [],
+      particles: [],
+      tracers: [],
+      floatingTexts: [],
+      spawnTimer: 0
+    };
+
+    // =========================================================================
+    // 4. DOM REFERENCES & HUD UPDATERS
+    // =========================================================================
+    const dom = {
+      score: document.getElementById("hudScore"),
+      acc: document.getElementById("hudAcc"),
+      timer: document.getElementById("hudTimer"),
+      clueNum: document.getElementById("clueNumber"),
+      clueText: document.getElementById("clueText"),
+      wordRack: document.getElementById("wordRack"),
+      combo: document.getElementById("hudCombo"),
+      comboBox: document.getElementById("comboBox"),
+      wordsSolved: document.getElementById("hudWordsSolved"),
+      tierNum: document.getElementById("hudTierNum"),
+      weaponName: document.getElementById("hudWeaponName"),
+      ammoText: document.getElementById("hudAmmoText"),
+      ammoPips: document.getElementById("ammoPips"),
+      tierProgressText: document.getElementById("hudTierProgressText"),
+      tierBar: document.getElementById("hudTierBar"),
+      shieldHearts: document.getElementById("shieldHearts"),
+      startModal: document.getElementById("startModal"),
+      endModal: document.getElementById("endModal"),
+      btnStart: document.getElementById("btnStartGame"),
+      btnRestart: document.getElementById("btnRestartGame"),
+      btnReload: document.getElementById("btnReload"),
+      btnMute: document.getElementById("btnMute")
+    };
+
+    function getCurrentWeapon() {
+      return WEAPON_TIERS[Math.min(state.tierIndex, WEAPON_TIERS.length - 1)];
+    }
+
+    function getRemainingNeededLetters() {
+      const needed = [];
+      const word = state.currentClue.word;
+      for (let i = 0; i < word.length; i++) {
+        if (!state.solvedSlots[i]) {
+          needed.push(word[i]);
+        }
+      }
+      return needed;
+    }
+
+    function renderWordRack() {
+      const word = state.currentClue.word;
+      dom.wordRack.innerHTML = "";
+      let firstUnsolvedMarked = false;
+
+      for (let i = 0; i < word.length; i++) {
+        const slot = document.createElement("div");
+        const isSolved = state.solvedSlots[i];
+        let classes = "tile-slot w-8 h-9 sm:w-10 sm:h-11 rounded-lg border-2 flex items-center justify-center font-display font-black text-base sm:text-xl ";
+
+        if (isSolved) {
+          classes += "solved";
+          slot.textContent = word[i];
+        } else {
+          classes += "bg-slate-950/85 border-slate-700 text-slate-500";
+          if (!firstUnsolvedMarked) {
+            classes += " next-hint";
+            firstUnsolvedMarked = true;
+          }
+          slot.textContent = "?";
+        }
+        slot.className = classes;
+        dom.wordRack.appendChild(slot);
+      }
+    }
+
+    function updateHUD() {
+      dom.score.textContent = state.score.toLocaleString();
+      const accPct = state.shotsFired === 0 ? 100 : Math.round((state.shotsHit / state.shotsFired) * 100);
+      dom.acc.textContent = `${accPct}%`;
+      dom.acc.className = `text-xs sm:text-sm font-bold ${accPct >= 75 ? "text-emerald-400" : accPct >= 50 ? "text-amber-400" : "text-rose-400"}`;
+
+      dom.timer.textContent = `${Math.max(0, Math.ceil(state.timeLeft))}s`;
+      dom.timer.className = `text-xs sm:text-sm font-bold ${state.timeLeft <= 15 ? "text-rose-400 animate-pulse" : "text-amber-300"}`;
+
+      dom.combo.textContent = `x${state.combo}`;
+      dom.wordsSolved.textContent = state.wordsSolved;
+
+      // Weapon Tier & Ammo
+      const wep = getCurrentWeapon();
+      dom.tierNum.textContent = `${wep.tier}/9`;
+      dom.weaponName.textContent = wep.name;
+      dom.ammoText.textContent = state.reloading ? "RELOAD" : `${state.ammo}/${wep.maxAmmo}`;
+
+      // Ammo Pips
+      dom.ammoPips.innerHTML = "";
+      const pipCount = Math.min(wep.maxAmmo, 18);
+      for (let i = 0; i < pipCount; i++) {
+        const pip = document.createElement("div");
+        const active = !state.reloading && i < state.ammo;
+        pip.className = `flex-1 h-full rounded-sm transition-all duration-100 ${active ? "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" : "bg-slate-800"}`;
+        dom.ammoPips.appendChild(pip);
+      }
+
+      // Tier Progress
+      if (wep.tier === 9) {
+        dom.tierProgressText.textContent = "MAX TIER";
+        dom.tierBar.style.width = "100%";
+      } else {
+        dom.tierProgressText.textContent = `${state.wordsInCurrentTier} / ${wep.wordsNeeded} WORD`;
+        dom.tierBar.style.width = `${Math.min(100, (state.wordsInCurrentTier / wep.wordsNeeded) * 100)}%`;
+      }
+
+      // Shield Integrity
+      dom.shieldHearts.innerHTML = "";
+      for (let i = 0; i < 3; i++) {
+        const gem = document.createElement("span");
+        gem.textContent = "◆";
+        gem.className = i < state.shield ? "text-cyan-400 neon-cyan" : "text-slate-700";
+        dom.shieldHearts.appendChild(gem);
+      }
+    }
+
+    function pickNextClue() {
+      if (state.usedClueIndices.size >= CROSSWORD_CLUES.length) {
+        state.usedClueIndices.clear();
+      }
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * CROSSWORD_CLUES.length);
+      } while (state.usedClueIndices.has(idx) && CROSSWORD_CLUES.length > 1);
+
+      state.usedClueIndices.add(idx);
+      state.clueIdx = idx;
+      state.currentClue = CROSSWORD_CLUES[idx];
+      state.solvedSlots = new Array(state.currentClue.word.length).fill(false);
+
+      dom.clueNum.textContent = state.wordsSolved + 1;
+      dom.clueText.textContent = state.currentClue.clue;
+      renderWordRack();
+
+      // Update needed letter flag on active targets
+      const neededSet = new Set(state.currentClue.word.split(""));
+      state.targets.forEach(t => {
+        if (t.type !== "bomb") {
+          t.isNeeded = neededSet.has(t.letter);
+        }
+      });
+    }
+
+    // Vibrant Neon Color Palette for ALL Floating Letters (No Gray Decoys)
+    const NEON_TILE_PALETTE = [
+      { border: "#22d3ee", glow: "rgba(34, 211, 238, 0.85)", bg: "rgba(8, 32, 56, 0.92)", accent: "#67e8f9" }, // Electric Cyan
+      { border: "#f472b6", glow: "rgba(244, 114, 182, 0.85)", bg: "rgba(50, 12, 38, 0.92)", accent: "#f9a8d4" }, // Hot Magenta
+      { border: "#fbbf24", glow: "rgba(251, 191, 36, 0.85)", bg: "rgba(48, 32, 8, 0.92)", accent: "#fde68a" },  // Neon Amber
+      { border: "#34d399", glow: "rgba(52, 211, 153, 0.85)", bg: "rgba(8, 42, 32, 0.92)", accent: "#6ee7b7" },  // Toxic Emerald
+      { border: "#a78bfa", glow: "rgba(167, 139, 250, 0.85)", bg: "rgba(30, 18, 58, 0.92)", accent: "#c4b5fd" }  // Laser Violet
+    ];
+
+    // =========================================================================
+    // 5. TARGET SPAWNING & ENTITY MANAGEMENT
+    // =========================================================================
+    function spawnTarget(forceNeededLetter = null) {
+      const neededLetters = getRemainingNeededLetters();
+      const roll = Math.random();
+
+      let type = "letter";
+      let letter = "A";
+      let isNeeded = false;
+
+      if (forceNeededLetter) {
+        letter = forceNeededLetter;
+        isNeeded = true;
+      } else if (roll < 0.16 && state.wordsSolved >= 1) {
+        // Glitch bomb tile (tests trigger discipline)
+        type = "bomb";
+        letter = "!";
+      } else if (roll < 0.68 && neededLetters.length > 0) {
+        // Spawn a letter currently needed for the crossword clue
+        letter = neededLetters[Math.floor(Math.random() * neededLetters.length)];
+        isNeeded = true;
+      } else {
+        // Decoy letter not in current word (still rendered in full-intensity neon!)
+        const wordSet = new Set(state.currentClue.word.split(""));
+        let candidate;
+        do {
+          candidate = ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+        } while (wordSet.has(candidate));
+        letter = candidate;
+        isNeeded = false;
+      }
+
+      // Multi-lane vertical distribution avoiding top & bottom HUD zones
+      const minY = Math.max(155, height * 0.24);
+      const maxY = Math.min(height - 135, height * 0.78);
+      const laneCount = 4;
+      const laneIdx = Math.floor(Math.random() * laneCount);
+      const laneHeight = (maxY - minY) / laneCount;
+      const y = minY + laneIdx * laneHeight + laneHeight * 0.5 + (Math.random() - 0.5) * 18;
+
+      const fromLeft = Math.random() < 0.5;
+      const size = width < 640 ? 48 : 58;
+      const speedBase = (width < 640 ? 95 : 135) + state.tierIndex * 11 + Math.random() * 55;
+      const neonTheme = NEON_TILE_PALETTE[Math.floor(Math.random() * NEON_TILE_PALETTE.length)];
+
+      state.targets.push({
+        id: Math.random(),
+        type,
+        letter,
+        isNeeded,
+        neonTheme,
+        x: fromLeft ? -size : width + size,
+        y,
+        baseY: y,
+        vx: fromLeft ? speedBase : -speedBase,
+        bobPhase: Math.random() * Math.PI * 2,
+        bobAmp: 8 + Math.random() * 14,
+        size,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+
+    function ensureNeededLettersOnRange() {
+      const needed = getRemainingNeededLetters();
+      if (needed.length === 0) return;
+
+      const activeLetters = state.targets
+        .filter(t => t.type === "letter" && t.x > -40 && t.x < width + 40)
+        .map(t => t.letter);
+
+      // Guarantee at least one needed letter is always on screen or incoming
+      const hasAnyNeeded = needed.some(ch => activeLetters.includes(ch));
+      if (!hasAnyNeeded) {
+        const pick = needed[Math.floor(Math.random() * needed.length)];
+        spawnTarget(pick);
+      }
+    }
+
+    // =========================================================================
+    // 6. PARTICLES, TRACERS & FLOATING POPUPS
+    // =========================================================================
+    function addFloatingText(x, y, text, color = "#22d3ee", scale = 1) {
+      state.floatingTexts.push({
+        x,
+        y,
+        text,
+        color,
+        scale,
+        vy: -55,
+        life: 0.95,
+        maxLife: 0.95
+      });
+    }
+
+    function spawnExplosion(x, y, color, count = 18) {
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.4;
+        const speed = 90 + Math.random() * 240;
+        state.particles.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: 3 + Math.random() * 4.5,
+          color,
+          life: 0.45 + Math.random() * 0.35,
+          maxLife: 0.8
+        });
+      }
+    }
+
+    function triggerShake(intensity = 7, duration = 0.14) {
+      state.shakeIntensity = Math.max(state.shakeIntensity, intensity);
+      state.shakeTime = Math.max(state.shakeTime, duration);
+    }
+
+    // =========================================================================
+    // 7. SHOOTING, HIT DETECTION & WORD SOLVING LOGIC
+    // =========================================================================
+    function startReload() {
+      const wep = getCurrentWeapon();
+      if (!state.running || state.reloading || state.ammo === wep.maxAmmo) {
+        if (state.running && !state.reloading && state.ammo === wep.maxAmmo) {
+          sfx.playReload();
+          addFloatingText(state.pointerX, state.pointerY - 24, "MAGAZINE FULL", "#38bdf8", 0.85);
+        }
+        return;
+      }
+      state.reloading = true;
+      state.reloadTimer = wep.reloadTime;
+      sfx.playReload();
+      dom.btnReload.classList.add("border-amber-400", "text-amber-300");
+      setTimeout(() => {
+        dom.btnReload.classList.remove("border-amber-400", "text-amber-300");
+      }, wep.reloadTime * 1000);
+      addFloatingText(state.pointerX, state.pointerY - 24, "RELOADING...", "#fbbf24", 0.9);
+      updateHUD();
+    }
+
+    function handleBackNavigation(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      state.running = false;
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/";
+      }
+    }
+
+    function handleTargetDestroyed(target, wep) {
+      const neededLetters = getRemainingNeededLetters();
+      const word = state.currentClue.word;
+
+      if (target.type === "bomb") {
+        // Hit a glitch bomb!
+        sfx.playHitBad();
+        spawnExplosion(target.x, target.y, "#f43f5e", 28);
+        triggerShake(14, 0.25);
+        state.combo = 1;
+        state.shield = Math.max(0, state.shield - 1);
+        addFloatingText(target.x, target.y, "GLITCH BOMB! -1 SHIELD", "#f43f5e", 1.15);
+
+        if (state.shield <= 0) {
+          endGame("SHIELD DEPLETED");
+        }
+        return;
+      }
+
+      // Check if target.letter matches any unsolved slot in current word
+      let matchedIndex = -1;
+      for (let i = 0; i < word.length; i++) {
+        if (!state.solvedSlots[i] && word[i] === target.letter) {
+          matchedIndex = i;
+          break;
+        }
+      }
+
+      if (matchedIndex !== -1) {
+        // VALID CROSSWORD LETTER HIT!
+        state.solvedSlots[matchedIndex] = true;
+        state.shotsHit++;
+
+        // Tier 9 Crossworld Nova bonus: auto-fills a second letter if available
+        if (wep.tier === 9) {
+          for (let j = 0; j < word.length; j++) {
+            if (!state.solvedSlots[j]) {
+              state.solvedSlots[j] = true;
+              break;
+            }
+          }
+        }
+
+        const points = 100 * state.combo * (1 + Math.floor(state.tierIndex * 0.25));
+        state.score += points;
+        state.combo++;
+        state.maxCombo = Math.max(state.maxCombo, state.combo);
+
+        // Pop combo badge
+        dom.comboBox.style.transform = "scale(1.12)";
+        setTimeout(() => { dom.comboBox.style.transform = "scale(1)"; }, 120);
+
+        sfx.playHitGood(state.combo);
+        spawnExplosion(target.x, target.y, "#22d3ee", 20);
+        triggerShake(5, 0.1);
+        addFloatingText(target.x, target.y - 10, `+${points} [${target.letter}]`, "#22d3ee", 1.05);
+
+        renderWordRack();
+
+        // Check if entire crossword clue is solved!
+        if (state.solvedSlots.every(Boolean)) {
+          handleWordCompleted();
+        } else {
+          // Update remaining targets' needed glow state
+          const stillNeeded = new Set(getRemainingNeededLetters());
+          state.targets.forEach(t => {
+            if (t.type === "letter") {
+              t.isNeeded = stillNeeded.has(t.letter);
+            }
+          });
+        }
+      } else {
+        // Hit a wrong decoy letter!
+        sfx.playHitBad();
+        spawnExplosion(target.x, target.y, "#fb923c", 14);
+        triggerShake(6, 0.12);
+        state.combo = 1;
+        addFloatingText(target.x, target.y, `WRONG LETTER (${target.letter})`, "#fb923c", 0.92);
+      }
+    }
+
+    function handleWordCompleted() {
+      state.wordsSolved++;
+      state.wordsInCurrentTier++;
+      const bonus = 350 * state.combo;
+      state.score += bonus;
+      state.timeLeft = Math.min(99, state.timeLeft + 6); // +6s time bonus per solved clue
+
+      const wep = getCurrentWeapon();
+      let tieredUp = false;
+
+      if (state.tierIndex < WEAPON_TIERS.length - 1 && state.wordsInCurrentTier >= wep.wordsNeeded) {
+        state.tierIndex++;
+        state.wordsInCurrentTier = 0;
+        const nextWep = getCurrentWeapon();
+        state.ammo = nextWep.maxAmmo;
+        state.reloading = false;
+        tieredUp = true;
+      }
+
+      sfx.playWordSolved(tieredUp);
+      triggerShake(9, 0.2);
+
+      const newWep = getCurrentWeapon();
+      addFloatingText(
+        width / 2,
+        height * 0.34,
+        tieredUp ? `WORD SOLVED! TIER UP: ${newWep.tier}/9 ${newWep.name}` : `WORD SOLVED! +${bonus} (+6s)`,
+        tieredUp ? "#fde047" : "#34d399",
+        1.25
+      );
+
+      pickNextClue();
+      updateHUD();
+    }
+
+    function fireWeapon(x, y) {
+      if (!state.running) return;
+      state.pointerX = x;
+      state.pointerY = y;
+
+      const wep = getCurrentWeapon();
+      if (state.reloading || state.shootCooldown > 0) return;
+
+      if (state.ammo <= 0) {
+        startReload();
+        return;
+      }
+
+      // Consume ammo & apply recoil
+      state.ammo--;
+      state.shotsFired++;
+      state.shootCooldown = wep.cooldown;
+      state.recoilOffset = 14;
+      sfx.playShot(wep.tier);
+      triggerShake(3.5 + wep.tier * 0.4, 0.08);
+
+      // Visual laser tracer from bottom-center turret to crosshair
+      const originX = width * 0.5 + (x - width * 0.5) * 0.18;
+      const originY = height + 10;
+
+      const pelletCount = wep.pellets;
+      const destroyedIds = new Set();
+
+      for (let p = 0; p < pelletCount; p++) {
+        const offsetAngle = pelletCount > 1 ? (p - (pelletCount - 1) / 2) * wep.spread * 260 : 0;
+        const aimX = x + offsetAngle;
+        const aimY = y + (pelletCount > 1 ? (Math.random() - 0.5) * 24 : 0);
+
+        state.tracers.push({
+          x1: originX,
+          y1: originY,
+          x2: aimX,
+          y2: aimY,
+          color: wep.color,
+          width: wep.tier >= 7 ? 4.5 : 2.5,
+          life: 0.14,
+          maxLife: 0.14
+        });
+
+        // Check targets hit by this pellet
+        for (let i = state.targets.length - 1; i >= 0; i--) {
+          const t = state.targets[i];
+          if (destroyedIds.has(t.id)) continue;
+
+          const halfSize = t.size * 0.56 + wep.radius * 0.45;
+          const dx = Math.abs(aimX - t.x);
+          const dy = Math.abs(aimY - t.y);
+
+          if (dx <= halfSize && dy <= halfSize) {
+            destroyedIds.add(t.id);
+            handleTargetDestroyed(t, wep);
+
+            // Splash damage for Tier 6+ weapons clears nearby targets
+            if (wep.splash > 0) {
+              state.targets.forEach(other => {
+                if (!destroyedIds.has(other.id) && other.type !== "bomb") {
+                  const dist = Math.hypot(other.x - t.x, other.y - t.y);
+                  if (dist <= wep.splash) {
+                    destroyedIds.add(other.id);
+                    if (other.isNeeded) {
+                      handleTargetDestroyed(other, wep);
+                    } else {
+                      spawnExplosion(other.x, other.y, wep.color, 8);
+                    }
+                  }
+                }
+              });
+            }
+
+            if (!wep.pierce) break;
+          }
+        }
+      }
+
+      // Remove destroyed targets
+      if (destroyedIds.size > 0) {
+        state.targets = state.targets.filter(t => !destroyedIds.has(t.id));
+      } else {
+        // Missed shot breaks combo streak
+        if (state.combo > 1) {
+          state.combo = 1;
+          addFloatingText(x, y - 16, "MISS", "#64748b", 0.8);
+        }
+      }
+
+      // Auto-reload if magazine emptied
+      if (state.ammo <= 0) {
+        startReload();
+      }
+      updateHUD();
+    }
+
+    // =========================================================================
+    // 8. INPUT LISTENERS (MOUSE, TOUCH & KEYBOARD)
+    // =========================================================================
+    canvas.addEventListener("pointermove", (e) => {
+      state.pointerX = e.clientX;
+      state.pointerY = e.clientY;
+    });
+
+    canvas.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      sfx.init();
+      state.pointerX = e.clientX;
+      state.pointerY = e.clientY;
+      fireWeapon(e.clientX, e.clientY);
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (!state.running) return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        sfx.init();
+        fireWeapon(state.pointerX, state.pointerY);
+      } else if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        sfx.init();
+        startReload();
+      }
+    });
+
+    function bindReloadButton(el) {
+      if (!el) return;
+      const triggerReload = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        sfx.init();
+        startReload();
+      };
+      el.addEventListener("pointerdown", triggerReload);
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+    bindReloadButton(dom.btnReload);
+
+    const btnBack = document.getElementById("btnBack");
+    const btnBackStart = document.getElementById("btnBackStart");
+    if (btnBack) btnBack.addEventListener("click", handleBackNavigation);
+    if (btnBackStart) btnBackStart.addEventListener("click", handleBackNavigation);
+
+    window.addEventListener("popstate", () => {
+      state.running = false;
+    });
+
+    dom.btnMute.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      sfx.init();
+      const isMuted = sfx.toggleMute();
+      dom.btnMute.textContent = isMuted ? "🔇" : "🔊";
+    });
+    dom.btnMute.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    // =========================================================================
+    // 9. RENDERING LOOP (NEON PERSPECTIVE RANGE, TILES & CROSSHAIR)
+    // =========================================================================
+    function drawBackgroundRange(dt) {
+      // Deep obsidian sky gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+      bgGrad.addColorStop(0, "#040711");
+      bgGrad.addColorStop(0.55, "#081024");
+      bgGrad.addColorStop(1, "#0b1633");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      const horizonY = height * 0.52;
+
+      // Subtle horizon glow
+      const glowGrad = ctx.createRadialGradient(width / 2, horizonY, 10, width / 2, horizonY, width * 0.6);
+      glowGrad.addColorStop(0, "rgba(34, 211, 238, 0.14)");
+      glowGrad.addColorStop(1, "rgba(6, 9, 19, 0)");
+      ctx.fillStyle = glowGrad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Perspective neon floor grid
+      ctx.save();
+      ctx.strokeStyle = "rgba(34, 211, 238, 0.14)";
+      ctx.lineWidth = 1;
+
+      // Vertical perspective rays
+      const numRays = 16;
+      for (let i = -numRays; i <= numRays; i++) {
+        const topX = width / 2 + i * (width / 18);
+        const botX = width / 2 + i * (width / 5.5);
+        ctx.beginPath();
+        ctx.moveTo(topX, horizonY);
+        ctx.lineTo(botX, height);
+        ctx.stroke();
+      }
+
+      // Horizontal scrolling depth lines
+      state.gridScroll = (state.gridScroll + dt * 45) % 40;
+      for (let y = horizonY; y < height; y += 28) {
+        const progress = (y - horizonY) / (height - horizonY);
+        const lineY = horizonY + Math.pow(progress, 1.45) * (height - horizonY) + state.gridScroll * progress;
+        if (lineY <= height) {
+          ctx.strokeStyle = `rgba(34, 211, 238, ${0.05 + progress * 0.18})`;
+          ctx.beginPath();
+          ctx.moveTo(0, lineY);
+          ctx.lineTo(width, lineY);
+          ctx.stroke();
+        }
+      }
+
+      // Horizon line
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, horizonY);
+      ctx.lineTo(width, horizonY);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawTargetTile(t) {
+      const half = t.size / 2;
+      ctx.save();
+      ctx.translate(t.x, t.y);
+
+      if (t.type === "bomb") {
+        // Red/Magenta Glitch Bomb Tile with Hazard Spikes & Pulse
+        const pulseScale = 1 + Math.sin(performance.now() * 0.012 + t.pulse) * 0.06;
+        ctx.scale(pulseScale, pulseScale);
+
+        ctx.shadowColor = "rgba(244, 63, 94, 0.95)";
+        ctx.shadowBlur = 22;
+        ctx.fillStyle = "rgba(55, 8, 24, 0.94)";
+        ctx.strokeStyle = "#f43f5e";
+        ctx.lineWidth = 3;
+
+        // Hazard corner spikes
+        ctx.beginPath();
+        const spike = 7;
+        ctx.moveTo(0, -half - spike);
+        ctx.lineTo(half + spike, 0);
+        ctx.lineTo(0, half + spike);
+        ctx.lineTo(-half - spike, 0);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.roundRect(-half, -half, t.size, t.size, 10);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#fda4af";
+        ctx.font = `900 ${Math.round(t.size * 0.48)}px 'Orbitron', sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("💣", 0, 2);
+      } else {
+        // ALL Letters Render in Full-Intensity Vibrant Neon (No Gray Decoys!)
+        const theme = t.neonTheme || NEON_TILE_PALETTE[0];
+        const glowPulse = 16 + Math.sin(performance.now() * 0.008 + t.pulse) * 5;
+
+        // Luminescent motion trail behind moving neon tile
+        const trailDir = t.vx >= 0 ? -1 : 1;
+        const trailGrad = ctx.createLinearGradient(0, 0, trailDir * t.size * 0.95, 0);
+        trailGrad.addColorStop(0, theme.glow);
+        trailGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = trailGrad;
+        ctx.fillRect(
+          trailDir < 0 ? -t.size * 0.95 : 0,
+          -half * 0.7,
+          t.size * 0.95,
+          t.size * 0.7
+        );
+
+        ctx.shadowColor = theme.glow;
+        ctx.shadowBlur = glowPulse;
+        ctx.fillStyle = theme.bg;
+        ctx.strokeStyle = theme.border;
+        ctx.lineWidth = 2.75;
+
+        ctx.beginPath();
+        ctx.roundRect(-half, -half, t.size, t.size, 10);
+        ctx.fill();
+        ctx.stroke();
+
+        // Inner neon rim highlight
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = theme.accent;
+        ctx.globalAlpha = 0.35;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(-half + 3, -half + 3, t.size - 6, t.size - 6, 7);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+
+        // Uniform corner crossword grid marker (no spoiler star on needed vs decoy)
+        ctx.fillStyle = theme.accent;
+        ctx.font = "700 9px 'JetBrains Mono', monospace";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText("◈", -half + 5, -half + 4);
+
+        // Crisp Luminescent Letter Typography
+        ctx.shadowColor = theme.glow;
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `900 ${Math.round(t.size * 0.52)}px 'Orbitron', sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(t.letter, 0, 2);
+      }
+
+      ctx.restore();
+    }
+
+    function drawCrosshair() {
+      const wep = getCurrentWeapon();
+      const x = state.pointerX;
+      const y = state.pointerY;
+      const r = wep.radius + state.recoilOffset;
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      // Outer tactical reticle ring
+      ctx.strokeStyle = state.reloading ? "#94a3b8" : wep.color;
+      ctx.shadowColor = wep.color;
+      ctx.shadowBlur = 12;
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 4 Crosshair ticks
+      const tickLen = 8;
+      const gap = r * 0.45;
+      ctx.beginPath();
+      ctx.moveTo(-r - tickLen, 0); ctx.lineTo(-gap, 0);
+      ctx.moveTo(gap, 0); ctx.lineTo(r + tickLen, 0);
+      ctx.moveTo(0, -r - tickLen); ctx.lineTo(0, -gap);
+      ctx.moveTo(0, gap); ctx.lineTo(0, r + tickLen);
+      ctx.stroke();
+
+      // Center precision dot
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Reload arc progress
+      if (state.reloading) {
+        const progress = 1 - state.reloadTimer / wep.reloadTime;
+        ctx.strokeStyle = "#fbbf24";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, r + 6, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // 10. MAIN GAME LOOP
+    // =========================================================================
+    let lastTimestamp = 0;
+
+    function update(dt) {
+      if (!state.running) return;
+
+      // Countdown timer
+      state.timeLeft -= dt;
+      if (state.timeLeft <= 0) {
+        state.timeLeft = 0;
+        updateHUD();
+        endGame("TIME EXPIRED");
+        return;
+      }
+
+      // Weapon cooldown & reload
+      if (state.shootCooldown > 0) state.shootCooldown = Math.max(0, state.shootCooldown - dt);
+      if (state.recoilOffset > 0) state.recoilOffset = Math.max(0, state.recoilOffset - dt * 85);
+
+      if (state.reloading) {
+        state.reloadTimer -= dt;
+        if (state.reloadTimer <= 0) {
+          state.reloading = false;
+          state.ammo = getCurrentWeapon().maxAmmo;
+          updateHUD();
+        }
+      }
+
+      // Screen shake decay
+      if (state.shakeTime > 0) {
+        state.shakeTime = Math.max(0, state.shakeTime - dt);
+      }
+
+      // Target spawning
+      state.spawnTimer -= dt;
+      const desiredCount = Math.min(11, 6 + Math.floor(state.tierIndex * 0.6));
+      if (state.spawnTimer <= 0 && state.targets.length < desiredCount) {
+        spawnTarget();
+        state.spawnTimer = Math.max(0.45, 0.95 - state.tierIndex * 0.05);
+      }
+      ensureNeededLettersOnRange();
+
+      // Update floating targets
+      for (let i = state.targets.length - 1; i >= 0; i--) {
+        const t = state.targets[i];
+        t.x += t.vx * dt;
+        t.bobPhase += dt * 2.6;
+        t.y = t.baseY + Math.sin(t.bobPhase) * t.bobAmp;
+
+        // Remove if off-screen
+        if ((t.vx > 0 && t.x > width + t.size * 1.5) || (t.vx < 0 && t.x < -t.size * 1.5)) {
+          state.targets.splice(i, 1);
+        }
+      }
+
+      // Update tracers
+      for (let i = state.tracers.length - 1; i >= 0; i--) {
+        state.tracers[i].life -= dt;
+        if (state.tracers[i].life <= 0) state.tracers.splice(i, 1);
+      }
+
+      // Update particles
+      for (let i = state.particles.length - 1; i >= 0; i--) {
+        const p = state.particles[i];
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.vy += 260 * dt; // subtle gravity
+        p.life -= dt;
+        if (p.life <= 0) state.particles.splice(i, 1);
+      }
+
+      // Update floating text popups
+      for (let i = state.floatingTexts.length - 1; i >= 0; i--) {
+        const ft = state.floatingTexts[i];
+        ft.y += ft.vy * dt;
+        ft.life -= dt;
+        if (ft.life <= 0) state.floatingTexts.splice(i, 1);
+      }
+
+      updateHUD();
+    }
+
+    function render(dt) {
+      ctx.save();
+      if (state.shakeTime > 0) {
+        const sx = (Math.random() - 0.5) * state.shakeIntensity * 2;
+        const sy = (Math.random() - 0.5) * state.shakeIntensity * 2;
+        ctx.translate(sx, sy);
+      }
+
+      drawBackgroundRange(dt);
+
+      // Draw targets
+      state.targets.forEach(drawTargetTile);
+
+      // Draw weapon laser tracers
+      state.tracers.forEach(tr => {
+        const alpha = Math.max(0, tr.life / tr.maxLife);
+        ctx.save();
+        ctx.strokeStyle = tr.color;
+        ctx.globalAlpha = alpha;
+        ctx.lineWidth = tr.width;
+        ctx.shadowColor = tr.color;
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.moveTo(tr.x1, tr.y1);
+        ctx.lineTo(tr.x2, tr.y2);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // Draw shatter particles
+      state.particles.forEach(p => {
+        const alpha = Math.max(0, p.life / p.maxLife);
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 8;
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        ctx.restore();
+      });
+
+      // Draw floating popups
+      state.floatingTexts.forEach(ft => {
+        const alpha = Math.max(0, ft.life / ft.maxLife);
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.font = `800 ${Math.round(15 * ft.scale)}px 'Orbitron', sans-serif`;
+        ctx.textAlign = "center";
+        ctx.fillStyle = ft.color;
+        ctx.shadowColor = "rgba(0,0,0,0.85)";
+        ctx.shadowBlur = 6;
+        ctx.fillText(ft.text, ft.x, ft.y);
+        ctx.restore();
+      });
+
+      // Draw tactical neon crosshair
+      drawCrosshair();
+
+      ctx.restore();
+    }
+
+    function gameLoop(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const dt = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+      lastTimestamp = timestamp;
+
+      update(dt);
+      render(dt);
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    // =========================================================================
+    // 11. START / END SESSION CONTROLLERS
+    // =========================================================================
+    function startGame() {
+      sfx.init();
+      state.running = true;
+      state.score = 0;
+      state.shotsFired = 0;
+      state.shotsHit = 0;
+      state.combo = 1;
+      state.maxCombo = 1;
+      state.wordsSolved = 0;
+      state.shield = 3;
+      state.timeLeft = 90;
+      state.tierIndex = 0;
+      state.wordsInCurrentTier = 0;
+      state.ammo = WEAPON_TIERS[0].maxAmmo;
+      state.reloading = false;
+      state.targets = [];
+      state.particles = [];
+      state.tracers = [];
+      state.floatingTexts = [];
+      state.usedClueIndices.clear();
+
+      dom.startModal.classList.add("hidden");
+      dom.endModal.classList.add("hidden");
+
+      pickNextClue();
+      for (let i = 0; i < 6; i++) spawnTarget();
+      updateHUD();
+    }
+
+    function endGame(reasonTitle) {
+      state.running = false;
+      const accPct = state.shotsFired === 0 ? 100 : Math.round((state.shotsHit / state.shotsFired) * 100);
+      const wep = getCurrentWeapon();
+
+      document.getElementById("endTitle").textContent = reasonTitle;
+      document.getElementById("statScore").textContent = state.score.toLocaleString();
+      document.getElementById("statAcc").textContent = `${accPct}%`;
+      document.getElementById("statWords").textContent = state.wordsSolved;
+      document.getElementById("statComboTier").textContent = `x${state.maxCombo} · ${wep.tier}/9`;
+
+      dom.endModal.classList.remove("hidden");
+    }
+
+    dom.btnStart.addEventListener("click", startGame);
+    dom.btnRestart.addEventListener("click", startGame);
+
+    // Initialize initial preview state & launch loop
+    window.onload = function () {
+      pickNextClue();
+      updateHUD();
+      requestAnimationFrame(gameLoop);
+    };
+  </script>
+</body>
+</html>
