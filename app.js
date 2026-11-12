@@ -1779,11 +1779,11 @@ const GAMES = [
   },
   {
     id: "neon-range",
-    href: "gungame.html",
+    href: "crossworld_neon_word_range.html",
     footerLabel: "Neon Word Range",
     badge: "Word Shooter",
     cardHtml: `
-      <a href="gungame.html" style="
+      <a href="crossworld_neon_word_range.html" style="
         display: flex;
         flex-direction: column;
         align-items: center;
