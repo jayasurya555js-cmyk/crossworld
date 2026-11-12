@@ -1776,7 +1776,240 @@ const GAMES = [
   <span class="sx-btn">Start Slicing →</span>
 </a>`,
     renderPreview: () => {}
-  }
+  },
+  {
+    id: "neon-range",
+    href: "gungame.html",
+    footerLabel: "Neon Word Range",
+    badge: "Word Shooter",
+    cardHtml: `
+      <a href="gungame.html" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        text-decoration: none;
+        background: radial-gradient(circle at 50% 25%, #161b33 0%, #090b14 75%, #05060b 100%);
+        border: 2px solid rgba(0, 240, 255, 0.35);
+        border-radius: 20px;
+        padding: 36px 28px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), inset 0 0 32px rgba(0, 240, 255, 0.08);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+        min-height: 410px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      "
+      onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 18px 36px rgba(0, 240, 255, 0.18), inset 0 0 36px rgba(0, 240, 255, 0.14)';"
+      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 12px 30px rgba(0, 0, 0, 0.25), inset 0 0 32px rgba(0, 240, 255, 0.08)';">
+
+        <!-- Subtle Background Grid Overlay -->
+        <div style="
+          position: absolute;
+          inset: 0;
+          background-image: linear-gradient(rgba(0, 240, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.06) 1px, transparent 1px);
+          background-size: 26px 26px;
+          pointer-events: none;
+        "></div>
+
+        <!-- Game Title -->
+        <div style="
+          position: relative;
+          z-index: 1;
+          font-size: 26px;
+          font-weight: 900;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: #ffffff;
+          text-shadow: 0 0 10px rgba(0, 240, 255, 0.85), 0 0 22px rgba(255, 42, 133, 0.6);
+          margin-bottom: 18px;
+        ">
+          NEON <span style="color: #00f0ff;">WORD</span> RANGE
+        </div>
+
+        <!-- Center Graphic: Shooting Range Preview Box -->
+        <div style="
+          position: relative;
+          z-index: 1;
+          width: 220px;
+          height: 124px;
+          background: linear-gradient(180deg, #0c1022 0%, #131936 100%);
+          border: 1.5px solid rgba(0, 240, 255, 0.45);
+          border-radius: 14px;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), inset 0 0 18px rgba(255, 42, 133, 0.15);
+          margin-bottom: 18px;
+          overflow: hidden;
+        ">
+          <!-- Laser Beam Diagonal -->
+          <div style="
+            position: absolute;
+            width: 170px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00f0ff, #ffffff);
+            box-shadow: 0 0 10px #00f0ff, 0 0 18px #00f0ff;
+            top: 66px;
+            left: 24px;
+            transform: rotate(-22deg);
+          "></div>
+
+          <!-- Neon Tile 1 (Cyan) -->
+          <div style="
+            position: absolute;
+            top: 16px;
+            left: 22px;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(0, 240, 255, 0.12);
+            border: 1.5px solid #00f0ff;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+            color: #00f0ff;
+            font-weight: 800;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">W</div>
+
+          <!-- Neon Tile 2 (Target in Crosshair - Magenta) -->
+          <div style="
+            position: absolute;
+            top: 32px;
+            left: 93px;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: rgba(255, 42, 133, 0.18);
+            border: 2px solid #ff2a85;
+            box-shadow: 0 0 16px rgba(255, 42, 133, 0.85);
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">X</div>
+
+          <!-- Tactical Crosshair Ring over Target -->
+          <div style="
+            position: absolute;
+            top: 23px;
+            left: 84px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 1.5px dashed #00f0ff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            pointer-events: none;
+          "></div>
+
+          <!-- Neon Tile 3 (Emerald) -->
+          <div style="
+            position: absolute;
+            bottom: 16px;
+            left: 34px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(0, 255, 157, 0.12);
+            border: 1.5px solid #00ff9d;
+            box-shadow: 0 0 12px rgba(0, 255, 157, 0.55);
+            color: #00ff9d;
+            font-weight: 800;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">Q</div>
+
+          <!-- Glitch Bomb Hazard -->
+          <div style="
+            position: absolute;
+            bottom: 18px;
+            right: 22px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 59, 48, 0.16);
+            border: 1.5px solid #ff3b30;
+            box-shadow: 0 0 12px rgba(255, 59, 48, 0.7);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">💣</div>
+        </div>
+
+        <!-- Category Pill Badge -->
+        <div style="
+          position: relative;
+          z-index: 1;
+          display: inline-block;
+          background: #14192d;
+          border: 1px solid rgba(0, 240, 255, 0.45);
+          color: #00f0ff;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.6px;
+          padding: 5px 14px;
+          border-radius: 999px;
+          margin-bottom: 14px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        ">
+          Word Shooter
+        </div>
+
+        <!-- Catchy Headline -->
+        <h3 style="
+          position: relative;
+          z-index: 1;
+          margin: 0 0 10px 0;
+          font-size: 21px;
+          font-weight: 800;
+          color: #ffffff;
+          letter-spacing: -0.2px;
+        ">
+          Aim. Shoot. Spell!
+        </h3>
+
+        <!-- Description -->
+        <p style="
+          position: relative;
+          z-index: 1;
+          margin: 0 0 22px 0;
+          font-size: 13.5px;
+          line-height: 1.5;
+          color: #b8c4e0;
+          max-width: 300px;
+        ">
+          Blast glowing letters to solve 1,100+ crossword clues, dodge glitch bombs, and rank up through 9 weapon tiers.
+        </p>
+
+        <!-- Primary CTA Button -->
+        <span style="
+          position: relative;
+          z-index: 1;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          background: linear-gradient(135deg, #00f0ff 0%, #00b8d4 100%);
+          color: #060913;
+          font-size: 14px;
+          font-weight: 800;
+          padding: 11px 22px;
+          border-radius: 10px;
+          box-shadow: 0 4px 16px rgba(0, 240, 255, 0.4);
+        ">
+          Start Shooting &rarr;
+        </span>
+
+      </a>
+    `,
+    renderPreview: () => {}
+  },
 ];
 
 /* ------------------------------------------
