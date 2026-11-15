@@ -49,7 +49,7 @@ function formatTime(seconds) {
   const secs = seconds % 60;
 
   return String(minutes).padStart(2, "0") + ":" +
-         String(secs).padStart(2, "0");
+    String(secs).padStart(2, "0");
 }
 
 function setStatus(elementId, message, type = "success") {
@@ -435,7 +435,7 @@ function generateCrossword(words, size = DEFAULT_SIZE, options = {}) {
     }
 
     return minR === 0 && minC === 0 &&
-           maxR === size - 1 && maxC === size - 1;
+      maxR === size - 1 && maxC === size - 1;
   }
 
   function attempt(requireSpan) {
@@ -706,8 +706,8 @@ class CrosswordGame {
     this.maxHints = 3;
     this.hintsUsed = 0;
 
-    this.onProgress = options.onProgress || function() {};
-    this.onHintChange = options.onHintChange || function() {};
+    this.onProgress = options.onProgress || function () { };
+    this.onHintChange = options.onHintChange || function () { };
 
     this.render();
     this.onHintChange(this.maxHints - this.hintsUsed, this.maxHints);
@@ -1453,9 +1453,9 @@ class WordSearchGame {
     this.gridElement = gridElement;
     this.wordListElement = wordListElement;
 
-    this.onProgress = options.onProgress || function() {};
-    this.onComplete = options.onComplete || function() {};
-    this.onHintChange = options.onHintChange || function() {};
+    this.onProgress = options.onProgress || function () { };
+    this.onComplete = options.onComplete || function () { };
+    this.onHintChange = options.onHintChange || function () { };
 
     this.foundWords = new Set();
     this.cellButtons = [];
@@ -1721,11 +1721,26 @@ const GAMES = [
     href: "daily.html",
     footerLabel: "Crossword",
     badge: "Daily Crossword",
-    heading: "A quick word challenge for your day.",
-    description: "Beginner-friendly, 5×5 up to 8×8, a fresh mix every time with instant hints.",
-    buttonLabel: "Start solving →",
-    previewId: "home-preview-grid",
-    previewClass: "",
+    cardHtml: `
+      <a class="game-promo-card crossword-promo" href="daily.html" aria-label="Play the Daily Crossword">
+        <div class="game-promo-card__hud">
+          <span class="game-promo-card__badge">Crossword challenge</span>
+          <span class="crossword-promo__level">5×5 — 8×8</span>
+        </div>
+        <div class="crossword-promo__scene" aria-hidden="true">
+          <div class="preview-grid crossword-promo__grid" id="home-preview-grid"></div>
+          <div class="crossword-promo__clues">
+            <span><b>01</b> ACROSS</span>
+            <span><b>02</b> DOWN</span>
+            <span class="crossword-promo__ready">READY TO SOLVE</span>
+          </div>
+        </div>
+        <div class="game-promo-card__copy">
+          <h3>Crack the clues.<br>Complete the grid.</h3>
+          <p>Connect Across and Down answers, use a hint when you need one, and take on a fresh mix of puzzles.</p>
+        </div>
+        <span class="game-promo-card__button">Start solving <span aria-hidden="true">→</span></span>
+      </a>`,
     renderPreview: renderHomePreview
   },
   {
@@ -1733,11 +1748,23 @@ const GAMES = [
     href: "wordsearch.html",
     footerLabel: "Word Search",
     badge: "Word Search",
-    heading: "Find hidden words in a themed grid.",
-    description: "A 12×12 letter grid, eight themes, a new one every time you play.",
-    buttonLabel: "Start searching →",
-    previewId: "home-ws-preview",
-    previewClass: "ws-mini-preview",
+    cardHtml: `
+      <a class="game-promo-card wordsearch-promo" href="wordsearch.html" aria-label="Play the themed Word Search">
+        <div class="game-promo-card__hud">
+          <span class="game-promo-card__badge">Word search</span>
+          <span class="wordsearch-promo__radar"><i></i> SCANNING</span>
+        </div>
+        <div class="wordsearch-promo__scene" aria-hidden="true">
+          <div class="preview-grid wordsearch-promo__grid" id="home-ws-preview"></div>
+          <div class="wordsearch-promo__target">WORD<br><b>FOUND</b><span>+100</span></div>
+          <span class="wordsearch-promo__scanline"></span>
+        </div>
+        <div class="game-promo-card__copy">
+          <h3>Find the words.<br>Beat the grid.</h3>
+          <p>Scan a themed letter grid, mark hidden words, and switch themes whenever you’re ready for another round.</p>
+        </div>
+        <span class="game-promo-card__button">Start searching <span aria-hidden="true">→</span></span>
+      </a>`,
     renderPreview: renderWordSearchPreview
   },
   {
@@ -1745,12 +1772,43 @@ const GAMES = [
     href: "snakesladders-single.html",
     footerLabel: "Snakes &amp; Ladders",
     badge: "Snakes & Ladders",
-    heading: "Classic Snakes &amp; Ladders.",
-    description: "Ascend to the top and avoid the serpent's bite in this classic race of luck and strategy. New board every day!",
-    buttonLabel: "Start Climbing →",
-    cardClass: "sl-card",
-    image: "assets/snakes-card-art.webp",
-    renderPreview: () => {}
+    cardHtml: `
+      <a class="game-promo-card sl-promo" href="snakesladders-single.html" aria-label="Play Snakes and Ladders">
+        <div class="game-promo-card__hud">
+          <span class="game-promo-card__badge">Classic board game</span>
+          <span class="sl-promo__players">1–4 PLAYERS</span>
+        </div>
+        <div class="sl-promo__scene" aria-hidden="true">
+          <div class="sl-promo__board">
+            <span class="sl-promo__tile">21</span><span class="sl-promo__tile">22</span><span class="sl-promo__tile sl-promo__ladder-end">23</span><span class="sl-promo__tile">24</span><span class="sl-promo__tile sl-promo__goal">25</span>
+            <span class="sl-promo__tile">20</span><span class="sl-promo__tile">19</span><span class="sl-promo__tile">18</span><span class="sl-promo__tile">17</span><span class="sl-promo__tile">16</span>
+            <span class="sl-promo__tile">11</span><span class="sl-promo__tile sl-promo__ladder-start">12</span><span class="sl-promo__tile">13</span><span class="sl-promo__tile sl-promo__ladder-end">14</span><span class="sl-promo__tile">15</span>
+            <span class="sl-promo__tile">10</span><span class="sl-promo__tile">9</span><span class="sl-promo__tile sl-promo__snake-end">8</span><span class="sl-promo__tile">7</span><span class="sl-promo__tile">6</span>
+            <span class="sl-promo__tile">1</span><span class="sl-promo__tile">2</span><span class="sl-promo__tile">3</span><span class="sl-promo__tile sl-promo__ladder-start">4</span><span class="sl-promo__tile">5</span>
+            <svg class="sl-promo__routes" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <g class="sl-promo__ladder">
+                <path d="M70 90 L70 50 M66 90 L66 50 M66 82 L70 82 M66 72 L70 72 M66 62 L70 62"/>
+                <path d="M10 50 L30 10 M6 48 L26 8 M8 42 L12 44 M13 32 L17 34 M18 22 L22 24"/>
+              </g>
+              <path class="sl-promo__snake" d="M70 10 C91 17 42 23 62 37 S42 54 57 65 S53 81 50 90"/>
+              <circle class="sl-promo__snake-head" cx="70" cy="10" r="3.2"/>
+            </svg>
+            <span class="sl-promo__token"></span>
+          </div>
+          <div class="sl-promo__side">
+            <span class="sl-promo__die">⚄</span>
+            <span class="sl-promo__roll">YOUR TURN</span>
+            <span class="sl-promo__arrow">ROLL <b>→</b></span>
+            <span class="sl-promo__finish">RACE TO 100</span>
+          </div>
+        </div>
+        <div class="game-promo-card__copy">
+          <h3>Roll the dice.<br>Race to the top.</h3>
+          <p>Climb ladders, dodge snakes, and make the winning move in a classic board-game showdown.</p>
+        </div>
+        <span class="game-promo-card__button">Start climbing <span aria-hidden="true">→</span></span>
+      </a>`,
+    renderPreview: () => { }
   },
   {
     id: "slice",
@@ -1775,7 +1833,7 @@ const GAMES = [
   <p class="sx-desc">Slice juicy fruits and veggies, dodge the bombs and grab power-ups. Three game modes and new blades to unlock.</p>
   <span class="sx-btn">Start Slicing →</span>
 </a>`,
-    renderPreview: () => {}
+    renderPreview: () => { }
   },
   {
     id: "neon-range",
@@ -2008,7 +2066,7 @@ const GAMES = [
 
       </a>
     `,
-    renderPreview: () => {}
+    renderPreview: () => { }
   },
 ];
 
@@ -2044,6 +2102,11 @@ function renderWordSearchPreview() {
 
   const demoSize = 6;
   const puzzle = generateWordSearch(["FUN", "WORD", "GAME"], demoSize);
+  const highlightedCells = new Set(
+    puzzle.words.slice(0, 2).flatMap(item =>
+      item.cells.map(([row, col]) => `${row}:${col}`)
+    )
+  );
 
   element.innerHTML = "";
   element.style.gridTemplateColumns = `repeat(${demoSize}, 1fr)`;
@@ -2052,6 +2115,9 @@ function renderWordSearchPreview() {
     for (let c = 0; c < demoSize; c++) {
       const cell = document.createElement("div");
       cell.className = "preview-cell ws-preview-cell";
+      if (highlightedCells.has(`${r}:${c}`)) {
+        cell.classList.add("wordsearch-promo__hit");
+      }
       cell.textContent = puzzle.grid[r][c];
       element.appendChild(cell);
     }
