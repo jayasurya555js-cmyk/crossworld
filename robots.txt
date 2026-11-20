@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /shared.html
+Disallow: /snakesladders-single.html
 
 Sitemap: https://cross-world.in/sitemap.xml

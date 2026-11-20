@@ -1722,7 +1722,7 @@ const GAMES = [
     footerLabel: "Crossword",
     badge: "Daily Crossword",
     cardHtml: `
-      <a class="game-promo-card crossword-promo" href="daily.html" aria-label="Play the Daily Crossword">
+      <div class="game-promo-card crossword-promo">
         <div class="game-promo-card__hud">
           <span class="game-promo-card__badge">Crossword challenge</span>
           <span class="crossword-promo__level">5×5 — 8×8</span>
@@ -1739,8 +1739,11 @@ const GAMES = [
           <h3>Crack the clues.<br>Complete the grid.</h3>
           <p>Connect Across and Down answers, use a hint when you need one, and take on a fresh mix of puzzles.</p>
         </div>
-        <span class="game-promo-card__button">Start solving <span aria-hidden="true">→</span></span>
-      </a>`,
+        <div class="game-promo-card__actions">
+          <a class="game-promo-card__button" href="daily.html" aria-label="Start solving the Daily Crossword">Start solving <span aria-hidden="true">→</span></a>
+          <a class="game-promo-card__button game-promo-card__button--secondary" href="create.html" aria-label="Create a custom crossword puzzle">Create puzzle <span aria-hidden="true">＋</span></a>
+        </div>
+      </div>`,
     renderPreview: renderHomePreview
   },
   {

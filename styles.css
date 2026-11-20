@@ -1293,6 +1293,14 @@ a {
     width: min(100% - 24px, 1120px);
   }
 
+  .game-promo-card__actions {
+    flex-direction: column;
+  }
+
+  .game-promo-card__actions .game-promo-card__button {
+    width: min(220px, 100%);
+  }
+
   .navbar {
     min-height: 64px;
   }
@@ -2088,6 +2096,34 @@ a {
   font-size: 1rem;
   font-weight: 700;
   transition: filter .2s ease, transform .2s ease;
+}
+
+.game-promo-card__actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.game-promo-card__actions .game-promo-card__button {
+  margin-top: 0;
+  text-decoration: none;
+}
+
+.game-promo-card__button--secondary {
+  border-color: #91aaff;
+  color: #fff;
+  background: linear-gradient(180deg, #6d66ff, #3d43bd);
+  box-shadow: 0 4px 0 rgba(25, 27, 92, .7), 0 0 15px rgba(109, 102, 255, .24);
+}
+
+.game-promo-card__button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
 }
 
 .wordsearch-promo .game-promo-card__button {
