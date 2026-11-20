@@ -2071,6 +2071,52 @@ const GAMES = [
     `,
     renderPreview: () => { }
   },
+  {
+    id: "clue-chaser",
+    href: "clue_chaser.html",
+    footerLabel: "Clue Chaser",
+    badge: "Clue Chaser",
+    cardHtml: `
+      <a href="clue_chaser.html" class="cc-game-card" aria-label="Play Clue Chaser">
+        <div class="cc-card-title">CLUE <span>CHASER</span></div>
+        <div class="cc-card-art">
+          <canvas id="cc-preview-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="cc-card-badges">
+          <span class="cc-badge">NEW ARCADE</span>
+          <span class="cc-mode-pill">REFLEX • CLUES</span>
+        </div>
+        <div class="cc-card-body">
+          <h3 class="cc-card-heading">Race. Decode. Chase!</h3>
+          <p class="cc-card-desc">Race down a neon vector grid, decode rapid-fire clues, and intercept matching answer trails.</p>
+          <span class="cc-play-cta">PLAY <span aria-hidden="true">→</span></span>
+        </div>
+      </a>`,
+    renderPreview: renderClueChaserPreview
+  },
+  {
+    id: "gravity-shift",
+    href: "gravity_shift.html",
+    footerLabel: "Gravity Shift",
+    badge: "Gravity Shift",
+    cardHtml: `
+      <a href="gravity_shift.html" class="gs-game-card" aria-label="Play Gravity Shift">
+        <div class="gs-card-title">GRAVITY <span>SHIFT</span></div>
+        <div class="gs-card-art">
+          <canvas id="gs-preview-canvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="gs-card-badges">
+          <span class="gs-badge">PHYSICS ARCADE</span>
+          <span class="gs-mode-pill">1-TAP • REFLEX</span>
+        </div>
+        <div class="gs-card-body">
+          <h3 class="gs-card-heading">Flip. Dodge. Survive!</h3>
+          <p class="gs-card-desc">Tap to reverse gravity through spikes, lasers, and moving barriers with near-miss bonuses.</p>
+          <span class="gs-play-cta">PLAY <span aria-hidden="true">→</span></span>
+        </div>
+      </a>`,
+    renderPreview: renderGravityShiftPreview
+  },
 ];
 
 /* ------------------------------------------
@@ -2125,6 +2171,242 @@ function renderWordSearchPreview() {
       element.appendChild(cell);
     }
   }
+}
+
+function renderClueChaserPreview() {
+  const canvas = $("cc-preview-canvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const card = canvas.closest(".cc-game-card");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let hovered = false;
+  let progress = 0;
+
+  function resizePreview() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function drawPreview() {
+    const { width, height } = canvas.getBoundingClientRect();
+    if (!width || !height) {
+      requestAnimationFrame(drawPreview);
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+    const centerX = width * .5;
+    const topY = height * .24;
+    const bottomY = height * .94;
+
+    for (let lane = 0; lane < 4; lane++) {
+      const laneOffset = (lane - 1.5) / 1.5;
+      ctx.beginPath();
+      ctx.moveTo(centerX + laneOffset * width * .14, topY);
+      ctx.lineTo(centerX + laneOffset * width * .44, bottomY);
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.22)";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+
+    if (!reduceMotion) {
+      progress = (progress + (hovered ? .022 : .011)) % 1;
+    } else {
+      progress = .58;
+    }
+
+    const laneOffset = (2 - 1.5) / 1.5;
+    const depth = progress;
+    const y = topY + (bottomY - topY) * Math.pow(depth, 1.3);
+    const spread = width * (.14 + (.44 - .14) * Math.pow(depth, 1.2));
+    const x = centerX + laneOffset * spread;
+    const scale = .55 + depth * .65;
+
+    ctx.beginPath();
+    ctx.moveTo(centerX + laneOffset * width * .14, topY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = "#00f0ff";
+    ctx.lineWidth = 3 * scale;
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = "#00f0ff";
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    const pillWidth = 64 * scale;
+    const pillHeight = 24 * scale;
+    const pillX = x - pillWidth / 2;
+    const pillY = y - pillHeight / 2;
+    const radius = 6 * scale;
+    ctx.beginPath();
+    ctx.roundRect(pillX, pillY, pillWidth, pillHeight, radius);
+    ctx.fillStyle = "rgba(7, 15, 30, 0.92)";
+    ctx.strokeStyle = "#00f0ff";
+    ctx.lineWidth = 1.5;
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = `800 ${Math.round(10 * scale)}px "Orbitron", sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("MARS", x, y + .5);
+
+    if (!reduceMotion) {
+      requestAnimationFrame(drawPreview);
+    }
+  }
+
+  if (card && !reduceMotion) {
+    card.addEventListener("pointerenter", () => { hovered = true; });
+    card.addEventListener("pointerleave", () => { hovered = false; });
+  }
+
+  window.addEventListener("resize", resizePreview);
+  resizePreview();
+  drawPreview();
+}
+
+function renderGravityShiftPreview() {
+  const canvas = $("gs-preview-canvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const card = canvas.closest(".gs-game-card");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let hovered = false;
+  let scroll = 0;
+  const trail = [];
+
+  function resizePreview() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function drawSpikeCluster(startX, railY, onFloor, count) {
+    const spikeWidth = 14;
+    const spikeHeight = 20;
+    ctx.fillStyle = "rgba(255, 42, 109, 0.25)";
+    ctx.strokeStyle = "#ff2a6d";
+    ctx.lineWidth = 1.6;
+
+    for (let i = 0; i < count; i++) {
+      const x = startX + i * spikeWidth;
+      const tipY = onFloor ? railY - spikeHeight : railY + spikeHeight;
+      ctx.beginPath();
+      ctx.moveTo(x, railY);
+      ctx.lineTo(x + spikeWidth * .5, tipY);
+      ctx.lineTo(x + spikeWidth, railY);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+  }
+
+  function drawPreview() {
+    const { width, height } = canvas.getBoundingClientRect();
+    if (!width || !height) {
+      requestAnimationFrame(drawPreview);
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+    if (!reduceMotion) scroll += hovered ? 3.2 : 1.7;
+
+    const topRail = 34;
+    const bottomRail = height - 14;
+    const midY = (topRail + bottomRail) * .5;
+    const amplitude = (bottomRail - topRail) * .34;
+    const wave = reduceMotion ? .7 : Math.sin(scroll * .045);
+    const inverted = wave < 0;
+
+    ctx.strokeStyle = "rgba(0, 245, 212, 0.08)";
+    ctx.lineWidth = 1;
+    const gridOffset = -(scroll % 36);
+    for (let x = gridOffset; x < width; x += 36) {
+      ctx.beginPath();
+      ctx.moveTo(x, topRail);
+      ctx.lineTo(x, bottomRail);
+      ctx.stroke();
+    }
+
+    const topColor = inverted ? "#9b5de5" : "#00f5d4";
+    const bottomColor = inverted ? "#00f5d4" : "#9b5de5";
+    ctx.lineWidth = 2.5;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = topColor;
+    ctx.strokeStyle = topColor;
+    ctx.beginPath();
+    ctx.moveTo(0, topRail);
+    ctx.lineTo(width, topRail);
+    ctx.stroke();
+    ctx.shadowColor = bottomColor;
+    ctx.strokeStyle = bottomColor;
+    ctx.beginPath();
+    ctx.moveTo(0, bottomRail);
+    ctx.lineTo(width, bottomRail);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    const spikeCycle = 240;
+    const firstSpike = width - ((scroll * 1.15) % spikeCycle);
+    const secondSpike = width - (((scroll * 1.15) + 120) % spikeCycle);
+    drawSpikeCluster(firstSpike, bottomRail, true, 3);
+    drawSpikeCluster(secondSpike, topRail, false, 2);
+
+    const orbX = width * .28;
+    const orbY = midY + wave * amplitude;
+    const orbColor = inverted ? "#9b5de5" : "#00f5d4";
+    trail.push({ x: orbX, y: orbY, color: orbColor });
+    if (trail.length > 14) trail.shift();
+
+    trail.forEach((point, index) => {
+      if (!reduceMotion) point.x -= (hovered ? 3.2 : 1.7) * .85;
+      const alpha = (index + 1) / trail.length;
+      ctx.fillStyle = point.color === "#9b5de5"
+        ? `rgba(155, 93, 229, ${alpha * .35})`
+        : `rgba(0, 245, 212, ${alpha * .35})`;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 8 * alpha, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.fillStyle = orbColor;
+    ctx.shadowBlur = 16;
+    ctx.shadowColor = orbColor;
+    ctx.beginPath();
+    ctx.arc(orbX, orbY, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(orbX, orbY, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (!reduceMotion) requestAnimationFrame(drawPreview);
+  }
+
+  if (card && !reduceMotion) {
+    card.addEventListener("pointerenter", () => { hovered = true; });
+    card.addEventListener("pointerleave", () => { hovered = false; });
+  }
+
+  window.addEventListener("resize", () => {
+    resizePreview();
+    if (reduceMotion) drawPreview();
+  });
+  resizePreview();
+  drawPreview();
 }
 
 /* ------------------------------------------
