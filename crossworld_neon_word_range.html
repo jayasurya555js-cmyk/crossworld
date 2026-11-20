@@ -123,17 +123,21 @@
       </div>
 
       <!-- Top-Center: CROSSWORD CLUE & LIVE LETTER SLOTS -->
-      <div id="clueBanner" class="hud-panel rounded-xl px-3 py-2 sm:px-6 sm:py-3 flex-1 max-w-xl mx-auto text-center border-cyan-400/30">
-        <div class="flex items-center justify-center gap-2 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-cyan-300/90 font-bold">
-          <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-          <span>CROSSWORLD CLUE #<span id="clueNumber">1</span></span>
+      <div class="flex flex-1 min-w-0 max-w-xl mx-auto flex-col items-center gap-2">
+        <div id="clueBanner" class="hud-panel w-full rounded-xl px-3 py-2 sm:px-6 sm:py-3 text-center border-cyan-400/30">
+          <div class="flex items-center justify-center gap-2 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-cyan-300/90 font-bold">
+            <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <span>CROSSWORLD CLUE #<span id="clueNumber">1</span></span>
+          </div>
+          <p id="clueText" class="text-xs sm:text-base md:text-lg font-bold text-white mt-0.5 leading-snug">
+            Celestial body orbiting Earth (4)
+          </p>
+          <!-- Crossword Tile Rack -->
+          <div id="wordRack" class="flex items-center justify-center gap-1.5 sm:gap-2 mt-2 flex-wrap">
+            <!-- Populated dynamically with crossword grid squares -->
+          </div>
         </div>
-        <p id="clueText" class="text-xs sm:text-base md:text-lg font-bold text-white mt-0.5 leading-snug">
-          Celestial body orbiting Earth (4)
-        </p>
-        <!-- Crossword Tile Rack -->
-        <div id="wordRack" class="flex items-center justify-center gap-1.5 sm:gap-2 mt-2 flex-wrap">
-          <!-- Populated dynamically with crossword grid squares -->
+        <div id="foundWordNotice" class="hidden hud-panel rounded-lg px-4 py-1.5 border-emerald-400/50 text-emerald-300 text-[10px] sm:text-xs font-bold tracking-[0.18em] uppercase shadow-[0_0_18px_rgba(52,211,153,0.2)]" role="status" aria-live="polite">
         </div>
       </div>
 
@@ -1402,6 +1406,7 @@
       clueNum: document.getElementById("clueNumber"),
       clueText: document.getElementById("clueText"),
       wordRack: document.getElementById("wordRack"),
+      foundWordNotice: document.getElementById("foundWordNotice"),
       combo: document.getElementById("hudCombo"),
       comboBox: document.getElementById("comboBox"),
       wordsSolved: document.getElementById("hudWordsSolved"),
@@ -1419,6 +1424,22 @@
       btnReload: document.getElementById("btnReload"),
       btnMute: document.getElementById("btnMute")
     };
+    let foundWordNoticeTimeout;
+
+    function showFoundWordNotice(word) {
+      window.clearTimeout(foundWordNoticeTimeout);
+      dom.foundWordNotice.textContent = `WORD FOUND: ${word}`;
+      dom.foundWordNotice.classList.remove("hidden");
+      foundWordNoticeTimeout = window.setTimeout(() => {
+        dom.foundWordNotice.classList.add("hidden");
+      }, 2500);
+    }
+
+    function clearFoundWordNotice() {
+      window.clearTimeout(foundWordNoticeTimeout);
+      dom.foundWordNotice.classList.add("hidden");
+      dom.foundWordNotice.textContent = "";
+    }
 
     function getCurrentWeapon() {
       return WEAPON_TIERS[Math.min(state.tierIndex, WEAPON_TIERS.length - 1)];
@@ -1779,6 +1800,7 @@
     }
 
     function handleWordCompleted() {
+      const solvedWord = state.currentClue.word;
       state.wordsSolved++;
       state.wordsInCurrentTier++;
       const bonus = 350 * state.combo;
@@ -1809,6 +1831,7 @@
         1.25
       );
 
+      showFoundWordNotice(solvedWord);
       pickNextClue();
       updateHUD();
     }
@@ -2341,6 +2364,7 @@
     // =========================================================================
     function startGame() {
       sfx.init();
+      clearFoundWordNotice();
       state.running = true;
       state.score = 0;
       state.shotsFired = 0;
