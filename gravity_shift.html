@@ -3319,6 +3319,14 @@
       ctx.fillRect(0, 0, W, H);
 
       const { top, bottom } = getCorridorBounds();
+      // Show more of the upcoming world on narrow screens.
+      const viewZoom = W <= 680 ? 0.78 : 1;
+      const cameraX = world.player.x;
+      const cameraY = (top + bottom) / 2;
+      ctx.translate(cameraX * (1 - viewZoom), cameraY * (1 - viewZoom));
+      ctx.scale(viewZoom, viewZoom);
+      const viewLeft = cameraX - cameraX / viewZoom;
+      const viewRight = cameraX + (W - cameraX) / viewZoom;
 
       const warpMult = world.running ? world.warpMultiplier : 1;
       const stepDist = world.running ? world.speed * warpMult * dt : 110 * dt;
@@ -3326,12 +3334,14 @@
 
       const gridSpacing = 60;
       const offset = -(world.distance % gridSpacing);
+      const firstGridX = offset +
+        Math.floor((viewLeft - offset) / gridSpacing) * gridSpacing;
 
       ctx.strokeStyle = world.warpMultiplier > 1
         ? 'rgba(255, 183, 3, 0.08)'
         : 'rgba(0, 245, 212, 0.05)';
       ctx.lineWidth = 1;
-      for (let gx = offset; gx < W; gx += gridSpacing) {
+      for (let gx = firstGridX; gx < viewRight; gx += gridSpacing) {
         ctx.beginPath();
         ctx.moveTo(gx, top);
         ctx.lineTo(gx, bottom);
@@ -3343,15 +3353,15 @@
       ctx.shadowBlur = 10;
       ctx.shadowColor = ctx.strokeStyle;
       ctx.beginPath();
-      ctx.moveTo(0, top);
-      ctx.lineTo(W, top);
+      ctx.moveTo(viewLeft, top);
+      ctx.lineTo(viewRight, top);
       ctx.stroke();
 
       ctx.strokeStyle = world.gravDir > 0 ? (activeWorldObj ? activeWorldObj.accent : '#00f5d4') : '#9b5de5';
       ctx.shadowColor = ctx.strokeStyle;
       ctx.beginPath();
-      ctx.moveTo(0, bottom);
-      ctx.lineTo(W, bottom);
+      ctx.moveTo(viewLeft, bottom);
+      ctx.lineTo(viewRight, bottom);
       ctx.stroke();
       ctx.shadowBlur = 0;
 
