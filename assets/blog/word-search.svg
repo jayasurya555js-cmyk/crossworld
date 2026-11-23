@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Word search puzzle</title>
+  <desc id="desc">A glowing turquoise word search grid with a highlighted diagonal word.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#071728"/>
+      <stop offset="1" stop-color="#123d58"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <text x="82" y="205" fill="#54e4d1" font-family="Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="7">WORD SEARCH</text>
+  <text x="78" y="292" fill="#fff" font-family="Arial,sans-serif" font-size="64" font-weight="800">Spot the pattern.</text>
+  <text x="82" y="360" fill="#c6dce8" font-family="Arial,sans-serif" font-size="32">Find every hidden word.</text>
+  <g transform="translate(695 95)">
+    <rect width="400" height="440" rx="24" fill="#092238" stroke="#2ed8ca" stroke-width="4"/>
+    <path d="M60 75L340 355" stroke="#36e2d0" stroke-width="54" stroke-linecap="round" opacity=".35" filter="url(#glow)"/>
+    <path d="M60 75L340 355" stroke="#36e2d0" stroke-width="42" stroke-linecap="round" opacity=".25"/>
+    <g fill="#f4fbff" font-family="Arial,sans-serif" font-size="34" font-weight="700" text-anchor="middle">
+      <text x="60" y="86">S</text><text x="130" y="86">A</text><text x="200" y="86">T</text><text x="270" y="86">R</text><text x="340" y="86">Q</text>
+      <text x="60" y="156">L</text><text x="130" y="156">P</text><text x="200" y="156">L</text><text x="270" y="156">E</text><text x="340" y="156">M</text>
+      <text x="60" y="226">N</text><text x="130" y="226">O</text><text x="200" y="226">A</text><text x="270" y="226">C</text><text x="340" y="226">D</text>
+      <text x="60" y="296">G</text><text x="130" y="296">H</text><text x="200" y="296">R</text><text x="270" y="296">T</text><text x="340" y="296">B</text>
+      <text x="60" y="366">W</text><text x="130" y="366">I</text><text x="200" y="366">D</text><text x="270" y="366">E</text><text x="340" y="366">S</text>
+    </g>
+    <g fill="none" stroke="#60efde" stroke-width="3" opacity=".55">
+      <path d="M95 35v350M165 35v350M235 35v350M305 35v350M25 105h350M25 175h350M25 245h350M25 315h350"/>
+    </g>
+  </g>
+</svg>

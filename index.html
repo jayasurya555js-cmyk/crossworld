@@ -60,18 +60,14 @@
       "url": "https://cross-world.in/",
       "name": "Crossworld",
       "description": "Free browser-based puzzles and casual games.",
-      "inLanguage": "en",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://cross-world.in/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "inLanguage": "en"
     },
     {
   "@type": "Game",
       "@id": "https://cross-world.in/#game",
   "name": "Crossworld",
   "description": "Play free online word games — crossword puzzles and word search — with instant hints and no sign-up. Create your own custom crossword and share it with friends.",
+  "keywords": "free crossword puzzles, online word search, custom crossword maker, browser puzzle games, daily word games",
   "url": "https://cross-world.in/",
   "genre": "Word Game",
   "isAccessibleForFree": true,
@@ -107,7 +103,7 @@
       crossorigin="anonymous"></script>
   </head>
 
-  <body>
+  <body class="home-theme">
 
     <!-- Hidden input used only to summon the mobile on-screen keyboard.
      Mobile browsers only pop up a virtual keyboard when a real
@@ -134,36 +130,77 @@
       <section class="page home-page" aria-labelledby="home-title">
 
         <div class="container hero">
+          <div class="hero-copy">
+            <p class="home-eyebrow"><span aria-hidden="true"></span> A PLAYGROUND FOR CURIOUS MINDS</p>
+            <h1 id="home-title">Play outside<br>the <span>grid.</span></h1>
+            <p class="hero-description">
+              Seven little worlds. Big-brain puzzles, quick arcade runs, and
+              classic games — all one click away, right in your browser.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#game-lobby">Choose your game <span aria-hidden="true">↓</span></a>
+              <a class="btn btn-secondary" href="create.html">Build a crossword <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="hero-stats" aria-label="Crossworld highlights">
+              <div><strong>07</strong><span>worlds to explore</span></div>
+              <div><strong>0</strong><span>downloads needed</span></div>
+              <div><strong>∞</strong><span>ways to play</span></div>
+            </div>
+          </div>
 
-          <h1 id="home-title">
-            <span style="color:#00ABFC;">Puzzles</span>
-            <span style="color:#8A0DFC;">•</span>
-            <span style="color:#7c4dff;">Games</span>
-            <span style="color:#ffb703;">•</span>
-            <span style="color:#2ec4b6;">Create</span><br>
-            <span style="color:#ff6b6b;">Play</span>
-            <span style="color:#ffd166;">a</span>
-            <span style="color:#90be6d;">little,</span>
-            <span style="color:#f72585;">Think</span>
-            <span style="color:#48bfe3;">a</span>
-            <span style="color:#ff9f1c;">lot.</span>
-          </h1>
-
-          <p>
-            Welcome to Cross-World — a collection of online puzzles and casual
-            games
-            made for curious minds. Choose a challenge, take a break, or create
-            a
-            crossword of your own.
-          </p>
+          <div class="hero-visual">
+            <a class="hero-console" href="gravity_shift.html" aria-label="Play Gravity Shift, featured game">
+              <div class="hero-console__top">
+                <span><i></i> CROSSWORLD / ARCADE SELECT</span>
+                <span class="hero-console__status">READY</span>
+              </div>
+              <div class="hero-console__scene">
+                <canvas class="hero-console__preview" id="hero-gravity-preview" aria-hidden="true"></canvas>
+                <span class="hero-console__coordinates">00:07 / NEXT WORLD</span>
+              </div>
+              <div class="hero-console__bottom">
+                <div><span>FEATURED WORLD</span><strong>Gravity Shift</strong></div>
+                <span class="hero-console__play">PRESS TO PLAY <b aria-hidden="true">↗</b></span>
+              </div>
+            </a>
+            <span class="hero-float hero-float--top" aria-hidden="true">WORD<br><b>HUNT</b></span>
+            <span class="hero-float hero-float--bottom" aria-hidden="true">THINK<br><b>FAST</b></span>
+          </div>
         </div>
 
-        <section class="section">
+        <section class="game-lobby" id="game-lobby" aria-labelledby="game-lobby-title">
           <div class="container">
+            <div class="game-lobby__heading">
+              <div>
+                <p class="home-eyebrow">CHOOSE YOUR PORTAL</p>
+                <h2 id="game-lobby-title">Pick your next world<span>.</span></h2>
+                <p>Find a new favorite or jump back into your go-to game.</p>
+              </div>
+              <label class="game-search" for="game-search">
+                <span>Quick search</span>
+                <input id="game-search" type="search" placeholder="Find a game..." autocomplete="off" aria-controls="games-grid">
+                <kbd aria-hidden="true">⌕</kbd>
+              </label>
+            </div>
+            <div class="game-tools">
+              <div class="game-filters" role="group" aria-label="Filter games by type">
+                <button class="game-filter" type="button" data-game-filter="all" aria-pressed="true">All games</button>
+                <button class="game-filter" type="button" data-game-filter="puzzle" aria-pressed="false">Puzzles</button>
+                <button class="game-filter" type="button" data-game-filter="arcade" aria-pressed="false">Arcade</button>
+                <button class="game-filter" type="button" data-game-filter="word" aria-pressed="false">Word games</button>
+                <button class="game-filter" type="button" data-game-filter="board" aria-pressed="false">Board games</button>
+              </div>
+              <p class="game-result-count" id="game-result-count" aria-live="polite"></p>
+            </div>
             <!-- Filled in by renderGameCards() from the GAMES list in
            app.js — adding a new game there is all it takes for a
            card to appear here automatically. -->
             <div class="games-grid" id="games-grid"></div>
+            <div class="games-empty" id="games-empty" hidden>
+              <span aria-hidden="true">✦</span>
+              <p>No worlds found. Try another search or clear your filters.</p>
+              <button class="game-filter-reset" id="clear-game-filters" type="button">Show all games</button>
+            </div>
           </div>
         </section>
 
@@ -180,6 +217,7 @@
         </div>
 
         <section class="container info-section">
+          <p class="home-eyebrow">A QUICK FIELD GUIDE</p>
           <h2>Choose a puzzle that fits your mood</h2>
           <p>
             Crossworld brings together short, browser-based games that are easy
@@ -313,6 +351,8 @@
 renderHeader("home");
 renderFooter();
 renderGameCards("games-grid");
+renderGravityShiftPreview($("hero-gravity-preview"));
+initGameExplorer();
 initAds();
 </script>
 

@@ -16,6 +16,7 @@ const DEFAULT_SIZE = 5;   // size of old shared links and the DAILY_PUZZLE demo 
 // up to 8 letters long and five words fit far more easily.
 const CREATOR_SIZE = 8;
 const MAX_CREATOR_WORDS = 8;
+const SITE_LOGO_SRC = new URL("assets/crossworld-logo.png", document.currentScript.src).href;
 
 function $(id) {
   return document.getElementById(id);
@@ -1721,6 +1722,7 @@ const GAMES = [
     href: "daily.html",
     footerLabel: "Crossword",
     badge: "Daily Crossword",
+    categories: ["puzzle", "word"],
     cardHtml: `
       <div class="game-promo-card crossword-promo">
         <div class="game-promo-card__hud">
@@ -1751,6 +1753,7 @@ const GAMES = [
     href: "wordsearch.html",
     footerLabel: "Word Search",
     badge: "Word Search",
+    categories: ["puzzle", "word"],
     cardHtml: `
       <a class="game-promo-card wordsearch-promo" href="wordsearch.html" aria-label="Play the themed Word Search">
         <div class="game-promo-card__hud">
@@ -1775,6 +1778,7 @@ const GAMES = [
     href: "snakesladders-single.html",
     footerLabel: "Snakes &amp; Ladders",
     badge: "Snakes & Ladders",
+    categories: ["board"],
     cardHtml: `
       <a class="game-promo-card sl-promo" href="snakesladders-single.html" aria-label="Play Snakes and Ladders">
         <div class="game-promo-card__hud">
@@ -1818,6 +1822,7 @@ const GAMES = [
     href: "slice.html",
     footerLabel: "Slice",
     badge: "Slice",
+    categories: ["arcade"],
     // Fully custom card markup (styled by .sx-* rules in styles.css)
     cardHtml: `
     <a class="sx-card" href="slice.html" aria-label="Play Slice, the fruit slicing game">
@@ -1843,6 +1848,7 @@ const GAMES = [
     href: "crossworld_neon_word_range.html",
     footerLabel: "Neon Word Range",
     badge: "Word Shooter",
+    categories: ["arcade", "word"],
     cardHtml: `
       <a href="crossworld_neon_word_range.html" style="
         display: flex;
@@ -2076,6 +2082,7 @@ const GAMES = [
     href: "clue_chaser.html",
     footerLabel: "Clue Chaser",
     badge: "Clue Chaser",
+    categories: ["arcade", "word"],
     cardHtml: `
       <a href="clue_chaser.html" class="cc-game-card" aria-label="Play Clue Chaser">
         <div class="cc-card-title">CLUE <span>CHASER</span></div>
@@ -2099,6 +2106,7 @@ const GAMES = [
     href: "gravity_shift.html",
     footerLabel: "Gravity Shift",
     badge: "Gravity Shift",
+    categories: ["arcade"],
     cardHtml: `
       <a href="gravity_shift.html" class="gs-game-card" aria-label="Play Gravity Shift">
         <div class="gs-card-title">GRAVITY <span>SHIFT</span></div>
@@ -2118,6 +2126,23 @@ const GAMES = [
     renderPreview: renderGravityShiftPreview
   },
 ];
+
+const GAME_DISPLAY_ORDER = [
+  "gravity-shift",
+  "neon-range",
+  "slice",
+  "daily",
+  "wordsearch",
+  "snakesladders-single",
+  "clue-chaser"
+];
+
+GAMES.sort((a, b) => {
+  const aOrder = GAME_DISPLAY_ORDER.indexOf(a.id);
+  const bOrder = GAME_DISPLAY_ORDER.indexOf(b.id);
+  return (aOrder < 0 ? GAME_DISPLAY_ORDER.length : aOrder) -
+    (bOrder < 0 ? GAME_DISPLAY_ORDER.length : bOrder);
+});
 
 /* ------------------------------------------
    HOME PAGE PREVIEWS
@@ -2272,14 +2297,13 @@ function renderClueChaserPreview() {
   drawPreview();
 }
 
-function renderGravityShiftPreview() {
-  const canvas = $("gs-preview-canvas");
+function renderGravityShiftPreview(canvas = $("gs-preview-canvas")) {
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  const card = canvas.closest(".gs-game-card");
+  const card = canvas.closest(".gs-game-card, .hero-console");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let hovered = false;
   let scroll = 0;
@@ -2431,14 +2455,14 @@ function renderHeader(activeId) {
   container.innerHTML = `
     <header class="site-header">
       <div class="container navbar">
-        <a href="index.html" class="brand" aria-label="Crossworld home">
-          <span>Crossworld</span>
+        <a href="/index.html" class="brand" aria-label="Crossworld home">
+          <img class="brand-logo" src="${SITE_LOGO_SRC}" alt="">
         </a>
 
         <nav class="nav-links" aria-label="Main navigation">
-          <a href="create.html"${navClass("create", "nav-create")}>Create Crossword</a>
-          <a href="wordsearch.html"${navClass("wordsearch", "nav-secondary")}>Play Word Search</a>
-          <a href="snakesladders-single.html"${navClass("snakesladders-single", "nav-secondary")}>Snakes &amp; Ladders</a>
+          <a href="/index.html#games-grid"${navClass("home")}>Games</a>
+          <a href="/about.html"${navClass("about")}>About</a>
+          <a href="/blog.html"${navClass("blog")}>Blog</a>
         </nav>
       </div>
     </header>
@@ -2449,21 +2473,33 @@ function renderFooter() {
   const container = $("site-footer");
   if (!container) return;
 
-  const gameLinks = GAMES
-    .map(game => `<a href="${game.href}">${game.footerLabel}</a>`)
-    .join("\n      ");
-
   container.innerHTML = `
     <footer class="site-footer">
-      <div class="container footer-inner">
-        <span>© 2026 Crossworld</span>
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a class="footer-brand__link" href="/index.html" aria-label="Crossworld home">
+            <img class="footer-brand__logo" src="${SITE_LOGO_SRC}" alt="">
+          </a>
+          <span class="footer-copyright">© 2026 Crossworld</span>
+        </div>
 
-        <nav class="footer-links" aria-label="Footer navigation">
-          <a href="index.html">Home</a>
-          ${gameLinks}
-          <a href="create.html">Create</a>
-          <a href="privacy.html">Privacy Policy</a>
-        </nav>
+        <div class="footer-groups">
+          <nav class="footer-group" aria-labelledby="footer-popular-title">
+            <h2 class="footer-heading" id="footer-popular-title">Popular</h2>
+            <a href="/gravity_shift.html">Gravity Shift</a>
+            <a href="/snakesladders-single.html">Snakes &amp; Ladders</a>
+            <a href="/crossworld_neon_word_range.html">Neon Word Range</a>
+            <a href="/slice.html">Slice</a>
+            <a href="/wordsearch.html">Word Search</a>
+          </nav>
+
+          <nav class="footer-group" aria-labelledby="footer-about-title">
+            <h2 class="footer-heading" id="footer-about-title">Get to know us</h2>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/blog.html">Blog</a>
+          </nav>
+        </div>
       </div>
     </footer>
   `;
@@ -2514,5 +2550,63 @@ function renderGameCards(containerId) {
     </div>`;
   }).join("\n");
 
-  GAMES.forEach(game => game.renderPreview());
+  GAMES.forEach((game, index) => {
+    const card = container.children[index];
+    if (card && game.categories) {
+      card.dataset.categories = game.categories.join(" ");
+    }
+    game.renderPreview();
+  });
+}
+
+function initGameExplorer() {
+  const grid = $("games-grid");
+  const search = $("game-search");
+  const filters = Array.from(document.querySelectorAll("[data-game-filter]"));
+  const resultCount = $("game-result-count");
+  const emptyState = $("games-empty");
+  const resetButton = $("clear-game-filters");
+  if (!grid || !search || !filters.length || !resultCount || !emptyState) return;
+
+  const cards = Array.from(grid.children);
+  let activeFilter = "all";
+
+  function updateResults() {
+    const query = search.value.trim().toLocaleLowerCase();
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const categories = (card.dataset.categories || "").split(/\s+/);
+      const matchesFilter = activeFilter === "all" || categories.includes(activeFilter);
+      const matchesSearch = card.textContent.toLocaleLowerCase().includes(query);
+      card.hidden = !matchesFilter || !matchesSearch;
+      if (!card.hidden) visibleCount += 1;
+    });
+
+    resultCount.textContent = `${visibleCount} ${visibleCount === 1 ? "game" : "games"} found`;
+    emptyState.hidden = visibleCount > 0;
+  }
+
+  filters.forEach(button => {
+    button.addEventListener("click", () => {
+      activeFilter = button.dataset.gameFilter || "all";
+      filters.forEach(filter => {
+        filter.setAttribute("aria-pressed", String(filter === button));
+      });
+      updateResults();
+    });
+  });
+
+  search.addEventListener("input", updateResults);
+  resetButton?.addEventListener("click", () => {
+    search.value = "";
+    activeFilter = "all";
+    filters.forEach(filter => {
+      filter.setAttribute("aria-pressed", String(filter.dataset.gameFilter === "all"));
+    });
+    updateResults();
+    search.focus();
+  });
+
+  updateResults();
 }

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Crossword puzzle</title>
+  <desc id="desc">A navy and turquoise crossword grid with intersecting highlighted answers.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#102b4e"/>
+      <stop offset="1" stop-color="#315f8e"/>
+    </linearGradient>
+    <linearGradient id="accent" x2="1" y2="1">
+      <stop stop-color="#a4f5e4"/>
+      <stop offset="1" stop-color="#52d8c6"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <circle cx="934" cy="320" r="220" fill="#59dfce" opacity=".14" filter="url(#glow)"/>
+  <text x="88" y="215" fill="#a4f5e4" font-family="Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="7">CROSSWORD PUZZLES</text>
+  <text x="84" y="300" fill="#fff" font-family="Arial,sans-serif" font-size="66" font-weight="800">Clue by clue.</text>
+  <text x="84" y="380" fill="#d5e5f5" font-family="Arial,sans-serif" font-size="34">Find the words that connect.</text>
+  <g transform="translate(690 100)" stroke="#d7e8f4" stroke-width="5">
+    <rect width="390" height="390" rx="10" fill="#f3f8fc"/>
+    <path d="M78 0v390M156 0v390M234 0v390M312 0v390M0 78h390M0 156h390M0 234h390M0 312h390" fill="none"/>
+    <path d="M0 78h390M156 0v390" fill="none" stroke="#52d8c6" stroke-width="76"/>
+    <g fill="#102b4e" stroke="none" font-family="Arial,sans-serif" font-size="40" font-weight="700" text-anchor="middle">
+      <text x="39" y="129">W</text><text x="117" y="129">O</text><text x="195" y="129">R</text><text x="273" y="129">D</text>
+      <text x="195" y="51">G</text><text x="195" y="207">A</text><text x="195" y="285">M</text><text x="195" y="363">E</text>
+    </g>
+  </g>
+  <circle cx="1090" cy="124" r="10" fill="#a4f5e4"/>
+  <circle cx="1080" cy="512" r="6" fill="#a4f5e4" opacity=".7"/>
+</svg>
