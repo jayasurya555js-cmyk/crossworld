@@ -264,6 +264,10 @@
       gap: 4px;
     }
 
+    .power-legend-toggle {
+      display: none;
+    }
+
     .power-legend-hdr {
       display: flex;
       align-items: center;
@@ -977,13 +981,42 @@
       .metric { min-width: 34px; }
       .metric-val { font-size: 0.72rem; }
       .power-legend {
-        max-width: 185px;
+        display: none;
+        bottom: calc(56px + env(safe-area-inset-bottom));
+        max-width: min(185px, calc(100vw - 24px));
         padding: 5px 7px;
+      }
+      .power-legend.is-open {
+        display: flex;
       }
       .power-legend-grid {
         grid-template-columns: 1fr;
         gap: 2px;
         font-size: 0.52rem;
+      }
+      .power-legend-toggle {
+        position: fixed;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        left: 12px;
+        z-index: 12;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 6px 10px;
+        border: 1px solid rgba(0, 245, 212, 0.4);
+        border-radius: 999px;
+        color: var(--cyan);
+        background: rgba(8, 13, 26, 0.94);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.54rem;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        cursor: pointer;
+      }
+      .power-legend-toggle:active {
+        transform: scale(0.96);
       }
       .bottom-hud {
         max-width: calc(100vw - 205px);
@@ -1065,6 +1098,13 @@
       </div>
     </div>
   </div>
+  <button
+    id="powerLegendToggle"
+    class="power-legend-toggle"
+    type="button"
+    aria-controls="powerLegend"
+    aria-expanded="false"
+    aria-label="Show power-up guide">⚡ POWER INFO</button>
 
   <div class="bottom-hud">
     <span id="gravIndicator" class="grav-indicator">↓ GRAVITY: DOWN</span>
@@ -3867,6 +3907,19 @@
     document.getElementById('guideReopenBtn').addEventListener('click', openScreenGuide);
     document.getElementById('modesHudBtn').addEventListener('click', openModeHub);
     document.getElementById('backToHubFromLevelsBtn').addEventListener('click', openModeHub);
+
+    const powerLegend = document.getElementById('powerLegend');
+    const powerLegendToggle = document.getElementById('powerLegendToggle');
+    powerLegendToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = powerLegend.classList.toggle('is-open');
+      powerLegendToggle.setAttribute('aria-expanded', String(isOpen));
+      powerLegendToggle.setAttribute(
+        'aria-label',
+        isOpen ? 'Hide power-up guide' : 'Show power-up guide'
+      );
+      powerLegendToggle.textContent = isOpen ? '✕ CLOSE' : '⚡ POWER INFO';
+    });
 
     document.getElementById('cardLevelMode').addEventListener('click', () => openLevelSelect());
     document.getElementById('openLevelSelectBtn').addEventListener('click', () => openLevelSelect());

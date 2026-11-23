@@ -3730,3 +3730,295 @@ a {
     transition: none;
   }
 }
+
+/* =========================
+   GRAVITY SHIFT-INSPIRED PUZZLE PAGES
+========================= */
+
+.home-theme .puzzle-page {
+  --bg: #050811;
+  --surface: #0a1020;
+  --card: rgba(11, 18, 34, .96);
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --border: rgba(0, 245, 212, .2);
+  --accent: #00f5d4;
+  --accent-dark: #00c8ad;
+  --accent-soft: rgba(0, 245, 212, .14);
+  --cell: #111a30;
+  --black: #050811;
+  --blocked-bg: #111a30;
+  background:
+    radial-gradient(ellipse at 82% 8%, rgba(155, 93, 229, .16), transparent 32%),
+    radial-gradient(ellipse at 10% 12%, rgba(0, 245, 212, .12), transparent 30%),
+    #050811;
+}
+
+.home-theme .puzzle-page .puzzle-header,
+.home-theme .puzzle-page .page-title {
+  max-width: 860px;
+  padding: 46px 0 28px;
+  text-align: center;
+}
+
+.home-theme .puzzle-page .eyebrow {
+  padding: 6px 11px;
+  border: 1px solid rgba(0, 245, 212, .32);
+  border-radius: 999px;
+  color: #00f5d4;
+  background: rgba(0, 245, 212, .08);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+}
+
+.home-theme .puzzle-page .puzzle-header h1,
+.home-theme .puzzle-page .page-title h1 {
+  color: #f8fafc;
+  font-family: "Orbitron", "Trebuchet MS", sans-serif;
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 900;
+  letter-spacing: -.045em;
+  text-shadow: 0 0 28px rgba(0, 245, 212, .14);
+}
+
+.home-theme .puzzle-page .puzzle-header p,
+.home-theme .puzzle-page .page-title p {
+  max-width: 650px;
+  margin: 12px auto 0;
+  color: #aab6cb;
+  line-height: 1.7;
+}
+
+.home-theme .puzzle-page .card {
+  border: 1px solid rgba(0, 245, 212, .22);
+  border-radius: 18px;
+  color: #f8fafc;
+  background:
+    linear-gradient(145deg, rgba(17, 26, 48, .96), rgba(8, 13, 26, .98));
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, .38),
+    0 0 30px rgba(0, 245, 212, .05),
+    inset 0 1px rgba(255, 255, 255, .05);
+}
+
+.home-theme .puzzle-page .grid-panel-top strong,
+.home-theme .puzzle-page .form-card h2,
+.home-theme .puzzle-page .preview-panel h2,
+.home-theme .puzzle-page .clue-group h3 {
+  color: #f2f6ff;
+  font-family: "Orbitron", "Trebuchet MS", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .025em;
+}
+
+.home-theme .puzzle-page .timer {
+  color: #ffb703;
+  font-family: "Orbitron", "Trebuchet MS", sans-serif;
+  font-weight: 800;
+}
+
+.home-theme .puzzle-page .form-card > p,
+.home-theme .puzzle-page .preview-panel p,
+.home-theme .puzzle-page .word-count,
+.home-theme .puzzle-page .muted {
+  color: #a2acc2;
+}
+
+.home-theme .puzzle-page .clue-group h3 {
+  padding: 14px 16px;
+  border-bottom-color: rgba(159, 180, 218, .14);
+  background: rgba(0, 245, 212, .06);
+}
+
+.home-theme .puzzle-page .clue-item {
+  border-bottom-color: rgba(159, 180, 218, .12);
+  color: #dce5f6;
+  background: rgba(9, 15, 28, .84);
+}
+
+.home-theme .puzzle-page .clue-item:hover,
+.home-theme .puzzle-page .clue-item.active {
+  color: #f4fffc;
+  background: rgba(0, 245, 212, .12);
+}
+
+.home-theme .puzzle-page .clue-number {
+  color: #00f5d4;
+}
+
+.home-theme .puzzle-page .crossword-grid,
+.home-theme .puzzle-page .creator-grid,
+.home-theme .puzzle-page .ws-grid {
+  border: 1px solid rgba(0, 245, 212, .36);
+  background-color: #050811;
+  box-shadow: 0 0 24px rgba(0, 245, 212, .08);
+}
+
+.home-theme .puzzle-page .cell {
+  color: #f8fafc;
+  background-color: #111a30;
+}
+
+.home-theme .puzzle-page .cell-number {
+  color: #94a3b8;
+}
+
+.home-theme .puzzle-page .cell.selected,
+.home-theme .puzzle-page .cell.word-selected {
+  color: #f8fafc;
+  background-color: rgba(0, 245, 212, .22);
+  box-shadow: inset 0 0 0 1px rgba(0, 245, 212, .72);
+}
+
+.home-theme .puzzle-page .cell.correct {
+  color: #38ef7d;
+}
+
+.home-theme .puzzle-page .cell.incorrect {
+  color: #fff;
+  background-color: #b4234a;
+}
+
+.home-theme .puzzle-page .ws-cell {
+  border-right-color: rgba(148, 163, 184, .22);
+  border-bottom-color: rgba(148, 163, 184, .22);
+  color: #e8edfb;
+}
+
+.home-theme .puzzle-page .ws-cell.ws-selecting {
+  color: #fff;
+  background: rgba(0, 245, 212, .28);
+}
+
+.home-theme .puzzle-page .ws-cell.ws-found {
+  color: #c9ffe3;
+  background: rgba(56, 239, 125, .24);
+}
+
+.home-theme .puzzle-page .ws-cell.ws-hint {
+  color: #fff2c2;
+  background: rgba(255, 183, 3, .22);
+  animation: arcade-hint-pulse 1.5s ease-in-out;
+}
+
+@keyframes arcade-hint-pulse {
+  0%, 100% { background: rgba(255, 183, 3, .22); }
+  50% { background: rgba(255, 183, 3, .48); }
+}
+
+.home-theme .puzzle-page .ws-word {
+  border-color: rgba(159, 180, 218, .2);
+  color: #dce5f6;
+  background: rgba(10, 16, 32, .9);
+}
+
+.home-theme .puzzle-page .ws-word.found {
+  border-color: rgba(56, 239, 125, .4);
+  color: #c9ffe3;
+  background: rgba(56, 239, 125, .16);
+}
+
+.home-theme .puzzle-page .progress-label {
+  color: #a2acc2;
+}
+
+.home-theme .puzzle-page .progress-track {
+  background: rgba(255, 255, 255, .1);
+}
+
+.home-theme .puzzle-page .progress-bar {
+  background: linear-gradient(90deg, #00f5d4, #38bdf8, #9b5de5);
+  box-shadow: 0 0 14px rgba(0, 245, 212, .32);
+}
+
+.home-theme .puzzle-page .btn-primary {
+  border-color: rgba(0, 245, 212, .7);
+  color: #06120f;
+  background: linear-gradient(135deg, #8affdf, #28d8c0);
+  box-shadow: 0 6px 20px rgba(0, 245, 212, .16);
+}
+
+.home-theme .puzzle-page .btn-primary:hover {
+  background: linear-gradient(135deg, #b0ffe9, #54ead5);
+  box-shadow: 0 8px 26px rgba(0, 245, 212, .28);
+}
+
+.home-theme .puzzle-page .btn-secondary {
+  border-color: rgba(159, 180, 218, .24);
+  color: #e8edfb;
+  background: rgba(20, 27, 46, .82);
+}
+
+.home-theme .puzzle-page .btn-secondary:hover {
+  border-color: rgba(0, 245, 212, .48);
+  background: rgba(0, 245, 212, .1);
+}
+
+.home-theme .puzzle-page .field label {
+  color: #cbd5e1;
+}
+
+.home-theme .puzzle-page .field input,
+.home-theme .puzzle-page .field textarea,
+.home-theme .puzzle-page .share-url {
+  border-color: rgba(159, 180, 218, .22);
+  color: #f2f6ff;
+  background: #0a1020;
+}
+
+.home-theme .puzzle-page .field input::placeholder,
+.home-theme .puzzle-page .field textarea::placeholder {
+  color: #71809a;
+}
+
+.home-theme .puzzle-page .field input:focus,
+.home-theme .puzzle-page .field textarea:focus,
+.home-theme .puzzle-page .share-url:focus {
+  border-color: #00f5d4;
+  outline: 2px solid rgba(0, 245, 212, .18);
+}
+
+.home-theme .puzzle-page .remove-word {
+  border-color: rgba(255, 42, 109, .34);
+  color: #ff7b9f;
+  background: rgba(255, 42, 109, .1);
+}
+
+.home-theme .puzzle-page .share-box {
+  border: 1px solid rgba(0, 245, 212, .2);
+  background: rgba(5, 8, 17, .72);
+}
+
+.home-theme .puzzle-page .share-box h3 {
+  color: #8affdf;
+}
+
+.home-theme .puzzle-page .status-message.success {
+  border: 1px solid rgba(56, 239, 125, .35);
+  color: #c9ffe3;
+  background: rgba(56, 239, 125, .12);
+}
+
+.home-theme .puzzle-page .status-message.error {
+  border: 1px solid rgba(255, 42, 109, .35);
+  color: #ffd2df;
+  background: rgba(255, 42, 109, .12);
+}
+
+.home-theme .puzzle-page :focus-visible {
+  outline-color: #00f5d4;
+}
+
+@media (max-width: 640px) {
+  .home-theme .puzzle-page .puzzle-header,
+  .home-theme .puzzle-page .page-title {
+    padding-top: 34px;
+    padding-bottom: 20px;
+  }
+
+  .home-theme .puzzle-page .grid-panel {
+    padding: 16px;
+  }
+}
