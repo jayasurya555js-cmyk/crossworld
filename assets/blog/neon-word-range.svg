@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Neon Word Range</title>
+  <desc id="desc">Glowing letter tiles, a crossword clue, and a neon target.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#080d24"/>
+      <stop offset="1" stop-color="#211344"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <text x="80" y="204" fill="#48e7ee" font-family="Arial,sans-serif" font-size="25" font-weight="700" letter-spacing="7">NEON WORD RANGE</text>
+  <text x="76" y="292" fill="#fff" font-family="Arial,sans-serif" font-size="64" font-weight="800">Aim. Shoot. Spell.</text>
+  <text x="80" y="360" fill="#d6d3f2" font-family="Arial,sans-serif" font-size="32">Solve a clue. Build the word.</text>
+  <rect x="675" y="105" width="420" height="420" rx="28" fill="#111631" stroke="#39dbea" stroke-width="4"/>
+  <rect x="733" y="170" width="86" height="86" rx="18" fill="#152744" stroke="#44eff1" stroke-width="4"/>
+  <rect x="852" y="170" width="86" height="86" rx="18" fill="#31183e" stroke="#ff55bd" stroke-width="4"/>
+  <rect x="971" y="170" width="86" height="86" rx="18" fill="#152744" stroke="#44eff1" stroke-width="4"/>
+  <g fill="#f7fbff" font-family="Arial,sans-serif" font-size="52" font-weight="800" text-anchor="middle">
+    <text x="776" y="231">W</text><text x="895" y="231">O</text><text x="1014" y="231">R</text>
+  </g>
+  <rect x="728" y="300" width="330" height="105" rx="18" fill="#191f3e" stroke="#66639d" stroke-width="2"/>
+  <text x="762" y="343" fill="#a7a5d9" font-family="Arial,sans-serif" font-size="19" font-weight="700" letter-spacing="3">CLUE</text>
+  <text x="762" y="378" fill="#fff" font-family="Arial,sans-serif" font-size="29" font-weight="700">A written message</text>
+  <circle cx="895" cy="457" r="23" fill="#ff55bd" filter="url(#glow)"/>
+  <circle cx="895" cy="457" r="12" fill="#fff"/>
+  <path d="M895 421v-14M895 507v-14M859 457h-14M945 457h-14" stroke="#4ae8f0" stroke-width="4"/>
+</svg>

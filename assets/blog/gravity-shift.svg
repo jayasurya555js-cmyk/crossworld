@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Gravity Shift</title>
+  <desc id="desc">A glowing orb flips between two obstacle-lined rails in a physics arcade game.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#071723"/>
+      <stop offset="1" stop-color="#123a4a"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <text x="80" y="205" fill="#56ead5" font-family="Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="7">GRAVITY SHIFT</text>
+  <text x="76" y="292" fill="#fff" font-family="Arial,sans-serif" font-size="68" font-weight="800">Flip. Dodge. Survive.</text>
+  <text x="80" y="360" fill="#c8e3e8" font-family="Arial,sans-serif" font-size="32">One tap changes direction.</text>
+  <path d="M625 160h475M625 466h475" stroke="#7ea2ae" stroke-width="12" stroke-linecap="round"/>
+  <path d="M680 160l26 42 26-42M830 160l26 42 26-42M1010 160l26 42 26-42" fill="#ff607a" stroke="#ff607a" stroke-width="5"/>
+  <path d="M745 466l26-42 26 42M920 466l26-42 26 42" fill="#ff607a" stroke="#ff607a" stroke-width="5"/>
+  <path d="M720 390C660 316 725 245 850 240S1027 303 984 365" fill="none" stroke="#3ed9c5" stroke-width="6" stroke-dasharray="14 14" opacity=".8"/>
+  <circle cx="820" cy="309" r="56" fill="#41e5d0" opacity=".35" filter="url(#glow)"/>
+  <circle cx="820" cy="309" r="30" fill="#45f1da"/>
+  <circle cx="811" cy="300" r="9" fill="#fff"/>
+  <path d="M1080 276v70M1045 311h70" stroke="#f2f7f8" stroke-width="4" opacity=".65"/>
+</svg>

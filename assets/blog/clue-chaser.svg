@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Clue Chaser</title>
+  <desc id="desc">A crossword clue card sits beside answer lanes on a glowing arcade grid.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1">
+      <stop stop-color="#08172c"/>
+      <stop offset="1" stop-color="#172548"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <text x="80" y="205" fill="#9cf2df" font-family="Arial,sans-serif" font-size="26" font-weight="700" letter-spacing="7">CLUE CHASER</text>
+  <text x="76" y="292" fill="#fff" font-family="Arial,sans-serif" font-size="66" font-weight="800">Read. React. Chase.</text>
+  <text x="80" y="360" fill="#ccd9ea" font-family="Arial,sans-serif" font-size="32">Match the clue to its answer.</text>
+  <rect x="655" y="104" width="400" height="144" rx="22" fill="#f6fbff"/>
+  <text x="688" y="151" fill="#5c7290" font-family="Arial,sans-serif" font-size="19" font-weight="700" letter-spacing="3">CLUE</text>
+  <text x="688" y="202" fill="#102b4e" font-family="Arial,sans-serif" font-size="34" font-weight="800">A bright star</text>
+  <g transform="translate(680 295)">
+    <rect width="350" height="245" rx="22" fill="#0b1e37" stroke="#536994" stroke-width="3"/>
+    <path d="M116 0v245M233 0v245M0 82h350M0 164h350" stroke="#364d75" stroke-width="2"/>
+    <rect x="19" y="104" width="95" height="48" rx="12" fill="#17375c" stroke="#51e5d0" stroke-width="3"/>
+    <rect x="136" y="22" width="95" height="48" rx="12" fill="#17375c" stroke="#51e5d0" stroke-width="3"/>
+    <rect x="252" y="184" width="82" height="42" rx="12" fill="#39204f" stroke="#ff69ba" stroke-width="3"/>
+    <g fill="#f8fbff" font-family="Arial,sans-serif" font-size="25" font-weight="800" text-anchor="middle">
+      <text x="66" y="137">SUN</text><text x="183" y="55">STAR</text><text x="293" y="213">MOON</text>
+    </g>
+    <path d="M183 78v74" stroke="#51e5d0" stroke-width="4" stroke-dasharray="8 8"/>
+  </g>
+  <circle cx="1090" cy="366" r="16" fill="#ff66b7" filter="url(#glow)"/>
+  <circle cx="1090" cy="366" r="8" fill="#fff"/>
+</svg>
